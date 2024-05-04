@@ -1,0 +1,180 @@
+{
+  "french": "Français",
+  "english": "English",
+
+
+  "startscreen": {
+    "welcome": "Welcome to Hpay",
+    "connectionmsg": "Your adventure begins here, please log in or register.",
+    "signin": "Sign In",
+    "signup": "Sign up"
+  },
+
+
+  "signinscreen": {
+    "title": "sign in",
+    "titlemsg": "Please complete this form to log in.",
+    "phone": "Phone",
+    "yourphone": "Your phone number",
+    "password": "Password",
+    "yourpassword": "Your password",
+    "passwordforgotten": "Password forgotten?",
+    "youdonthaveaccount": "You don't have an account?",
+    "signin": "Sign in",
+    "signup": "Sign Up",
+    "single": "Single",
+    "married": "Married",
+    "divorce": "Divorce",
+    "statut": "Marital status",
+    "next": "Suivant",
+    "loginorpasswordinvalid": "Login or password invalid",
+    "connexionfailure": "Connexion failure",
+    "requiredvalue": "Required value"
+  },
+
+
+  "signupscreen": {
+    "title": "Create an account",
+    "titlemsg": "Please complete this form to create your account",
+    "phone": "Phone",
+    "yourphone": "Your phone number",
+    "password": "Password",
+    "yourpassword": "Your password",
+    "passwordconfirmation": "Password confirmation",
+    "confirmyourpassword": "confirm your password",
+    "signup": "Signup",
+    "iaccept": "I accept",
+    "termsandconditions": "terms and conditions",
+    "youalreadyhaveanaccount": "You already have an account",
+    "signin": "Sign in",
+    "noemptytel": "The telephone number cannot be empty",
+    "nomemtypassword": "Password cannot be empty",
+    "noemptypasswordconfirmation": "Password confirmation cannot be empty",
+    "differentfrompassword": "Different from password",
+    "requiredvalue": "Required value",
+    "accountalreadyexist": "An account already exist with this number"
+  },
+
+
+
+  "telVerificationcreen": {
+    "title": "Phone Number verification",
+    "titlemsg": "Please enter the code received by SMS to your number",
+    "nocode": "Didn't receive a code?",
+    "resendcode": "Resend the code",
+    "validate": "Validate",
+    "telverificationfailure": "Verification failure",
+    "novalidcode": "the code entered is not valid"
+  },
+
+
+  "identitycreen": {
+    "title": "Complete votre Profil",
+    "titlemsg": "Please fill out this form to complete your profile",
+    "firstname": "Enter your First name",
+    "yourfirstname": "Enter your first name",
+    "familyname": "Family name",
+    "yourfamilyname": "Enter your family  name",
+    "sex": "Sex",
+    "male": "Male",
+    "female": "Female",
+    "dateofbirth": "Date of birth",
+    "submit": "Submit",
+    "placeofbirth": "Place of birth",
+    "yourplaceofbirth": "Enter your Place of birth",
+    "nationality": "Nationality",
+    "yourNationality": "Your nationality",
+    "requiredvalue": "Required value",
+    "youremail": "Your email"
+  },
+
+
+  "emailscreen": {
+    "title": "Submit your email address (2FA)",
+    "titlemsg": "Your email address is necessary to be used as a second authentication factor if necessary.",
+    "email": "Email",
+    "youremail": "Your email address",
+    "submit": "Submit",
+    "ignore": "Ignore",
+    "pass": "Pass"
+  },
+
+
+  "passwordRecover": {
+    "title": "password recovery",
+    "titlemsg": "Please enter your authentication phone number or email address",
+    "id": "Email/Phone",
+    "youremail": "Your Phone/email",
+    "submit": "Submit",
+    "titleverif": "Verification Code",
+    "titlemsgverif": "Please enter the code received by SMS or by email",
+    "titlenewpassword": "Verification Code",
+    "titlemsgnewpassword": "Please enter the code received by SMS or by email"
+  },
+
+  "photoProfilScreen": {
+    "title": "Add a profil photo",
+    "titlemsg": "Please choose a profile photo to allow your correspondents to identify you"
+  },
+
+
+  "kyc": {
+    "address": "Address",
+    "youraddress": "Your addresse",
+    "country": "Country",
+    "yourcountry": "Enter your country",
+    "town": "Town",
+    "yourTown": "Your town",
+    "telephone": "Telephone",
+    "telephone2": "Telephone 2",
+    "email": "email",
+    "yourEmail": "Entrer votre email",
+    "identitydocument": "Identity Document",
+    "identydocumenttype": "Identity document type",
+    "typeidentitydocument": "Type identity document",
+    "passport": "Passport",
+    "idcard": "Identity card",
+    "chooseadocumenttype": "Choose a document type",
+    "chooseatown": "Choose a town",
+    "chooseacountry": "Choose a country",
+    "identitydetails": "Identity details",
+    "Addressdetails": "Details de l'adresse",
+    "Identityproof": "Identity proof",
+    "declaration": "Declaration",
+    "declationtext": "I hereby declare that the information provided in this form is accurate and complete.\n I confirm that any information is found incorrect and/or incomplete that leads a violation of regulations may initiate legal actions, and I accept that I am the responsible party for any and all charges, penalties and violations.",
+    "previous": "Previous",
+    "validate": "Validate",
+    "submit": "Submit",
+    "next": "Next",
+    "readandapproved": "Read and approved",
+    "success": "Success",
+    "successmsg": "Thank you for submitting your information. We will examine them shortly.",
+    "clicktoaddthefront": "Click to add the front",
+    "clicktoaddtheback": "Click to add the back",
+    "expirationdate": "Expiration date",
+    "numberofthedocument": "Number of the document",
+    "numberofthechoosedocument": "Number of the choosed document"
+  },
+
+
+  "loading": "please wait ...",
+  "settings": "Settings",
+  "requiredValue": "Value  required",
+  "signoutConfirmMessage": "Do you really want to log out ?",
+  "cancel": "Cancel",
+  "no": "No",
+  "yes": "Yes",
+  "payment": "Payment",
+  "Error": "Error",
+  "close": "Close",
+  "language": "Language",
+  "changelanguage": "Change de language",
+  "pleasewait": "Please wait",
+  "success": "succès",
+  "info": "Info",
+  "failure": "Échec",
+  "front": "recto",
+  "back": "verso",
+  "clicktoaddthefront": "click to add the front"
+
+}

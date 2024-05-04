@@ -1,0 +1,193 @@
+{
+  "french": "Français",
+  "english": "Anglais",
+
+
+  "startscreen": {
+    "welcome": "Bienvenue sur Hpay",
+    "connectionmsg": "Votre aventure commence ici, Veuillez-vous connectez ou vous inscrire.",
+    "signin": "Se connecter",
+    "signup": "S'inscrire"
+  },
+
+
+  "signinscreen": {
+    "title": "Bienvenue ! ",
+    "titlemsg": "Veuillez remplir ce formulaire pour vous connecter.",
+    "phone": "Télephone",
+    "yourphone": "Votre numéro de teléphone",
+    "password": "Mot de passe",
+    "yourpassword": "Votre mot de passe",
+    "passwordforgotten": "Mot de passe oublié?",
+    "youdonthaveaccount": "Vous n'avez pas de compte",
+    "signin": "Se connecter",
+    "signup": "S'inscrire",
+    "requiredvalue": "Valeur requise",
+    "loginorpasswordinvalid": "Login ou mot de passe invalide",
+    "connexionfailure": "Échec de connexion"
+  },
+
+
+
+  "signupscreen": {
+    "title": "Créer un compte",
+    "titlemsg": "Veuillez remplir ce formulaire pour créer votre compte",
+    "phone": "Télephone",
+    "yourphone": "Votre numéro de teléphnone",
+    "password": "Mot de passe",
+    "yourpassword": "Votre mot de passe",
+    "passwordconfirmation": "Confirmation du mot de passe",
+    "confirmyourpassword": "Confirmez votre mot de passe",
+    "signup": "S'inscrire",
+    "iaccept": "J'accepte",
+    "termsandconditions": "les termes et conditions",
+    "youalreadyhaveanaccount": "Vous avez dejà un compte ?",
+    "signin": "Connectez-vous",
+    "noemptytel": "Le numéro de téléphone ne peut pas être vide",
+    "nomemtypassword": "Le mot de  passe ne peut pas être vide",
+    "noemptypasswordconfirmation": "Le confirmation du  mot de  passe ne peut pas etre vide",
+    "passwordinvalidformat": "Format invalide : \nAu minumum 8 caractères. \nAu moins une majuscule. \nAu moins une minuscule.\nAu moins un caractère spécial.",
+    "differentfrompassword": "Different du mot de passe",
+    "requiredvalue": "Valeur requise",
+    "accountalreadyexist": "un compte existe déjà avec ce numéro de télephone",
+    "registrationfailure": "Échec d'inscription"
+  },
+
+
+  "telVerificationcreen": {
+    "title": "Vérification du numéro",
+    "titlemsg": "Veuillez entrer le code reçu par SMS à votre numéro",
+    "nocode": "Vous n'avez pas reçu de code?",
+    "resendcode": "Renvoyez le code",
+    "validate": "Valider",
+    "telverificationfailure": "Échec de la vérification",
+    "novalidcode": "Le code entré n'est pas valide"
+  },
+
+
+  "identitycreen": {
+    "title": "Completez votre profil",
+    "titlemsg": "Veuillez remplir ce formulaire pour completer votre profil",
+    "firstname": "Prénom",
+    "yourfirstname": "Entrer votre prénom",
+    "familyname": "Nom de famille",
+    "yourfamilyname": "Entrer votre nom de famille",
+    "sex": "Genre",
+    "male": "Maxculin",
+    "female": "Féminin",
+    "dateofbirth": "Date de naissance",
+    "submit": "Soumettre",
+    "placeofbirth": "Lieu de naissance",
+    "yourplaceofbirth": "Votre lieu de naissance",
+    "nationality": "Nationalité",
+    "yourNationality": "Votre nationnalité",
+    "single": "Celibataire",
+    "married": "Marié",
+    "divorce": "Divorcé",
+    "statut": "Statut matrimonial",
+    "next": "Suivant",
+    "requiredvalue": "Valeur requise",
+    "youremail": "Votre email"
+  },
+
+
+  "emailscreen": {
+    "title": "Soumettre votre adresse Email (2FA)",
+    "titlemsg": "Votre adresse email est nécessaire afin d'être utilisé au cas échéant  comme deuxième facteur d'authentification.",
+    "email": "Email",
+    "youremail": "Votre adresse email",
+    "submit": "Soumettre",
+    "ignore": "Ignorer",
+    "pass": "Passer"
+  },
+
+
+
+  "passwordRecover": {
+    "title": "Récuperation du mot de passe",
+    "titlemsg": "Veuillez entrer votre numéro de télephone ou votre adresse email d'authentification",
+    "id": "Email/Telephone",
+    "youremail": "Votre Telephone/email",
+    "submit": "Soumettre",
+    "next": "Suivant",
+    "titleverif": "Code de vérification",
+    "titlemsgverif": "Veuillez saisir le code reçu par SMS ou par email",
+    "titlenewpassword": "Creer un nouveau mot de passe",
+    "titlemsgnewpassword": "Veuillez entrer et confirmer votre nouveau mot de passe"
+  },
+
+
+  "photoProfilScreen": {
+
+    "title": "Ajoutez une photo de profil",
+    "titlemsg": "Veuillez choisir une photo de profil afin de permettre à vos correspondants de vous identifier"
+
+
+
+  },
+
+
+
+  "kyc": {
+    "address": "Adresse",
+    "youraddress": "Votre addresse",
+    "country": "Pays",
+    "yourcountry": "Votre pays",
+    "town": "Ville",
+    "yourTown": "Votre ville",
+    "Telephone": "Telephone",
+    "Telephone2": "Telephone 2",
+    "Email": "email",
+    "yourEmail": "Votre email",
+    "identitydocument": "Document d'identité'",
+    "identydocumenttype": "Type de Document d'identité",
+    "typeidentitydocument": "Type de document d'identé",
+    "passport": "Passport",
+    "idcard": "Carte d'identé",
+    "chooseadocumenttype": "Choisir un type de document",
+    "front": "recto",
+    "back": "verso",
+    "chooseatown": "Choisir une ville",
+    "chooseacountry": "Choisir un pays",
+    "identitydetails": "Détails d'identité",
+    "Addressdetails": "Détails de l'adresse",
+    "Identityproof": "Preuve d'identité",
+    "declaration": "Déclaration",
+    "declationtext": "Je déclare par la présente que les informations fournies dans ce formulaire sont exactes et complètes. Je confirme que toute information jugée incorrecte et/ou incomplète entraînant une violation de la réglementation peut engager des poursuites judiciaires, et j'accepte d'être la partie responsable de toutes les accusations, pénalités et violations.",
+    "previous": "Précedant",
+    "validate": "Valider",
+    "submit": "Soumettre",
+    "next": "Suivant",
+    "readandapproved": "lu et approuvé",
+    "success": "Succès",
+    "successmsg": "Nous vous remercions d'avoir soumis vos informations.\n Nous procèderons sous peu à leur examen.",
+    "clicktoaddthefront": "Cliquer pour ajouter le recto",
+    "clicktoaddtheback": "Cliquer pour ajouter le verso",
+    "expirationdate": "Date d'expriration",
+    "numberofthedocument": "Numero du document",
+    "numberofthechoosedocument": "Numéro du document choisi"
+
+  },
+
+
+
+  "loading": "veuillez patienter ...",
+  "settings": "Paramètres",
+  "requiredValue": "Value  required",
+  "logout": "Déconnexion",
+  "signoutConfirmMessage": "Do you really want to log out ?",
+  "cancel": "Annuler",
+  "no": "Non",
+  "yes": "Oui",
+  "Error": "Erreur",
+  "close": "Fermer",
+  "language": "Language",
+  "changelanguage": "Changer de langue",
+  "pleasewait": "veuillez patienter",
+  "success": "succès",
+  "info": "Info",
+  "failure": "Échec",
+  "myorders": "Mes commmandes"
+
+
+}
