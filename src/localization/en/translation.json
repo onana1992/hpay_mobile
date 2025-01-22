@@ -4,7 +4,7 @@
 
 
   "startscreen": {
-    "welcome": "Welcome to Hpay",
+    "welcome": "Welcome to HPay",
     "connectionmsg": "Your adventure begins here, please log in or register.",
     "signin": "Sign In",
     "signup": "Sign up"
@@ -34,9 +34,10 @@
 
 
   "signupscreen": {
-    "title": "Create an account",
+    "title": "Registration",
+    "step1": "Let's start by creating your account",
     "titlemsg": "Please complete this form to create your account",
-    "phone": "Phone",
+    "phone": "Phone number",
     "yourphone": "Your phone number",
     "password": "Password",
     "yourpassword": "Your password",
@@ -52,17 +53,18 @@
     "noemptypasswordconfirmation": "Password confirmation cannot be empty",
     "differentfrompassword": "Different from password",
     "requiredvalue": "Required value",
-    "accountalreadyexist": "An account already exist with this number"
+    "accountalreadyexist": "An account already exist with this number",
+    "submit":  "Submit"
   },
 
 
 
   "telVerificationcreen": {
-    "title": "Phone Number verification",
+    "title": "Vérification de votre numéro de télephone",
     "titlemsg": "Please enter the code received by SMS to your number",
     "nocode": "Didn't receive a code?",
     "resendcode": "Resend the code",
-    "validate": "Validate",
+    "validate": "Verify",
     "telverificationfailure": "Verification failure",
     "novalidcode": "the code entered is not valid"
   },

@@ -119,6 +119,7 @@ function SignInScreen({ navigation }: {navigation:any}){
                         <View style={styles.inputTitle}>
                             <Text style={styles.inputTitleText}>{t('signinscreen.phone')}*</Text>
                         </View>
+
                         <TextInput
                             label={t('signinscreen.yourphone')}
                             returnKeyType="next"

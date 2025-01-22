@@ -44,12 +44,13 @@ function PhotoProfilScreen({ navigation,route }: { navigation: any,route:any }) 
     const [filePath, setFilePath] = React.useState<string>('');
     const [visible, setVisible] = React.useState(false);
 
-    const BASE_URL = 'http://10.0.0.133:80/api/';
+    //const BASE_URL = 'http://10.0.0.133:80/api/';
     //const BASE_URL = 'http://192.168.2.38:80/api/';
     //const BASE_URL = 'http://10.110.96.97:80/api/';
+    const BASE_URL = 'https://backend.clanlantene.com/joe92/api/';
     
     const [modalVisible, setModalVisible] = React.useState(false);
-    const { phone, idclient } = route.params;
+   // const { phone, idclient } = route.params;
 
 
 
@@ -244,8 +245,8 @@ function PhotoProfilScreen({ navigation,route }: { navigation: any,route:any }) 
             },
         }).then(response => {
 
-             console.log(response.data);
-             //dispatch(signIn({ tel: '4388833759' }));
+            // console.log(response.data);
+            // dispatch(signIn({ tel: '4388833759' }));
 
             if (response.data.success === true) {
 
@@ -276,14 +277,14 @@ function PhotoProfilScreen({ navigation,route }: { navigation: any,route:any }) 
         <KeyboardAvoidingView
             style={styles.main}
             enabled={true}
-            //behavior={Platform.OS === 'ios' ? 'padding' : 'padding'}
+            behavior={Platform.OS === 'ios' ? 'padding' : 'padding'}
         >
 
             <Pressable style={{ flex: 1 }} onPress={Keyboard.dismiss}>
 
                 <NoConnectedHeader navigation={navigation} />
 
-                <View style={styles.content}>
+                {/* <View style={styles.content}>
 
                     <View style={{ flex: 4, marginTop:50 }}>
 
@@ -327,7 +328,8 @@ function PhotoProfilScreen({ navigation,route }: { navigation: any,route:any }) 
 
                     </View>
 
-                </View>
+                </View>*/}
+
             </Pressable>
 
             <ImagePickerModal

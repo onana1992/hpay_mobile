@@ -8,6 +8,7 @@ import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
 import { Menu, MenuOptions, MenuOption, MenuTrigger } from 'react-native-popup-menu';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useTranslation } from 'react-i18next';
+import { Colors } from '../themes';
 
 export default function NoConnectedHeader(props: { navigation: { goBack: () => void; }; }) {
 
@@ -22,12 +23,12 @@ export default function NoConnectedHeader(props: { navigation: { goBack: () => v
 
         < View style={styles.main}>
             <View style={{ flex: 1 }}>
-                <TouchableOpacity onPress={() => {props.navigation.goBack() }}>
-                    <Ionicons name="chevron-back" color="black" size={22}/>
+                <TouchableOpacity style={styles.backbutton} onPress={() => { props.navigation.goBack() }}>
+                    <Ionicons name="chevron-back" color="black" size={18}/>
                 </TouchableOpacity>
             </View>
 
-            <View style={{ flex: 5, alignItems: "flex-end" }}>
+            <View style={{ flex: 5, alignItems: 'flex-end' }}>
                 <Menu>
                     <MenuTrigger>
                         {
@@ -57,7 +58,16 @@ export default function NoConnectedHeader(props: { navigation: { goBack: () => v
 
 const styles = StyleSheet.create({
     main: {
-        height: 40,
+        height: 25,
         flexDirection: 'row',
     },
+
+    backbutton: {
+        height: 30,
+        width: 30,
+        borderRadius: 20,
+        backgroundColor: Colors.primary,
+        alignItems: 'center',
+        justifyContent:'center',
+    }
 })

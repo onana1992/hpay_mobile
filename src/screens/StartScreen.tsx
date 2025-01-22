@@ -10,6 +10,7 @@ import Logo from '../components/Logo';
 import Header from '../components/Header'
 import Background from '../components/Background';
 import Paragraph from '../components/Paragraph';
+import { Colors } from '../themes';
 import Button from '../components/Button';
 import { useTranslation } from 'react-i18next';
 import { Menu, MenuOptions, MenuOption, MenuTrigger } from 'react-native-popup-menu';
@@ -32,7 +33,16 @@ function StartScreen({ navigation }: {navigation:any}) {
 
                 <View style={{ flex: 5, alignItems: 'flex-end' }}>
                     <Menu>
-                        <MenuTrigger>
+                        <MenuTrigger
+                            customStyles={{
+                                triggerWrapper: {
+                                    height: 40,
+                                    alignSelf: 'center',
+                                    justifyContent: 'center',
+                                    paddingHorizontal: 10,
+                                    borderRadius: 10,
+                                },
+                            }}>
                             {
                                 i18n.language === 'fr' ?
                                     <Text> &#x1F1E8;&#x1F1F5; {t('french')}</Text>
@@ -42,11 +52,29 @@ function StartScreen({ navigation }: {navigation:any}) {
                         </MenuTrigger>
                         <MenuOptions>
 
-                            <MenuOption onSelect={() => changeLangage('fr')} >
+                            <MenuOption
+                                onSelect={() => changeLangage('fr')}
+                                customStyles={{
+                                    optionWrapper: {
+                                        height: 30,
+                                        justifyContent: 'center',
+                                        paddingHorizontal: 10,
+                                    },
+                                }}
+                            >
                                 <Text style={{}}> &#x1F1E8;&#x1F1F5; {t('french')}</Text>
                             </MenuOption>
 
-                            <MenuOption onSelect={() => changeLangage('en')} >
+                            <MenuOption
+                                onSelect={() => changeLangage('en')}
+                                customStyles={{
+                                    optionWrapper: {
+                                        height: 30,
+                                        justifyContent: 'center',
+                                        paddingHorizontal: 10,
+                                    },
+                                }}
+                            >
                                 <Text style={{}}> &#x1F1EC;&#x1F1E7; {t('english')}</Text>
                             </MenuOption>
 
@@ -56,12 +84,12 @@ function StartScreen({ navigation }: {navigation:any}) {
             </View>
 
             <View style={styles.main}>
-                <View style={{ flex: 3, justifyContent: 'flex-start', alignItems: 'center' }}>
+                <View style={{ flex: 4, justifyContent: 'flex-start', alignItems: 'center' }}>
                     <Logo />
-                    <Header>{t('startscreen.welcome')}</Header>
-                    <Paragraph>
+                    <Header>{t('startscreen.welcome').toUpperCase()}</Header>
+                    <Text style={styles.welcomemessage}>
                         {t('startscreen.connectionmsg')}
-                    </Paragraph>
+                    </Text>
                 </View>
 
                 <View style={{ flex: 1 }}>
@@ -85,12 +113,18 @@ function StartScreen({ navigation }: {navigation:any}) {
 }
 
 const styles = StyleSheet.create({
+
     main: {
         backgroundColor: '#ffff',
         flex: 1,
-        /*justifyContent: 'center',
-        alignItems: 'center',*/
-        padding:20
+        padding: 20,
+    },
+
+    welcomemessage:{
+        fontStyle: 'italic',
+        fontSize: 14,
+        color: 'gray',
+        textAlign:'center',
     },
 });
 

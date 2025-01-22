@@ -24,7 +24,7 @@ const colors = {
     border: '#483F53',
     banner: '#0084AB',
 
-    text: '#1C1C1E',
+    text: '#333333',
     primary: '#ef5924',
     error: 'red',
     gray:"gray"

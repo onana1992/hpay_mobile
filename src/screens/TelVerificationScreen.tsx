@@ -30,6 +30,7 @@ import NoConnectedHeader from '../components/NoConnectedHeader';
 import { verifyTelRequest } from '../services/request';
 import Toast from 'react-native-toast-message';
 import LoadingModal from '../components/LoadingModal';
+import StepCompnent from '../components/StepCompnent';
 //import {  useRoute } from '@react-navigation/native';
 
 function SignInScreen({ navigation, route }: {navigation:any, route:any}) {
@@ -38,14 +39,16 @@ function SignInScreen({ navigation, route }: {navigation:any, route:any}) {
     const { t } = useTranslation();
     const [modalVisible, setModalVisible] = React.useState(false);
 
-    const { phone, idclient } = route.params;
+    //const { phone, idclient } = route.params;
 
-    console.log(phone);
-    console.log(idclient);
+    //console.log(phone);
+   // console.log(idclient);
 
     const lauchVerification = () => {
 
-        if (code.length == 4) {
+        navigation.navigate('Identity');
+
+        /*if (code.length == 4) {
             
             setModalVisible(true);
 
@@ -78,7 +81,7 @@ function SignInScreen({ navigation, route }: {navigation:any, route:any}) {
 
             })
 
-        }
+        }*/
 
     }
 
@@ -86,25 +89,30 @@ function SignInScreen({ navigation, route }: {navigation:any, route:any}) {
     return (
    
         <View style={styles.main}>
+
+            <NoConnectedHeader navigation={navigation} />
+
             <KeyboardAvoidingView
                 enabled={true}
-                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+                behavior={Platform.OS === 'ios' ? 'padding' : 'padding'}
                 style={{flex:1}}
             >
 
-                <Pressable style={{ flex: 1 }} onPress={Keyboard.dismiss}>
+                <Pressable style={styles.content} onPress={Keyboard.dismiss}>
 
-                    <NoConnectedHeader navigation={navigation} />
                     
-                    <View style={styles.content}>
-
                         <View style={{ flex: 3, alignItems:'center' }}>
-                            <Logo />
-                            <Header>{t('telVerificationcreen.title')}</Header>
+                           
+                           
+                        <StepCompnent step={3} />
 
-                            <Paragraph>
-                                {t('telVerificationcreen.titlemsg')}
-                            </Paragraph>
+                            <View style={styles.pageheader}>
+                                <Text style={styles.title}>{t('telVerificationcreen.title')}</Text>
+                                <Text style={styles.subtitle}>
+                                    {t('telVerificationcreen.titlemsg')}
+                                </Text>
+                            </View>
+
 
                             <View style={{ justifyContent: 'center', alignItems: 'center', marginVertical: 20 }}>
                                 <SmoothPinCodeInput
@@ -125,6 +133,7 @@ function SignInScreen({ navigation, route }: {navigation:any, route:any}) {
                                     <Text style={{ color: Colors.text }}>{t('telVerificationcreen.nocode')}</Text>
                                 </View>
                             </View>
+
                             <View style={{ flexDirection: 'row', marginTop: 0 }}>
                                 <View style={styles.row}>
                                     <TouchableOpacity onPress={() => navigation.navigate('SignIn')}>
@@ -148,7 +157,7 @@ function SignInScreen({ navigation, route }: {navigation:any, route:any}) {
                             </View>
                         </View>
 
-                    </View>
+                   
                 </Pressable>
                 <LoadingModal setModalVisible={setModalVisible} modalVisible={modalVisible} />
             </KeyboardAvoidingView>
@@ -164,10 +173,10 @@ const styles = StyleSheet.create({
     },
 
     content: {
-        flex: 1,
-        //flexDirection: 'column',
-       // justifyContent: 'center',
-        alignItems: 'center',
+        flex:1,
+        flexDirection: 'column',
+        justifyContent: 'flex-start',
+        alignItems: 'flex-start',
     },
 
     forgotPassword: {
@@ -190,6 +199,35 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: Colors.primary,
     },
+
+    pageheader: {
+        width: '100%',
+        justifyContent: 'flex-start',
+        alignItem: 'flex-start',
+        marginBottom: 30,
+        marginTop: 30
+    },
+
+    step: {
+        flexDirection: 'row',
+        height: 20,
+        width: '100%'
+    },
+
+    title: {
+        color: Colors.text,
+        fontSize: 22,
+        fontWeight: 500,
+        textAlign: 'left',
+        paddingVertical: 0
+    },
+
+    subtitle: {
+        color: Colors.gray,
+        fontSize: 14,
+        fontStyle: 'italic',
+        marginTop: 0
+    }
 
 });
 

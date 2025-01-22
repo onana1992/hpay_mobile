@@ -256,8 +256,8 @@ function HomeScreen({ navigation,user }: { navigation: any, user:any }) {
                             </TouchableOpacity>
                         </View>
                         <View style={styles.profil} >
-                            <Text style={{ color: '#fff', paddingTop: 5, fontWeight: 'bold', fontSize: 16 }}> {user.prenoms}{' '}{user.nom} </Text>
-                            <Text style={{ color: '#fff', fontSize: 12 }}> {user.telephone}</Text>
+                            <Text style={{ color: '#fff', paddingTop: 5, fontWeight: 'bold', fontSize: 16 }}> {user?.prenoms}{' '}{user?.nom} </Text>
+                            <Text style={{ color: '#fff', fontSize: 12 }}> {user?.telephone}</Text>
                         </View>
                     </View>
                     <View style={{ flex: 1 }}>

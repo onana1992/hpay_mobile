@@ -4,7 +4,7 @@
 
 
   "startscreen": {
-    "welcome": "Bienvenue sur Hpay",
+    "welcome": "Bienvenue sur HPay",
     "connectionmsg": "Votre aventure commence ici, Veuillez-vous connectez ou vous inscrire.",
     "signin": "Se connecter",
     "signup": "S'inscrire"
@@ -30,9 +30,10 @@
 
 
   "signupscreen": {
-    "title": "Créer un compte",
-    "titlemsg": "Veuillez remplir ce formulaire pour créer votre compte",
-    "phone": "Télephone",
+    "title": "Inscription",
+    "step1": "Numéro de téléphone et mot de passe pour créer votre compte",
+    "titlemsg": "Veuillez remplir le formulaire suivant pour créer votre compte",
+    "phone": "Numéro de télephone",
     "yourphone": "Votre numéro de teléphnone",
     "password": "Mot de passe",
     "yourpassword": "Votre mot de passe",
@@ -50,18 +51,22 @@
     "differentfrompassword": "Different du mot de passe",
     "requiredvalue": "Valeur requise",
     "accountalreadyexist": "un compte existe déjà avec ce numéro de télephone",
-    "registrationfailure": "Échec d'inscription"
+    "registrationfailure": "Échec d'inscription",
+    "submit": "Soumettre"
   },
 
 
+
+
   "telVerificationcreen": {
-    "title": "Vérification du numéro",
+    "title": "Vérification de votre numéro de téléphone",
     "titlemsg": "Veuillez entrer le code reçu par SMS à votre numéro",
     "nocode": "Vous n'avez pas reçu de code?",
     "resendcode": "Renvoyez le code",
-    "validate": "Valider",
+    "validate": "Vérifier",
     "telverificationfailure": "Échec de la vérification",
     "novalidcode": "Le code entré n'est pas valide"
+   
   },
 
 
@@ -118,12 +123,8 @@
 
 
   "photoProfilScreen": {
-
     "title": "Ajoutez une photo de profil",
     "titlemsg": "Veuillez choisir une photo de profil afin de permettre à vos correspondants de vous identifier"
-
-
-
   },
 
 

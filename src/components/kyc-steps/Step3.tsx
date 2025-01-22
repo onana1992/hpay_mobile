@@ -50,7 +50,8 @@ const Step3 = ({ data, setData, step, setStep }: { data: any, setData: any, step
  
     const [countryData, setCountryData] = React.useState<any>([]);
     const [doc, setDoc] = React.useState<number>(1);
-    const BASE_URL = 'http://10.0.0.133:80/api/';
+    //const BASE_URL = 'http://10.0.0.133:80/api/';
+    const BASE_URL = 'https://backend.clanlantene.com/joe92/api/';
     const [file, setFile] = React.useState(null);
     const [visible, setVisible] = React.useState(false);
     const [typeId, setTypesId] = React.useState({ value:1 , error: '' });
@@ -293,7 +294,7 @@ const Step3 = ({ data, setData, step, setStep }: { data: any, setData: any, step
             },
         }).then(response => {
 
-            //console.log(response.data.url);
+            console.log(response.data.url);
 
             if (doc === 1) {
 

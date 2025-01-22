@@ -11,7 +11,7 @@ const Header: React.FC<any> = (props) => {
 
 const styles = StyleSheet.create({
     header: {
-        fontSize: 22,
+        fontSize: 20,
         color: Colors.text,
         fontWeight: 'bold',
         textAlign: 'center',

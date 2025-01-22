@@ -74,7 +74,8 @@ function App(): JSX.Element {
                 <PersistGate  persistor={persistor}>
                     <StatusBar
                         animated={true}
-                        backgroundColor={Colors.primary}
+                        backgroundColor="#ffffff"
+                        barStyle="dark-content"
                         translucent={false}
                     />
                     <PaperProvider>

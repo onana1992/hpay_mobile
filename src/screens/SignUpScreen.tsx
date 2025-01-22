@@ -37,6 +37,7 @@ import PhoneInput from 'react-native-phone-number-input';
 import { signUpRequest } from '../services/request';
 import Toast from 'react-native-toast-message';
 import LoadingModal from '../components/LoadingModal';
+import StepCompnent from '../components/StepCompnent';
 
 
 function SignUpScreen({ navigation }: {navigation:any}) {
@@ -63,11 +64,13 @@ function SignUpScreen({ navigation }: {navigation:any}) {
 
     const onLoginPressed = () => {
 
+        navigation.navigate('TelVerification');
+
         //navigation.navigate('TelVerification');
         //console.log(confirmPassword.value);
         //console.log(password.value);
 
-        const telError = telValidator(telephone.value);
+        /*const telError = telValidator(telephone.value);
         const passwordError = passwordValidator(password.value);
         const passwordConfirmationError = confirmPasswordValidator(password.value, confirmPassword.value);
         
@@ -112,18 +115,12 @@ function SignUpScreen({ navigation }: {navigation:any}) {
 
             }).catch((_error: any) => {
 
-                // console.log(error);
-                // setModalVisible(false);
-
             })
     
-        }
+        }*/
 
         
-
-
-        //setSnackVisible(true);
-        //alert()
+       
     }
 
     return (
@@ -136,120 +133,74 @@ function SignUpScreen({ navigation }: {navigation:any}) {
                 behavior={Platform.OS === 'ios' ? 'padding' : 'padding'}
             >
 
-                <Pressable style={{ flex: 1 }} onPress={Keyboard.dismiss}>
+                <Pressable  onPress={Keyboard.dismiss}>
 
 
                     <View style={styles.content}>
-                        <Logo />
-                        <Header>{t('signupscreen.title')}</Header>
 
-                        <Paragraph>
-                            {t('signupscreen.titlemsg')}
-                        </Paragraph>
+                        <StepCompnent step={2} />
 
-                        <View style={styles.inputTitle}>
+                        <View style={styles.pageheader}>
+                            <Text style={styles.title}>{t('signupscreen.step1')}</Text>
+                            <Text style={styles.subtitle}>
+                                {t('signupscreen.titlemsg')}
+                            </Text>
+                        </View>
+
+                        <View style={{ flex: 1, alignContent: 'flex-start', justifyContent: 'flex-start' }}>
                             <Text style={styles.inputTitleText}>{t('signupscreen.phone')}*</Text>
+                            <View style={{ flexDirection: 'row', width: '100%',  }}>
+                                <TextInput
+                                    label={t('signupscreen.yourphone')}
+                                    returnKeyType="done"
+                                    value={telephone.value}
+                                    inputMode="numeric"
+                                    onChangeText={(text: string) => setTelephone({ value: text, error: '' })}
+                                    description={undefined}
+                                    left={<Input.Affix text="+1"/>}
+                                />
+                                {telephone.error ? <Text style={styles.error}>{telephone.error}</Text> : null}
+                            </View>
                         </View>
 
-                        <View style={{ width:'100%'}}>
-                            <PhoneInput
-                                ref={phoneInput}
-                                defaultValue={value}
-                                defaultCode="US"
-                                countryPickerProps={{
-                                    countryCodes: countries,
-                                }}
-                                layout="second"
-                                placeholder={t('signupscreen.yourphone')}
-                                onChangeText={(text) => {
-                                    setTelephone({ value: text, error: '' })
-                                    console.log(text);
-                                }}
-
-                                onChangeCountry={(country) => {
-                                    setCountry(country.name);
-
-                                }}
-
-                                onChangeFormattedText={(text) => {
-                                    /*setTelephone({ value: text, error: '' })
-                                    console.log(text);*/
-                                }}
-
-                                withDarkTheme={false}
-                                withShadow={false}
-                                autoFocus={false}
-                                containerStyle={{
-                                    width: '100%',
-                                    marginTop: 20,
-                                    padding: 5,
-                                    backgroundColor: 'white',
-                                    borderColor: telephone.error ? '#BA001A' : 'gray', 
-                                    borderWidth: 1.5,
-                                    borderRadius: 5,
-                                }}
-
-                                textInputStyle={{
-                                    backgroundColor: 'white',
-                                    height: 50,
-                                }}
-
-                                textContainerStyle={{
-                                    backgroundColor: 'white',
-                                    margin: -4,
-                                    height: 50,
-                                }}
-
-                                flagButtonStyle={{
-                                   // backgroundColor: "red",
-                                    width: 70,
-                                    
-                                }}
-
-                                codeTextStyle={{
-                                    //backgroundColor: "red",
-                                    // width: 40,
-                                    // marginLeft:-12
-                                }}
-                            />
-                            {telephone.error ? <Text style={styles.error}>{telephone.error}</Text> : null}
-                        </View>
-                        
-
-                        <View style={[styles.inputTitle, {marginTop:20}]}>
+                        <View style={{ flex: 1, alignContent: 'flex-start', justifyContent: 'flex-start', marginTop:10 }}>
                             <Text style={styles.inputTitleText}>{t('signupscreen.password')}*</Text>
+                            <View style={{ flexDirection: 'row', width: '100%', }}>
+                                <TextInput
+                                    label={t('signupscreen.yourpassword')}
+                                    returnKeyType="done"
+                                    value={password.value}
+                                    onChangeText={(text: string) => setPassword({ value: text, error: '' })}
+                                    error={!!password.error}
+                                    errorText={password.error}
+                                    secureTextEntry={!passwordShow}
+                                    right={<Input.Icon icon={!passwordShow ? 'eye-off' : 'eye'} onPress={() => { setPasswordShow(!passwordShow) }} />}
+                                    description={undefined}
+                                />
+                            </View>
                         </View>
-                        <TextInput
-                            label={t('signupscreen.yourpassword')}
-                            returnKeyType="done"
-                            value={password.value}
-                            onChangeText={(text: string) => setPassword({ value: text, error: '' })}
-                            error={!!password.error}
-                            errorText={password.error}
-                            secureTextEntry={!passwordShow}
-                            right={<Input.Icon icon={!passwordShow ? 'eye-off' : 'eye'} onPress={() => { setPasswordShow(!passwordShow) }} />}
-                            description={undefined}
-                        />
 
-                        <View style={styles.inputTitle}>
+
+                        <View style={{ flex: 1, alignContent: 'flex-start', justifyContent: 'flex-start', marginTop: 10 }}>
                             <Text style={styles.inputTitleText}>{t('signupscreen.passwordconfirmation')}*</Text>
+                            <View style={{ flexDirection: 'row', width: '100%', }}>
+                                <TextInput
+                                    label={t('signupscreen.confirmyourpassword')}
+                                    returnKeyType="done"
+                                    value={confirmPassword.value}
+                                    onChangeText={(text: string) => setConfirmPassword({ value: text, error: '' })}
+                                    error={!!confirmPassword.error}
+                                    errorText={confirmPassword.error}
+                                    secureTextEntry={!confirmPasswordShow}
+                                    right={<Input.Icon icon={!confirmPasswordShow ? 'eye-off' : 'eye'} onPress={() => { setConfirmPasswordShow(!confirmPasswordShow) }} />}
+                                    description={undefined}
+                                />
+                            </View>
                         </View>
 
-                        <TextInput
-                            label={t('signupscreen.confirmyourpassword')}
-                            returnKeyType="done"
-                            value={confirmPassword.value}
-                            onChangeText={(text: string) => setConfirmPassword({ value: text, error: '' })}
-                            error={!!confirmPassword.error}
-                            errorText={confirmPassword.error}
-                            secureTextEntry={!confirmPasswordShow}
-                            right={<Input.Icon icon={!confirmPasswordShow ? 'eye-off' : 'eye'} onPress={() => { setConfirmPasswordShow(!confirmPasswordShow) }} />}
-                            description={undefined}
-                        />
+                        <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'flex-start', marginTop: 10 }}>
 
-                        <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-start', alignItems:"center" }}>
-
-                            <View style={{ flex: 1, flexDirection: 'row',justifyContent: 'flex-start', alignItems: "center" } }>
+                            <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-start', alignItems: "center" }}>
                                 <Checkbox
                                     status={checked ? 'checked' : 'unchecked'}
                                     onPress={() => {
@@ -265,31 +216,33 @@ function SignUpScreen({ navigation }: {navigation:any}) {
 
                         </View>
 
+                        <View style={{ marginTop: 20, flex: 1, flexDirection: 'row', justifyContent: 'flex-start', alignItems: "center" }}>
+                            <Button
+                                mode="contained"
+                                //disabled={!checked}
+                                onPress={() => { onLoginPressed() }}>
+                                {t('signupscreen.submit')}
 
-                        <Button
-                            mode="contained"
-                            //disabled={!checked}
-                            onPress={() => { onLoginPressed() }}>
-                            {t('signupscreen.signup')}
+                            </Button>
+                        </View>
+                        
 
-                        </Button>
 
-                       
 
-                        <View style={styles.row}>
+                        <View style={{ marginTop: 20, flex: 1, width:'100%', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
                             <Text style={{ color: Colors.text }}>{t('signupscreen.youalreadyhaveanaccount')}</Text>
                             <TouchableOpacity onPress={() => navigation.navigate('SignIn')}>
                                 <Text style={styles.link}> {t('signupscreen.signin')} </Text>
                             </TouchableOpacity>
                         </View>
 
-                        <Snackbar
+                        {/*<Snackbar
                             visible={snackVisible}
                             onDismiss={onDismissSnackBar}
                             style={{ marginTop: 150, width: "100%" }}
                         >
                             <Text style={{ color: 'red' }}> Echec, un compte existe deja avec ce numero</Text>
-                        </Snackbar>
+                        </Snackbar>*/}
 
                     </View>
                 </Pressable>
@@ -304,15 +257,13 @@ function SignUpScreen({ navigation }: {navigation:any}) {
 const styles = StyleSheet.create({
     main: {
         backgroundColor: '#ffff',
-        flex: 1,
         padding: 20,
     },
 
     content: {
-        flex: 1,
         flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
+        justifyContent: 'flex-start',
+        alignItems: 'flex-start',
     },
 
     forgotPassword: {
@@ -340,15 +291,15 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'flex-start',
         alignItems: 'flex-start',
-        marginVertical: -10,
-        marginTop: 10
+        width: '100%'
     },
 
     inputTitleText: {
         flex: 1,
         textAlign: 'left',
         color: Colors.text,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+
     },
 
     error: {
@@ -357,6 +308,33 @@ const styles = StyleSheet.create({
         paddingTop: 4,
     },
 
+    pageheader: {
+        justifyContent: 'flex-start',
+        alignItem: 'flex-start',
+        marginBottom: 30,
+        marginTop:30
+    },
+
+    step: {
+        flexDirection:'row',
+        height: 20,
+        width:'100%'
+    },
+
+    title: {
+        color: Colors.text,
+        fontSize: 22,
+        fontWeight: 500,
+        textAlign: 'left',
+        paddingVertical: 0
+    },
+
+    subtitle: {
+        color: Colors.gray,
+        fontSize: 14,
+        fontStyle: 'italic',
+        marginTop:0
+    }
 });
 
 

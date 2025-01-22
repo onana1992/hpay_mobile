@@ -26,6 +26,7 @@ import { useTranslation } from 'react-i18next';
 import NoConnectedHeader from '../components/NoConnectedHeader';
 import { PostEmailRequest } from '../services/request';
 import LoadingModal from '../components/LoadingModal';
+import StepCompnent from '../components/StepCompnent';
 
 function EmailScreen({ navigation,route }: {navigation:any,route:any}) {
 
@@ -33,13 +34,18 @@ function EmailScreen({ navigation,route }: {navigation:any,route:any}) {
     const [email, setEmail] = React.useState({ value: '', error: '' })
     const { t } = useTranslation();
     const [modalVisible, setModalVisible] = React.useState(false);
-    const { phone, idclient } = route.params;
+
+    //const { phone, idclient } = route.params;
 
 
 
     const onLoginPressed = () => {
 
-        const emailError = emailValidator(email.value);  
+        navigation.navigate('PhotoScreen');
+
+        //console.log(email.value);
+
+        /*const emailError = emailValidator(email.value);  
         
         if (emailError) {
             setEmail({ ...email, error: emailError })
@@ -47,15 +53,15 @@ function EmailScreen({ navigation,route }: {navigation:any,route:any}) {
         }
 
         
-        setModalVisible(true);
-        PostEmailRequest(idclient, email.value ).then((response: any) => {
+        setModalVisible(true);*/
+        /*PostEmailRequest(idclient, email.value ).then((response: any) => {
 
             console.log(response.data);
 
             if (response.data.success === true) {
 
                 setModalVisible(false);
-                navigation.navigate('PhotoScreen', { phone: phone, idclient: idclient });
+                navigation.navigate('PhotoScreen'); *//*, { phone: phone, idclient: idclient })*//*;
             } else {
 
                 console.log('echec');
@@ -65,9 +71,9 @@ function EmailScreen({ navigation,route }: {navigation:any,route:any}) {
 
 
         }).catch((error: any) => {
-            console.log(error);
+            //console.log(error);
             setModalVisible(false);
-        })
+        })*/
         
     }
 
@@ -93,28 +99,33 @@ function EmailScreen({ navigation,route }: {navigation:any,route:any}) {
                 <NoConnectedHeader navigation={navigation} />
 
                 <View style={styles.content}>
-                    <Logo />
-                    <Header> {t('emailscreen.title')}</Header>
 
-                    <Paragraph>
-                        {t('emailscreen.titlemsg')}
-                    </Paragraph>
+                    <StepCompnent step={5} />
 
-                    <View style={styles.inputTitle}>
-                        <Text style={styles.inputTitleText}>{t('emailscreen.email')}*</Text>
+                    <View style={styles.pageheader}>
+                        <Text style={styles.title}>{t('emailscreen.title')}</Text>
+                        <Text style={styles.subtitle}>
+                            {t('emailscreen.titlemsg')}
+                        </Text>
                     </View>
-                    <TextInput
-                        label={t('emailscreen.youremail')}
-                        returnKeyType="next"
-                        value={email.value}
-                        onChangeText={(text: string) => setEmail({ value: text, error: '' })}
-                        error={!!email.error}
-                        errorText={email.error}
-                        autoCapitalize="none"
-                        autoCompleteType="tel"
-                        textContentType="emailAddress"
-                        description={undefined}
-                    />
+
+                    <View style={{ flex: 1, alignContent: 'flex-start', justifyContent: 'flex-start'}}>
+                        <Text style={styles.inputTitleText}>{t('emailscreen.email')}*</Text>
+                        <View style={{ flexDirection: 'row', width: '100%', }}>
+                            <TextInput
+                                label={t('emailscreen.youremail')}
+                                returnKeyType="next"
+                                value={email.value}
+                                onChangeText={(text: string) => setEmail({ value: text, error: '' })}
+                                error={!!email.error}
+                                errorText={email.error}
+                                autoCapitalize="none"
+                                autoCompleteType="tel"
+                                textContentType="emailAddress"
+                                description={undefined}
+                            />
+                        </View>
+                    </View>
 
                 </View>
 
@@ -188,6 +199,34 @@ const styles = StyleSheet.create({
         textAlign: 'left',
         color: Colors.text,
         fontWeight: 'bold'
+    },
+    pageheader: {
+        width:'100%',
+        justifyContent: 'flex-start',
+        alignItem: 'flex-start',
+        marginBottom: 30,
+        marginTop: 30
+    },
+
+    step: {
+        flexDirection: 'row',
+        height: 20,
+        width: '100%'
+    },
+
+    title: {
+        color: Colors.text,
+        fontSize: 22,
+        fontWeight: 500,
+        textAlign: 'left',
+        paddingVertical: 0
+    },
+
+    subtitle: {
+        color: Colors.gray,
+        fontSize: 14,
+        fontStyle: 'italic',
+        marginTop: 0
     }
 
 });

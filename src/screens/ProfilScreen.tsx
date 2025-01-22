@@ -37,9 +37,10 @@ function ProfilScreen({ navigation }: { navigation: any }) {
     const [filePath, setFilePath] = React.useState(null);
     const [fileName, setFileName] = React.useState(null);
 
-    const BASE_URL = 'http://10.0.0.133:80/api/';
+    //const BASE_URL = 'http://10.0.0.133:80/api/';
     // const BASE_URL = 'http://192.168.2.38:80/api/';
     //const BASE_URL = 'http://10.110.96.97:80/api/';
+    const BASE_URL = 'https://backend.clanlantene.com/joe92/api/';
 
     const user = useSelector((state: any) => state.profil.user);
     // console.log(user.photo_client);
@@ -266,6 +267,8 @@ function ProfilScreen({ navigation }: { navigation: any }) {
             </View>
         );
     };
+
+    
 
 
     return (
