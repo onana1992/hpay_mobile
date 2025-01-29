@@ -13,7 +13,7 @@
 
   "signinscreen": {
     "title": "sign in",
-    "titlemsg": "Please complete this form to log in.",
+    "titlemsg": "Please enter your phone number and password to log in",
     "phone": "Phone",
     "yourphone": "Your phone number",
     "password": "Password",
@@ -34,8 +34,9 @@
 
 
   "signupscreen": {
+    "step": "step",
     "title": "Registration",
-    "step1": "Let's start by creating your account",
+    "step1": "Phone number and password",
     "titlemsg": "Please complete this form to create your account",
     "phone": "Phone number",
     "yourphone": "Your phone number",
@@ -54,7 +55,7 @@
     "differentfrompassword": "Different from password",
     "requiredvalue": "Required value",
     "accountalreadyexist": "An account already exist with this number",
-    "submit":  "Submit"
+    "submit": "Submit"
   },
 
 
@@ -66,7 +67,9 @@
     "resendcode": "Resend the code",
     "validate": "Verify",
     "telverificationfailure": "Verification failure",
-    "novalidcode": "the code entered is not valid"
+    "novalidcode": "the code entered is not valid",
+    "coderenewtitle": "code renew",
+    "coderenewmessage": "the verification code has been renew successfully"
   },
 
 
@@ -98,20 +101,42 @@
     "youremail": "Your email address",
     "submit": "Submit",
     "ignore": "Ignore",
-    "pass": "Pass"
+    "pass": "Pass",
+    "cancel": "Cancel",
+    "verify": "Verify"
+
+
   },
 
+  "sponsorship": {
+    "title": "Get sponsored by a member",
+    "titlemsg": "The app was recommended to you by a member. Please search for their profile and add them as a referrer",
+    "sponsoryourphone": "Sponsor phone number",
+    "sponsorcountry": "Sponsor country",
+    "addassponsor": "Add as sponsor",
+    "cancel": "Cancel",
+    "confirm": "Confirm"
+  },
+
+  "countryScreen": {
+    "title": "Let's start with your country and city",
+    "titlemsg": "Please choose your country and city of residence",
+    "country": "Country of Residence",
+    "city": "City of residence",
+    "next": "Next"
+  },
 
   "passwordRecover": {
     "title": "password recovery",
-    "titlemsg": "Please enter your authentication phone number or email address",
+    "titlemsg": "Please enter your  phone number used during the authentication",
     "id": "Email/Phone",
     "youremail": "Your Phone/email",
     "submit": "Submit",
     "titleverif": "Verification Code",
     "titlemsgverif": "Please enter the code received by SMS or by email",
     "titlenewpassword": "Verification Code",
-    "titlemsgnewpassword": "Please enter the code received by SMS or by email"
+    "titlemsgnewpassword": "Please enter the code received by SMS or by email",
+    "passwordrecover": "Recupération du mot de passe"
   },
 
   "photoProfilScreen": {
@@ -159,7 +184,7 @@
   },
 
 
-  "loading": "please wait ...",
+  "loading": "Please wait ...",
   "settings": "Settings",
   "requiredValue": "Value  required",
   "signoutConfirmMessage": "Do you really want to log out ?",

@@ -101,7 +101,7 @@ function StartScreen({ navigation }: {navigation:any}) {
 
                     <Button
                         mode="outlined"
-                        onPress={() => navigation.navigate('SignUp')}  >
+                        onPress={() => navigation.navigate('CountryScreen')}  >
                         {t('startscreen.signup')}
                     </Button>
                 </View>

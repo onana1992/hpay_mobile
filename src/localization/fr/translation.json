@@ -12,8 +12,8 @@
 
 
   "signinscreen": {
-    "title": "Bienvenue ! ",
-    "titlemsg": "Veuillez remplir ce formulaire pour vous connecter.",
+    "title": "Connexion",
+    "titlemsg": "Veuillez entrer votre numéro de télephone et votre mot de passe pour vous connecter",
     "phone": "Télephone",
     "yourphone": "Votre numéro de teléphone",
     "password": "Mot de passe",
@@ -30,8 +30,9 @@
 
 
   "signupscreen": {
+    "step": "étape",
     "title": "Inscription",
-    "step1": "Numéro de téléphone et mot de passe pour créer votre compte",
+    "step1": "Numéro de téléphone et mot de passe",
     "titlemsg": "Veuillez remplir le formulaire suivant pour créer votre compte",
     "phone": "Numéro de télephone",
     "yourphone": "Votre numéro de teléphnone",
@@ -65,8 +66,10 @@
     "resendcode": "Renvoyez le code",
     "validate": "Vérifier",
     "telverificationfailure": "Échec de la vérification",
-    "novalidcode": "Le code entré n'est pas valide"
-   
+    "novalidcode": "Le code entré n'est pas valide",
+    "coderenewtitle": "Renouvellement du code",
+    "coderenewmessage": "Le code de vérification a été renouvelé avec succès"
+
   },
 
 
@@ -103,22 +106,44 @@
     "youremail": "Votre adresse email",
     "submit": "Soumettre",
     "ignore": "Ignorer",
-    "pass": "Passer"
+    "pass": "Passer",
+    "cancel": "Annluer",
+    "verify": "Vérifier"
+  },
+
+  "sponsorship": {
+    "title": "Faite vous parrainer par un membre",
+    "titlemsg": "L'application vous a été recommandée par un membre.Veuillez rechercher son profil et l'ajouter comme parrain",
+    "sponsoryourphone": "Numéro de télephone du parrain",
+    "sponsorcountry": "Pays du parrain",
+    "addassponsor": "Ajouter comme sponsor",
+    "cancel": "Annuler",
+    "confirm": "confirmer"
+
+  },
+
+  "countryScreen": {
+    "title": "Commençons par votre pays et votre ville",
+    "titlemsg": "Veuillez choisir votre pays et votre ville de residence",
+    "sponsoryourphone": "Numéro de télephone du parrain",
+    "country": "Pays de residence",
+    "city": "Ville de residence",
+    "next" :  "Suivant"
   },
 
 
-
   "passwordRecover": {
-    "title": "Récuperation du mot de passe",
-    "titlemsg": "Veuillez entrer votre numéro de télephone ou votre adresse email d'authentification",
-    "id": "Email/Telephone",
+    "title": "Votre numéro d'inscription",
+    "titlemsg": "Veuillez entrer votre numéro de télephone utilisé lors de l'inscription",
+    "id": "Telephone",
     "youremail": "Votre Telephone/email",
     "submit": "Soumettre",
     "next": "Suivant",
     "titleverif": "Code de vérification",
     "titlemsgverif": "Veuillez saisir le code reçu par SMS ou par email",
     "titlenewpassword": "Creer un nouveau mot de passe",
-    "titlemsgnewpassword": "Veuillez entrer et confirmer votre nouveau mot de passe"
+    "titlemsgnewpassword": "Veuillez entrer et confirmer votre nouveau mot de passe",
+    "passwordrecover": "Récupération du mot de passe",
   },
 
 
@@ -172,7 +197,7 @@
 
 
 
-  "loading": "veuillez patienter ...",
+  "loading": "Veuillez patienter ...",
   "settings": "Paramètres",
   "requiredValue": "Value  required",
   "logout": "Déconnexion",

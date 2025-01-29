@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next';
 
 
 
-export default function StepCompnent(props: any) {
+export default function StepRecover(props: any) {
 
     const { t } = useTranslation();
 
@@ -25,10 +25,10 @@ export default function StepCompnent(props: any) {
                 paddingVertical: 7,
                 //fontStyle: 'italic' 
                 //fontFamily:'Arial',
-            }}>{t('signupscreen.title')} <Text style={{ fontSize: 20 } }>({props.step}/7)</Text></Text>
+            }}>{t('passwordRecover.passwordrecover')} <Text style={{ fontSize: 20 }}>({props.step}/3)</Text></Text>
             <View style={styles.step}>
                 {
-                    [1, 2, 3, 4, 5, 6, 7].map((item, index) =>
+                    [1, 2, 3].map((item, index) =>
 
                         <View
                             key={index.toString()}

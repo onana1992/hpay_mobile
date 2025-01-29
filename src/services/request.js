@@ -5,14 +5,49 @@ export function signInRequest(login,password) {
 
 }
 
+
+
+
 export function signUpRequest(login, password) {
-    return client.get(`/signup?phone=${login}&password=${password}`);
+    return client.post(`/auth/signup`,
+
+        {
+            "login": login,
+            "password": password,
+            "idPays": 9,
+            "idVille": 560
+        }
+
+    );
+}
+
+export function verifyTelRequest(idLogin, code) {
+    return client.post(`/auth/validate`,
+
+        {
+            "idLoginClient": idLogin,
+            "activationCode": code
+        }
+
+    );
 }
 
 
-export function verifyTelRequest(login,code) {
+export function updateActivationCodeRequest(idLogin) {
+    return client.post(`/auth/updateActivationCode/${idLogin}`,
+
+        {
+
+        }
+
+    );
+}
+
+
+
+/*export function verifyTelRequest(login,code) {
     return client.get(`/code-validation?phone=${login}&code=${code}`);
-}
+}*/
 
 
 export function PostIdentityRequest(idclient, name, firstName, sex, dateNaiss) {

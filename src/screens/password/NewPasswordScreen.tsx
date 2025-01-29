@@ -32,7 +32,7 @@ import { confirmPasswordValidator } from '../../helpers/confirmPasswordValidator
 import { TextInput as Input, Snackbar } from 'react-native-paper'
 import { useTranslation } from 'react-i18next';
 import NoConnectedHeader from '../../components/NoConnectedHeader';
-import PhoneInput from 'react-native-phone-number-input';
+import StepRecover from "../../components/StepRecover";
 
 
 
@@ -78,74 +78,76 @@ function NewPasswordScreen({ navigation }: { navigation: any }) {
 
             <KeyboardAvoidingView
                 enabled={true}
-                behavior={Platform.OS === 'ios' ? 'padding' : 'padding'}>
+                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            >
+                
+                <Pressable onPress={Keyboard.dismiss}>
 
-                <Pressable style={{ flex: 1 }} onPress={Keyboard.dismiss}>
-
+                    <StepRecover step={3} />
 
                     <View style={styles.content}>
-                        <Logo />
-                        <Header>{t('passwordRecover.titlenewpassword').toUpperCase()}</Header>
 
-                        <Paragraph>
-                            {t('passwordRecover.titlemsgnewpassword')}
-                        </Paragraph>
+                        <View style={styles.pageheader}>
+                            <Text style={styles.title}>{t('signupscreen.step1')}</Text>
+                            <Text style={styles.subtitle}>
+                                {t('signupscreen.titlemsg')}
+                            </Text>
+                        </View>
 
                         
-                       
-                        <View style={[styles.inputTitle, { marginTop: 20 }]}>
+
+                        <View style={{ flex: 1, alignContent: 'flex-start', justifyContent: 'flex-start', marginTop: 20 }}>
                             <Text style={styles.inputTitleText}>{t('signupscreen.password')}*</Text>
+                            <View style={{ flexDirection: 'row', width: '100%', }}>
+                                <TextInput
+                                    label={t('signupscreen.yourpassword')}
+                                    returnKeyType="done"
+                                    value={password.value}
+                                    onChangeText={(text: string) => setPassword({ value: text, error: '' })}
+                                    error={!!password.error}
+                                    errorText={password.error}
+                                    secureTextEntry={!passwordShow}
+                                    right={<Input.Icon icon={!passwordShow ? 'eye-off' : 'eye'} onPress={() => { setPasswordShow(!passwordShow) }} />}
+                                    description={undefined}
+                                />
+                            </View>
                         </View>
-                        <TextInput
-                            label={t('signupscreen.yourpassword')}
-                            returnKeyType="done"
-                            value={password.value}
-                            onChangeText={(text: string) => setPassword({ value: text, error: '' })}
-                            error={!!password.error}
-                            errorText={password.error}
-                            secureTextEntry={!passwordShow}
-                            right={<Input.Icon icon={!passwordShow ? 'eye-off' : 'eye'} onPress={() => { setPasswordShow(!passwordShow) }} />}
-                            description={undefined}
-                        />
 
-                        <View style={styles.inputTitle}>
+
+                        <View style={{ flex: 1, alignContent: 'flex-start', justifyContent: 'flex-start', marginTop: 20 }}>
                             <Text style={styles.inputTitleText}>{t('signupscreen.passwordconfirmation')}*</Text>
+                            <View style={{ flexDirection: 'row', width: '100%', }}>
+                                <TextInput
+                                    label={t('signupscreen.confirmyourpassword')}
+                                    returnKeyType="done"
+                                    value={confirmPassword.value}
+                                    onChangeText={(text: string) => setConfirmPassword({ value: text, error: '' })}
+                                    error={!!confirmPassword.error}
+                                    errorText={confirmPassword.error}
+                                    secureTextEntry={!confirmPasswordShow}
+                                    right={<Input.Icon icon={!confirmPasswordShow ? 'eye-off' : 'eye'} onPress={() => { setConfirmPasswordShow(!confirmPasswordShow) }} />}
+                                    description={undefined}
+                                />
+                            </View>
                         </View>
 
-                        <TextInput
-                            label={t('signupscreen.confirmyourpassword')}
-                            returnKeyType="done"
-                            value={confirmPassword.value}
-                            onChangeText={(text: string) => setConfirmPassword({ value: text, error: '' })}
-                            error={!!confirmPassword.error}
-                            errorText={confirmPassword.error}
-                            secureTextEntry={!confirmPasswordShow}
-                            right={<Input.Icon icon={!confirmPasswordShow ? 'eye-off' : 'eye'} onPress={() => { setConfirmPasswordShow(!confirmPasswordShow) }} />}
-                            description={undefined}
-                        />
-
                         
 
-                        <Button
-                            mode="contained"
-                            onPress={() => { onLoginPressed() }}>
-                            {t('signupscreen.signup')}
-                        </Button>
+                        <View style={{ marginTop: 20, flex: 1, flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center' }}>
+                            <Button
+                                mode="contained"
+                                //disabled={!checked}
+                                onPress={() => { onLoginPressed() }}>
+                                {t('signupscreen.submit')}
+
+                            </Button>
+                        </View>
 
 
-
-                        
-
-                        <Snackbar
-                            visible={snackVisible}
-                            onDismiss={onDismissSnackBar}
-                            style={{ marginTop: 150, width: '100%' }}
-                        >
-                            <Text style={{ color: 'red' }}> Echec, un compte existe deja avec ce numero</Text>
-                        </Snackbar>
 
                     </View>
                 </Pressable>
+               {/* <LoadingModal setModalVisible={setModalVisible} modalVisible={modalVisible} />*/}
             </KeyboardAvoidingView>
 
         </ScrollView>
@@ -156,15 +158,13 @@ function NewPasswordScreen({ navigation }: { navigation: any }) {
 const styles = StyleSheet.create({
     main: {
         backgroundColor: '#ffff',
-        flex: 1,
         padding: 20,
     },
 
     content: {
-        flex: 1,
         flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
+        justifyContent: 'flex-start',
+        alignItems: 'flex-start',
     },
 
     forgotPassword: {
@@ -192,15 +192,14 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'flex-start',
         alignItems: 'flex-start',
-        marginVertical: -10,
-        marginTop: 10
+        width: '100%'
     },
 
     inputTitleText: {
-        flex: 1,
         textAlign: 'left',
         color: Colors.text,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+
     },
 
     error: {
@@ -208,6 +207,34 @@ const styles = StyleSheet.create({
         color: '#BA001A',
         paddingTop: 4,
     },
+
+    pageheader: {
+        justifyContent: 'flex-start',
+        alignItem: 'flex-start',
+        marginBottom: 30,
+        marginTop: 30
+    },
+
+    step: {
+        flexDirection: 'row',
+        height: 20,
+        width: '100%'
+    },
+
+    title: {
+        color: Colors.text,
+        fontSize: 22,
+        fontWeight: 500,
+        textAlign: 'left',
+        paddingVertical: 0
+    },
+
+    subtitle: {
+        color: Colors.gray,
+        fontSize: 14,
+        fontStyle: 'italic',
+        marginTop: 0
+    }
 
 });
 

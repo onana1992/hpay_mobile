@@ -19,7 +19,8 @@ import {
     Keyboard,
     Image,
     PermissionsAndroid,
-    Rationale
+    Rationale,
+    Text
 } from 'react-native';
 import Header from '../components/Header';
 import Paragraph from '../components/Paragraph';
@@ -29,11 +30,14 @@ import NoConnectedHeader from '../components/NoConnectedHeader';
 import { useDispatch } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import ImagePickerModal from '../components/ImagePickerModal';
+
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import { signIn, } from '../store/profilSlice';
 import { Colors } from '../themes';
 import axios from 'axios';
 import LoadingModal from '../components/LoadingModal';
+import StepCompnent from '../components/StepCompnent';
+
 
 function PhotoProfilScreen({ navigation,route }: { navigation: any,route:any }) {
 
@@ -223,52 +227,53 @@ function PhotoProfilScreen({ navigation,route }: { navigation: any,route:any }) 
 
     const sendpicture = async () => {
 
-        console.log(filePath);
-        console.log(fileName);
+        //console.log(filePath);
+        //console.log(fileName);
 
-        let form_data = new FormData();
-        let filename = fileName?.split('/').pop();
-        let match = /\.(\w+)$/.exec(filename);
-        let type = match ? `image/${match[1]}` : 'image';
-        console.log(type);
-        console.log(idclient);
+        
+        navigation.navigate('ParrainageScreen')
 
-        form_data.append('img', { uri: filePath, name: fileName, type: type });
-        form_data.append('idclient', idclient);
-        setModalVisible(true);
+        {/*let form_data = new FormData();
+            let filename = fileName?.split('/').pop();
+            let match = /\.(\w+)$/.exec(filename);
+            let type = match ? `image/${match[1]}` : 'image';
+            console.log(type);
+            console.log(idclient);
 
-
-
-        axios.post(`${BASE_URL}upload_profil_image`, form_data, {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-            },
-        }).then(response => {
-
-            // console.log(response.data);
-            // dispatch(signIn({ tel: '4388833759' }));
-
-            if (response.data.success === true) {
-
-                console.log(response.data.user[0]);
-                setModalVisible(false);
-                dispatch(signIn(response.data.user[0]));
-
-            }
-            else {
-
-                setModalVisible(false);
-
-            }
-
-        }).catch(function (error) {
-
-            console.log(error)
-            // setIsloading(false);
-
-        });
+            form_data.append('img', { uri: filePath, name: fileName, type: type });
+            form_data.append('idclient', idclient);
+            setModalVisible(true);
 
 
+
+            axios.post(`${BASE_URL}upload_profil_image`, form_data, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            }).then(response => {
+
+           
+
+                if (response.data.success === true) {
+
+                    console.log(response.data.user[0]);
+                    setModalVisible(false);
+                    dispatch(signIn(response.data.user[0]));
+
+                }
+                else {
+
+                    setModalVisible(false);
+
+                }
+
+            }).catch(function (error) {
+
+                console.log(error)
+
+            });
+
+    /*/}
     };
 
 
@@ -280,11 +285,11 @@ function PhotoProfilScreen({ navigation,route }: { navigation: any,route:any }) 
             behavior={Platform.OS === 'ios' ? 'padding' : 'padding'}
         >
 
-            <Pressable style={{ flex: 1 }} onPress={Keyboard.dismiss}>
-
                 <NoConnectedHeader navigation={navigation} />
 
-                {/* <View style={styles.content}>
+                <View style={styles.content}>
+
+                    <StepCompnent step={6} />
 
                     <View style={{ flex: 4, marginTop:50 }}>
 
@@ -298,24 +303,27 @@ function PhotoProfilScreen({ navigation,route }: { navigation: any,route:any }) 
                             </TouchableOpacity>
                         </View>
 
-                        <View style={{ marginBottom: 30 }}>
+                        <View style={{ marginBottom: 20 }}>
 
                         </View>
 
-                        <Header > {t('photoProfilScreen.title')}</Header>
+                        <Text
+                            style={styles.title}>
+                            {t('photoProfilScreen.title')}
+                        </Text>
 
-                        <Paragraph>
-                            {t('photoProfilScreen.titlemsg')}
-                        </Paragraph>
+                        <Text
+                            style={styles.subtitle}>
+                                {t('photoProfilScreen.titlemsg')}
+                            </Text>
 
                     </View>
-                    
-                   
-                    <View style={{ flex:1, marginTop: 40, width: '100%' }}>
+
+                    <View style={{ flex:2,  width: '100%', justifyContent:'flex-end' }}>
 
                         <Button
                             mode="contained"
-                           // disabled={true}
+                           //disabled={true}
                             onPress={() => { sendpicture() }}>
                             Soumettre     
                         </Button>
@@ -328,9 +336,9 @@ function PhotoProfilScreen({ navigation,route }: { navigation: any,route:any }) 
 
                     </View>
 
-                </View>*/}
 
-            </Pressable>
+                </View>
+
 
             <ImagePickerModal
                 isVisible={visible}
@@ -338,6 +346,7 @@ function PhotoProfilScreen({ navigation,route }: { navigation: any,route:any }) 
                 captureImage={captureImage}
                 chooseFile={chooseFile}
             />
+
             <LoadingModal setModalVisible={setModalVisible} modalVisible={modalVisible} />
 
         </KeyboardAvoidingView>
@@ -420,6 +429,36 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center'
     },
+
+     pageheader: {
+        justifyContent: 'flex-start',
+        alignItem: 'flex-start',
+        marginBottom: 30,
+        marginTop:30
+    },
+
+    step: {
+        flexDirection:'row',
+        height: 20,
+        width:'100%'
+    },
+
+    title: {
+        color: Colors.text,
+        fontSize: 22,
+        fontWeight: 500,
+        textAlign: 'center',
+        paddingVertical: 0
+    },
+
+    subtitle: {
+        color: Colors.gray,
+        textAlign: 'center',
+        fontSize: 14,
+        fontStyle: 'italic',
+        marginTop:0
+    }
+
 
 });
 

@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
 
     container: {
         width: '100%',
-        marginVertical: 12,
+        marginVertical: 0,
     },
 
     input: {

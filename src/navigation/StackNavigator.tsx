@@ -13,9 +13,11 @@ import SignInScreen from '../screens/SignInScreen';
 import StartScreen from '../screens/StartScreen';
 import SignUpScreen from '../screens/SignUpScreen';
 import TelVerificationScreen from '../screens/TelVerificationScreen';
+import CountryScreen from '../screens/CountryScreen';
 import IdentityScreen from '../screens/IdentityScreen';
 import  EmailScreen  from '../screens/EmailScreen';
-import { useSelector, useDispatch } from 'react-redux';
+import ParrainageScreen from '../screens/ParrainageScreen';
+import { useSelector} from 'react-redux';
 import TabNavigator from './TabNavigator';
 import PhotoProfilScreen from '../screens/PhotoProfilScreen';
 import RecoverScreen from '../screens/password/RecoverScreen';
@@ -68,11 +70,11 @@ function StackNavigation() {
 
                     <Stack.Navigator>
                         
-                       <Stack.Screen
+                       {/*<Stack.Screen
                             name="StartPage"
                             component={StartScreen}
                             options={{ headerShown: false }}
-                        />
+                       />*/}
 
 
                         <Stack.Screen
@@ -81,11 +83,21 @@ function StackNavigation() {
                             options={{ headerShown: false }}
                         />
 
+
+                        <Stack.Screen
+                            name="CountryScreen"
+                            component={CountryScreen}
+                            options={{ headerShown: false }}
+                        />
+                        
+
                         <Stack.Screen
                             name="SignUp"
                             component={SignUpScreen}
                             options={{ headerShown: false }}
                         />
+
+
 
                        <Stack.Screen
                             name="TelVerification"
@@ -94,20 +106,21 @@ function StackNavigation() {
                         />
 
 
+                       
                         <Stack.Screen
                             name="Identity"
                             component={IdentityScreen}
                             options={{ headerShown: false }}
                         />
 
-
+                        
                         <Stack.Screen
                                 name="Email"
                                 component={EmailScreen}
                                 options={{ headerShown: false }}
                         />
 
-
+                        
                         <Stack.Screen
                             name="PhotoScreen"
                             component={PhotoProfilScreen}
@@ -135,6 +148,13 @@ function StackNavigation() {
                             options={{ headerShown: false }}
                         />
 
+                        <Stack.Screen
+                            name="ParrainageScreen"
+                            component={ParrainageScreen}
+                            options={{ headerShown: false }}
+                        />
+
+                        
                         
                     </Stack.Navigator>
             }

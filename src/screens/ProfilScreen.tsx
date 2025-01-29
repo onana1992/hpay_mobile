@@ -268,11 +268,11 @@ function ProfilScreen({ navigation }: { navigation: any }) {
         );
     };
 
-    
 
 
     return (
         <ScrollView style={styles.main}>
+
             <Header />
 
             <View style={{ minHeight: 200, backgroundColor: '#ffff', marginTop: -40, marginHorizontal: 10, borderRadius: 20, paddingTop: 20, paddingBottom: 20 }}>

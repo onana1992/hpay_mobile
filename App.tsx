@@ -5,7 +5,7 @@
 
 import React, { useEffect } from 'react';
 
-import { SafeAreaView, StatusBar, useColorScheme,} from 'react-native';
+import { SafeAreaView, StatusBar, useColorScheme, View, Text } from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 import { PaperProvider } from 'react-native-paper';
 import StackNavigation from './src/navigation/StackNavigator';
@@ -69,6 +69,7 @@ function App(): JSX.Element {
   }, []);
 
     return (
+        
         <PortalProvider>
             <Provider store={store}>
                 <PersistGate  persistor={persistor}>

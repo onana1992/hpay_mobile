@@ -20,9 +20,8 @@ import {
     ScrollView,
 
 } from 'react-native';
-import Logo from '../components/Logo';
-import Header from '../components/Header';
-import Paragraph from '../components/Paragraph';
+
+
 import Button from '../components/Button';
 import TextInput from '../components/TextInput';
 import { Colors } from '../themes';
@@ -47,6 +46,7 @@ function SignInScreen({ navigation }: {navigation:any}){
     const { t } = useTranslation();
     const dispatch = useDispatch();
     const onDismissSnackBar = () => setSnackVisible(false);
+
 
     const onLoginPressed = () => {
 
@@ -107,47 +107,53 @@ function SignInScreen({ navigation }: {navigation:any}){
 
                     <View style={styles.content}>
 
-                        <Logo />
+                       
+                        <View style={styles.pageheader}>
+                            <Text style={styles.title}>{t('signinscreen.title')}</Text>
+                            <Text style={styles.subtitle}>
+                                {t('signinscreen.titlemsg')}
+                            </Text>
+                        </View>
 
-                        <Header> {t('signinscreen.title')}</Header>
+                        <View style={{ flex: 1, alignContent: 'flex-start', justifyContent: 'flex-start', marginTop: 20 }}>
 
-                        <Paragraph>
-                            {t('signinscreen.titlemsg')}
-                        </Paragraph>
-
-
-                        <View style={styles.inputTitle}>
                             <Text style={styles.inputTitleText}>{t('signinscreen.phone')}*</Text>
+                            <View style={{ flexDirection: 'row', width: '100%', }}>
+                                 <TextInput
+                                    label={t('signinscreen.yourphone')}
+                                    returnKeyType="next"
+                                    value={telephone.value}
+                                    onChangeText={(text:string) => setTelephone({ value: text, error: '' })}
+                                    error={!!telephone.error}
+                                    errorText={telephone.error}
+                                    autoCapitalize="none"
+                                    autoCompleteType="tel"
+                                    textContentType="emailAddress"
+                                    description={undefined}
+                                />
+                            </View>
+
                         </View>
 
-                        <TextInput
-                            label={t('signinscreen.yourphone')}
-                            returnKeyType="next"
-                            value={telephone.value}
-                            onChangeText={(text:string) => setTelephone({ value: text, error: '' })}
-                            error={!!telephone.error}
-                            errorText={telephone.error}
-                            autoCapitalize="none"
-                            autoCompleteType="tel"
-                            textContentType="emailAddress"
-                            description={undefined}
-                        />
 
-
-                        <View style={styles.inputTitle}>
+                        <View style={{ flex: 1, alignContent: 'flex-start', justifyContent: 'flex-start', marginTop: 20 }}>
+                            
                             <Text style={styles.inputTitleText}>{t('signinscreen.password')}*</Text>
+                            <View style={{ flexDirection: 'row', width: '100%', }}>
+                                <TextInput
+                                    label={t('signinscreen.yourpassword')}
+                                    returnKeyType="done"
+                                    value={password.value}
+                                    onChangeText={(text:string) => setPassword({ value: text, error: '' })}
+                                    error={!!password.error}
+                                    errorText={password.error}
+                                    description={undefined}
+                                    secureTextEntry={!passwordShow}
+                                    right={<Input.Icon icon={!passwordShow ? 'eye-off' : 'eye'} onPress={() => { setPasswordShow(!passwordShow) }} />}
+                                />
+                            </View>
+
                         </View>
-                        <TextInput
-                            label={t('signinscreen.yourpassword')}
-                            returnKeyType="done"
-                            value={password.value}
-                            onChangeText={(text:string) => setPassword({ value: text, error: '' })}
-                            error={!!password.error}
-                            errorText={password.error}
-                            description={undefined}
-                            secureTextEntry={!passwordShow}
-                            right={<Input.Icon icon={!passwordShow ? 'eye-off' : 'eye'} onPress={() => { setPasswordShow(!passwordShow) }} />}
-                        />
 
                         <View style={styles.forgotPassword}>
                             <TouchableOpacity
@@ -166,7 +172,7 @@ function SignInScreen({ navigation }: {navigation:any}){
 
                         <View style={styles.row}>
                             <Text style={{ color: Colors.text }}>{t('signinscreen.youdonthaveaccount')} </Text>
-                            <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
+                            <TouchableOpacity onPress={() => navigation.navigate('CountryScreen')}>
                                 <Text style={styles.link}>{t('signinscreen.signup')}</Text>
                             </TouchableOpacity>
                         </View>
@@ -193,6 +199,7 @@ function SignInScreen({ navigation }: {navigation:any}){
 }
 
 const styles = StyleSheet.create({
+
     main: {
         backgroundColor: '#ffff',
         flex: 1,
@@ -210,6 +217,7 @@ const styles = StyleSheet.create({
         width: '100%',
         alignItems: 'flex-end',
         marginBottom: 24,
+        marginTop: 10
     },
 
     row: {
@@ -240,13 +248,37 @@ const styles = StyleSheet.create({
         textAlign: 'left',
         color: Colors.text,
         fontWeight: 'bold'
+    },
+
+    pageheader: {
+        justifyContent: 'flex-start',
+        alignItem: 'flex-start',
+        marginBottom: 30,
+        marginTop: 30
+    },
+
+    step: {
+        flexDirection: 'row',
+        height: 20,
+        width: '100%'
+    },
+
+    title: {
+        color: Colors.text,
+        fontSize: 22,
+        fontWeight: 500,
+        textAlign: 'left',
+        paddingVertical: 0
+    },
+
+    subtitle: {
+        color: Colors.gray,
+        fontSize: 14,
+        fontStyle: 'italic',
+        marginTop: 0
     }
 
 });
 
 
 export default SignInScreen;
-
-
-/*Login: 0150182512
-Pass: 123456789*/

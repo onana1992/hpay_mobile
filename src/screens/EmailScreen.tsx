@@ -13,27 +13,29 @@ import {
     Text,
     StyleSheet,
     KeyboardAvoidingView,
-    Keyboard, SafeAreaView,
+    Keyboard, Pressable, Platform, ScrollView
 } from 'react-native';
-import Logo from '../components/Logo';
-import Header from '../components/Header';
-import Paragraph from '../components/Paragraph';
+
 import Button from '../components/Button';
 import TextInput from '../components/TextInput';
 import { Colors } from '../themes';
-import { emailValidator } from '../helpers/emailValidator';
 import { useTranslation } from 'react-i18next';
 import NoConnectedHeader from '../components/NoConnectedHeader';
-import { PostEmailRequest } from '../services/request';
 import LoadingModal from '../components/LoadingModal';
 import StepCompnent from '../components/StepCompnent';
+import EmailVerificationModal from '../components/EmailVerificationModal';
 
-function EmailScreen({ navigation,route }: {navigation:any,route:any}) {
+
+
+function EmailScreen({ navigation,route}: {navigation:any,route:any}) {
 
 
     const [email, setEmail] = React.useState({ value: '', error: '' })
     const { t } = useTranslation();
     const [modalVisible, setModalVisible] = React.useState(false);
+    const [verifModalVisible, setVerifModalVisible] = React.useState<boolean>(false);
+
+
 
     //const { phone, idclient } = route.params;
 
@@ -41,7 +43,9 @@ function EmailScreen({ navigation,route }: {navigation:any,route:any}) {
 
     const onLoginPressed = () => {
 
-        navigation.navigate('PhotoScreen');
+        setVerifModalVisible(true);
+
+        //navigation.navigate('PhotoScreen');
 
         //console.log(email.value);
 
@@ -85,68 +89,77 @@ function EmailScreen({ navigation,route }: {navigation:any,route:any}) {
   
     }
 
+    const openVerifMotal = () => {
+        setVerifModalVisible(true);
+    }
 
+
+    
     return (
-
+   
         <KeyboardAvoidingView
+            enabled={true}
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             style={styles.main}
-            enabled={false}
-            behavior='padding'
         >
+            <NoConnectedHeader navigation={navigation} />
+            <ScrollView>
 
-            <SafeAreaView style={{ flex: 1 }} onPress={Keyboard.dismiss}>
+                <Pressable style={styles.content} onPress={Keyboard.dismiss}>
 
-                <NoConnectedHeader navigation={navigation} />
+                    <View style={{ flex:2 , alignItems:'flex-start' }}>
+                           
+                        <StepCompnent step={5} />
 
-                <View style={styles.content}>
-
-                    <StepCompnent step={5} />
-
-                    <View style={styles.pageheader}>
-                        <Text style={styles.title}>{t('emailscreen.title')}</Text>
-                        <Text style={styles.subtitle}>
-                            {t('emailscreen.titlemsg')}
-                        </Text>
-                    </View>
-
-                    <View style={{ flex: 1, alignContent: 'flex-start', justifyContent: 'flex-start'}}>
-                        <Text style={styles.inputTitleText}>{t('emailscreen.email')}*</Text>
-                        <View style={{ flexDirection: 'row', width: '100%', }}>
-                            <TextInput
-                                label={t('emailscreen.youremail')}
-                                returnKeyType="next"
-                                value={email.value}
-                                onChangeText={(text: string) => setEmail({ value: text, error: '' })}
-                                error={!!email.error}
-                                errorText={email.error}
-                                autoCapitalize="none"
-                                autoCompleteType="tel"
-                                textContentType="emailAddress"
-                                description={undefined}
-                            />
+                        <View style={styles.pageheader}>
+                            <Text style={styles.title}>{t('emailscreen.title')}</Text>
+                            <Text style={styles.subtitle}>
+                                {t('emailscreen.titlemsg')}
+                            </Text>
                         </View>
+
+
+                        <View style={{  alignContent: 'flex-end', justifyContent: 'flex-end'}}>
+                            <Text style={styles.inputTitleText}>{t('emailscreen.email')}*</Text>
+                            <View style={{ flexDirection: 'row', width: '100%', }}>
+                                <TextInput
+                                    label={t('emailscreen.youremail')}
+                                    returnKeyType="next"
+                                    value={email.value}
+                                    onChangeText={(text: string) => setEmail({ value: text, error: '' })}
+                                    error={!!email.error}
+                                    errorText={email.error}
+                                    autoCapitalize="none"
+                                    autoCompleteType="tel"
+                                    textContentType="emailAddress"
+                                    description={undefined}
+                                />
+                            </View>
+                        </View>
+        
                     </View>
+                   
+                </Pressable>
+            </ScrollView>
+            <View style={{  marginTop: 10, width: '100%', justifyContent: 'flex-end' }}>
+                <Button
+                    mode="contained"
+                    onPress={() => { openVerifMotal() }}>
+                    {t('emailscreen.submit')}
+                </Button>
 
-                </View>
-
-                <View style={{ flex: 2, marginTop:250 }}>
-                    <View style={{ marginTop: 10, width: '100%' }}>
-                        <Button
-                            mode="contained"
-                            onPress={() => { onLoginPressed() }}>
-                            {t('emailscreen.submit')}
-                        </Button>
-
-                        <Button
-                            mode="outlined"
-                            onPress={() => { pass() }}>
-                            {t('emailscreen.pass')}
-                        </Button>
-                    </View>
-                </View>
-            </SafeAreaView>
+                <Button
+                    mode="outlined"
+                    onPress={() => { pass() }}>
+                    {t('emailscreen.pass')}
+                </Button>
+            </View>
             <LoadingModal setModalVisible={setModalVisible} modalVisible={modalVisible} />
-        </KeyboardAvoidingView>
+            <EmailVerificationModal
+                isVisible={verifModalVisible}
+                onClose={() => setVerifModalVisible(false)}
+            />
+        </KeyboardAvoidingView>       
     );
 }
 
@@ -156,20 +169,24 @@ const styles = StyleSheet.create({
         backgroundColor: '#ffff',
         flex: 1,
         padding: 20,
+        width:'100%',
     },
 
     content: {
-        flex: 4,
+        flex:1,
         flexDirection: 'column',
-        // justifyContent: 'center',
-        alignItems: 'center',
+        justifyContent: 'flex-start',
+        alignItems: 'flex-start',
+        width: '100%',
     },
 
+
     forgotPassword: {
-        width: '100%',
+        
         alignItems: 'flex-end',
         marginBottom: 24,
     },
+
 
     row: {
         flexDirection: 'row',
@@ -186,22 +203,8 @@ const styles = StyleSheet.create({
         color: Colors.primary,
     },
 
-    inputTitle: {
-        flexDirection: 'row',
-        justifyContent: 'flex-start',
-        alignItems: 'flex-start',
-        marginVertical: -10,
-        marginTop: 10
-    },
-
-    inputTitleText: {
-        flex: 1,
-        textAlign: 'left',
-        color: Colors.text,
-        fontWeight: 'bold'
-    },
     pageheader: {
-        width:'100%',
+        width: '100%',
         justifyContent: 'flex-start',
         alignItem: 'flex-start',
         marginBottom: 30,
@@ -227,7 +230,13 @@ const styles = StyleSheet.create({
         fontSize: 14,
         fontStyle: 'italic',
         marginTop: 0
-    }
+    },
+
+    inputTitleText: {
+        textAlign: 'left',
+        color: Colors.text,
+        fontWeight: 'bold'
+    },
 
 });
 

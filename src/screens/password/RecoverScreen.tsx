@@ -9,15 +9,13 @@
 
 import * as React from 'react';
 import { View, Text, StyleSheet, KeyboardAvoidingView, Pressable, Platform,Keyboard,} from 'react-native';
-import Logo from '../../components/Logo';
-import Header from '../../components/Header';
-import Paragraph from '../../components/Paragraph';
 import Button from '../../components/Button';
 import TextInput from '../../components/TextInput';
 import { Colors } from '../../themes';
-import { emailValidator } from '../../helpers/emailValidator';
 import { useTranslation } from 'react-i18next';
 import NoConnectedHeader from '../../components/NoConnectedHeader';
+import StepCompnent from '../../components/StepCompnent';
+import StepRecover from '../../components/StepRecover';
 
 
 function RecoverScreen({ navigation }: { navigation: any }) {
@@ -25,6 +23,7 @@ function RecoverScreen({ navigation }: { navigation: any }) {
 
     const [email, setEmail] = React.useState({ value: '', error: '' })
     const { t } = useTranslation();
+    const [telephone, setTelephone] = React.useState({ value: '', error: '' });
 
     const onLoginPressed = () => {
 
@@ -46,41 +45,51 @@ function RecoverScreen({ navigation }: { navigation: any }) {
             enabled={true}
             behavior={Platform.OS === 'ios' ? 'padding' : 'padding'}>
 
-            <Pressable style={{ flex: 1 }} onPress={Keyboard.dismiss}>
-
                 <NoConnectedHeader navigation={navigation} />
+                <Pressable style={{ flex: 1 }} onPress={Keyboard.dismiss}>
 
-                <View style={styles.content}>
-                    <Logo />
-                    <Header> {t('passwordRecover.title').toUpperCase()}</Header>
+                    <StepRecover step={1} />
 
-                    <Paragraph>
-                        {t('passwordRecover.titlemsg')}
-                    </Paragraph>
+                    <View style={{ flex: 3, alignItems: 'flex-start' }}>
+                        <View style={styles.content}>
 
-                    <View style={styles.inputTitle}>
-                        <Text style={styles.inputTitleText}>{t('passwordRecover.id')}*</Text>
+                        <View style={styles.pageheader}>
+                            <Text style={styles.title}>{t('passwordRecover.title')}</Text>
+                            <Text style={styles.subtitle}>
+                                {t('passwordRecover.titlemsg')}
+                            </Text>
+                        </View>
+
+                        <View style={{ alignContent: 'flex-start', justifyContent: 'flex-start', marginTop: 20 }}>
+                            <Text style={styles.inputTitleText}>{t('signinscreen.phone')}*</Text>
+                            <View style={{ flexDirection: 'row', width: '100%', }}>
+                                <TextInput
+                                    label={t('signinscreen.yourphone')}
+                                    returnKeyType="next"
+                                    value={telephone.value}
+                                    onChangeText={(text: string) => setTelephone({ value: text, error: '' })}
+                                    error={!!telephone.error}
+                                    errorText={telephone.error}
+                                    autoCapitalize="none"
+                                    autoCompleteType="tel"
+                                    textContentType="emailAddress"
+                                    description={undefined}
+                                />
+                            </View>
+
+                        </View>
                     </View>
-                    <TextInput
-                        label={t('')}
-                        returnKeyType="next"
-                        value={email.value}
-                        onChangeText={(text: string) => setEmail({ value: text, error: '' })}
-                        error={!!email.error}
-                        errorText={email.error}
-                        autoCapitalize="none"
-                        autoCompleteType="tel"
-                        textContentType="emailAddress"
-                        description={undefined}
-                    />
+                    
+                    <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'flex-end' }}>
 
-                    <View style={{ marginTop: 20, width: "100%" }}>
-                        <Button
-                            mode="contained"
-                            onPress={() => { onLoginPressed() }}>
-                            {t('passwordRecover.next')}
-                        </Button>
+                        <View style={{ flexDirection: 'row', marginTop: 30, width: "100%" }}>
+                            <Button
+                                mode="contained"
+                                onPress={() => { onLoginPressed() }}>
+                                {t('passwordRecover.next')}
+                            </Button>
 
+                        </View>
                     </View>
 
                 </View>
@@ -91,23 +100,25 @@ function RecoverScreen({ navigation }: { navigation: any }) {
 }
 
 const styles = StyleSheet.create({
+
+
     main: {
         backgroundColor: '#ffff',
         flex: 1,
         padding: 20,
+        width: '100%',
     },
 
     content: {
         flex: 1,
         flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
     },
 
     forgotPassword: {
         width: '100%',
         alignItems: 'flex-end',
         marginBottom: 24,
+        marginTop: 10
     },
 
     row: {
@@ -129,16 +140,45 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'flex-start',
         alignItems: 'flex-start',
-        marginVertical: -10,
         marginTop: 10
     },
 
     inputTitleText: {
-        flex: 1,
         textAlign: 'left',
         color: Colors.text,
         fontWeight: 'bold'
-    }
+    },
+
+    pageheader: {
+        justifyContent: 'flex-start',
+        alignItem: 'flex-start',
+        marginBottom: 30,
+        marginTop: 30
+    },
+
+    step: {
+        flexDirection: 'row',
+        height: 20,
+        width: '100%'
+    },
+
+    title: {
+        color: Colors.text,
+        fontSize: 22,
+        fontWeight: 500,
+        textAlign: 'left',
+        paddingVertical: 0
+    },
+
+    subtitle: {
+        color: Colors.gray,
+        fontSize: 14,
+        fontStyle: 'italic',
+        marginTop: 0
+    },
+
+
+
 
 });
 

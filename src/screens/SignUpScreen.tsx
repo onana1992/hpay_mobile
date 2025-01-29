@@ -38,24 +38,37 @@ import { signUpRequest } from '../services/request';
 import Toast from 'react-native-toast-message';
 import LoadingModal from '../components/LoadingModal';
 import StepCompnent from '../components/StepCompnent';
+import { useRoute } from '@react-navigation/native';
 
 
-function SignUpScreen({ navigation }: {navigation:any}) {
+function SignUpScreen({ navigation}: {navigation:any, route: any}) {
+
+
+    const route = useRoute<any>();
+    const { country, city } = route.params;
+
+
+    console.log(country);
+    console.log(city);
 
     const [modalVisible, setModalVisible] = React.useState(false);
     const [telephone, setTelephone] = React.useState({ value: '', error: '' });
-    const [country, setCountry] = React.useState('United States');
     const [password, setPassword] = React.useState({ value: '', error: '' })
     const [confirmPassword, setConfirmPassword] = React.useState({ value: '', error: '' })
     const [passwordShow, setPasswordShow] = React.useState(false)
     const [confirmPasswordShow, setConfirmPasswordShow] = React.useState(false)
     const [checked, setChecked] = React.useState(false);
     const { t } = useTranslation();
+
+
     const [value, setValue] = useState('');
     const phoneInput = useRef<PhoneInput>(null);
     const [snackVisible, setSnackVisible] = React.useState(false);
     const onDismissSnackBar = () => setSnackVisible(false);
 
+    const indice = (val:string) => {
+        return '+' + val; 
+    }
 
     const countries = ['CI', 'SN', 'CH', 'GM', 'TG', 'ML', 'BJ', 'GA',
         'CA', 'HT', 'US', 'CD', 'DO', 'GT', 'CM', 'CG', 'FR',
@@ -64,13 +77,12 @@ function SignUpScreen({ navigation }: {navigation:any}) {
 
     const onLoginPressed = () => {
 
-        navigation.navigate('TelVerification');
-
         //navigation.navigate('TelVerification');
-        //console.log(confirmPassword.value);
-        //console.log(password.value);
+     
 
-        /*const telError = telValidator(telephone.value);
+        console.log(telephone.value);
+
+        const telError = telValidator(telephone.value);
         const passwordError = passwordValidator(password.value);
         const passwordConfirmationError = confirmPasswordValidator(password.value, confirmPassword.value);
         
@@ -84,45 +96,33 @@ function SignUpScreen({ navigation }: {navigation:any}) {
         }
 
         if (checked) {
+            setModalVisible(true);
+            signUpRequest(country.indicator + telephone.value, password.value).then((response: any) => {
 
-            signUpRequest(telephone.value, password.value).then((response: any) => {
+                console.log(response.data.response.data);
+                setModalVisible(false);
+                navigation.navigate('TelVerification', { phone: telephone.value, idclient: response.data.response.data.idLoginClient });
 
-                console.log(response.data);
-
-               setModalVisible(true);
-
-                if (response.data.success === true) {
-
-                    setModalVisible(false);
-                    navigation.navigate('TelVerification', { phone: telephone.value, idclient: response.data.data.idclient});
-
-
-                } else {
-
-                    console.log('echec');
-                    setModalVisible(false);
-
+            }).catch((_error: any) => {
+               
+                setModalVisible(false)
+                if (_error.response.status === 409) {
                     Toast.show({
                         type: 'error',
                         text1: t('signupscreen.registrationfailure'),
                         text2: t('signupscreen.accountalreadyexist'),
                         position: 'top'
                     });
+                } else {
+
 
                 }
-
-
-
-            }).catch((_error: any) => {
-
             })
     
-        }*/
+        }
 
-        
-       
     }
-
+    
     return (
         <ScrollView style={styles.main}>
         
@@ -147,23 +147,25 @@ function SignUpScreen({ navigation }: {navigation:any}) {
                             </Text>
                         </View>
 
-                        <View style={{ flex: 1, alignContent: 'flex-start', justifyContent: 'flex-start' }}>
+                        <View style={{ flex: 1, alignContent: 'flex-start', justifyContent: 'flex-start'}}>
                             <Text style={styles.inputTitleText}>{t('signupscreen.phone')}*</Text>
                             <View style={{ flexDirection: 'row', width: '100%',  }}>
                                 <TextInput
                                     label={t('signupscreen.yourphone')}
                                     returnKeyType="done"
                                     value={telephone.value}
+                                    error={!!telephone.error}
+                                    errorText={telephone.error}
                                     inputMode="numeric"
                                     onChangeText={(text: string) => setTelephone({ value: text, error: '' })}
                                     description={undefined}
-                                    left={<Input.Affix text="+1"/>}
+                                    left={<Input.Affix text={indice(country.indicator)} />}
                                 />
                                 {telephone.error ? <Text style={styles.error}>{telephone.error}</Text> : null}
                             </View>
                         </View>
 
-                        <View style={{ flex: 1, alignContent: 'flex-start', justifyContent: 'flex-start', marginTop:10 }}>
+                        <View style={{ flex: 1, alignContent: 'flex-start', justifyContent: 'flex-start', marginTop:20 }}>
                             <Text style={styles.inputTitleText}>{t('signupscreen.password')}*</Text>
                             <View style={{ flexDirection: 'row', width: '100%', }}>
                                 <TextInput
@@ -181,7 +183,7 @@ function SignUpScreen({ navigation }: {navigation:any}) {
                         </View>
 
 
-                        <View style={{ flex: 1, alignContent: 'flex-start', justifyContent: 'flex-start', marginTop: 10 }}>
+                        <View style={{ flex: 1, alignContent: 'flex-start', justifyContent: 'flex-start', marginTop: 20 }}>
                             <Text style={styles.inputTitleText}>{t('signupscreen.passwordconfirmation')}*</Text>
                             <View style={{ flexDirection: 'row', width: '100%', }}>
                                 <TextInput
@@ -198,7 +200,7 @@ function SignUpScreen({ navigation }: {navigation:any}) {
                             </View>
                         </View>
 
-                        <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'flex-start', marginTop: 10 }}>
+                        <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'flex-start', marginTop: 20 }}>
 
                             <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-start', alignItems: "center" }}>
                                 <Checkbox
@@ -216,7 +218,7 @@ function SignUpScreen({ navigation }: {navigation:any}) {
 
                         </View>
 
-                        <View style={{ marginTop: 20, flex: 1, flexDirection: 'row', justifyContent: 'flex-start', alignItems: "center" }}>
+                        <View style={{ marginTop: 20, flex: 1, flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center' }}>
                             <Button
                                 mode="contained"
                                 //disabled={!checked}
@@ -295,7 +297,6 @@ const styles = StyleSheet.create({
     },
 
     inputTitleText: {
-        flex: 1,
         textAlign: 'left',
         color: Colors.text,
         fontWeight: 'bold',

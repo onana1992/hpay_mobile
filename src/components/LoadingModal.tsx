@@ -2,6 +2,7 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 /* eslint-disable react/self-closing-comp */
 /* eslint-disable prettier/prettier */
+
 import React from 'react';
 import { StyleSheet, Dimensions, View, ActivityIndicator, Text } from 'react-native';
 import Modal from 'react-native-modal';
@@ -20,10 +21,6 @@ const LoadingModal = ({ modalVisible, setModalVisible }: { modalVisible: boolean
 		<Modal
 			backdropOpacity={0.7}
 			isVisible={modalVisible}
-			//animationInTiming={1000}
-			//animationOutTiming={1000}
-			//backdropTransitionInTiming={1000}
-			//backdropTransitionOutTiming={1000}
 			onRequestClose={() => {
 				 setModalVisible(!modalVisible);
 			}}
@@ -42,15 +39,15 @@ const LoadingModal = ({ modalVisible, setModalVisible }: { modalVisible: boolean
 
 const styles = StyleSheet.create({
 	modal: {
-		width: Dimensions.get('window').width - 40,
-		//height: Dimensions.get('window').height,
-		height:300,
+		width: Dimensions.get('window').width / 2,
+		height:150,
 		backgroundColor: 'white',
 		alignSelf: 'center',
 		marginVertical: 60,
 		marginHorizontal: 20,
-		borderColor: '#0084BD',
+		borderColor: 'transparent',
 		borderWidth: 0.5,
+		borderRadius:10,
 	},
 
 });

@@ -39,6 +39,7 @@ const styles = StyleSheet.create({
 
     input: {
         backgroundColor: '#ffff',
+        marginTop:0,
     },
 
     description: {

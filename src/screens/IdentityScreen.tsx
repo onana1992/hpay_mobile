@@ -114,14 +114,17 @@ function IdentityScreen({ navigation, route }: {navigation:any,route:any}) {
     }
 
     return (
-        <ScrollView style={styles.main}>
+
+        <KeyboardAvoidingView
+            enabled={true}
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            style={styles.main}
+        >
+        
 
             <NoConnectedHeader navigation={navigation} />
 
-            <KeyboardAvoidingView
-                enabled={true}
-                behavior={Platform.OS === 'ios' ? 'padding' : 'padding'}
-            >
+            <ScrollView>
 
                 <Pressable onPress={Keyboard.dismiss}>
 
@@ -155,7 +158,7 @@ function IdentityScreen({ navigation, route }: {navigation:any,route:any}) {
                         </View>
 
 
-                        <View style={{ flex: 1, alignContent: 'flex-start', justifyContent: 'flex-start', marginTop: 10 }}>
+                        <View style={{ flex: 1, alignContent: 'flex-start', justifyContent: 'flex-start', marginTop: 20 }}>
                             <Text style={styles.inputTitleText} >{t('identitycreen.familyname')}*</Text>
                             <View style={{ flexDirection: 'row', width: '100%', }}>
                                 <TextInput
@@ -172,7 +175,7 @@ function IdentityScreen({ navigation, route }: {navigation:any,route:any}) {
                         </View>
 
 
-                        <View style={{ flex: 1, alignContent: 'flex-start', justifyContent: 'flex-start', marginTop: 10 }}>
+                        <View style={{ flex: 1, alignContent: 'flex-start', justifyContent: 'flex-start', marginTop: 20 }}>
                             <Text style={styles.inputTitleText}>{t('identitycreen.dateofbirth')}*</Text>
                             <View style={{ flexDirection: 'row'}}>
                                 <DateInput
@@ -186,7 +189,7 @@ function IdentityScreen({ navigation, route }: {navigation:any,route:any}) {
                         </View>
 
 
-                        <View style={{ flex: 1, alignContent: 'flex-start', justifyContent: 'flex-start', marginTop: 10 }}>
+                        <View style={{ flex: 1, alignContent: 'flex-start', justifyContent: 'flex-start', marginTop: 20 }}>
                             <Text style={styles.inputTitleText}>{t('identitycreen.sex')}*</Text>
                             <View style={{ flexDirection: 'row', width:'100%' }}>
                                 <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
@@ -222,20 +225,22 @@ function IdentityScreen({ navigation, route }: {navigation:any,route:any}) {
 
                         </View>
 
-                        <View style={{ width: '100%', marginTop: 20 }}>
-                            <Button
-                                mode="contained"
-                                onPress={() => { onSubmitPressed() }}
-                            >
-                                {t('identitycreen.submit')}
-                            </Button>
-                        </View>                  
+                                          
                     </View>
                 </Pressable>
-                <LoadingModal setModalVisible={setModalVisible} modalVisible={modalVisible} />
-            </KeyboardAvoidingView>
+                
+            </ScrollView>
+            <View style={{ width: '100%', marginTop: 20 }}>
+                <Button
+                    mode="contained"
+                    onPress={() => { onSubmitPressed() }}
+                >
+                    {t('identitycreen.submit')}
+                </Button>
+            </View>
+            <LoadingModal setModalVisible={setModalVisible} modalVisible={modalVisible} />
 
-        </ScrollView>
+        </KeyboardAvoidingView>
 
         
     );
@@ -246,6 +251,7 @@ const styles = StyleSheet.create({
     main: {
         backgroundColor: '#ffff',
         padding: 20,
+        flex:1,
     },
 
     content: {

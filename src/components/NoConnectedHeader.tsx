@@ -58,8 +58,9 @@ export default function NoConnectedHeader(props: { navigation: { goBack: () => v
 
 const styles = StyleSheet.create({
     main: {
-        height: 25,
+        height: 40,
         flexDirection: 'row',
+        paddingVertical: 5
     },
 
     backbutton: {
