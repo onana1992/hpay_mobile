@@ -19,6 +19,7 @@ import { Portal, PortalProvider, PortalHost } from '@gorhom/portal';
 import { PersistGate } from 'redux-persist/integration/react';
 import { LogBox } from 'react-native';
 import Toast from 'react-native-toast-message';
+import changeNavigationBarColor from 'react-native-navigation-bar-color';
 
 registerTranslation('en-GB', enGB);
 registerTranslation('fr', fr);
@@ -54,6 +55,11 @@ registerTranslation('fr', fr);
 }*/
 
 function App(): JSX.Element {
+
+
+    React.useEffect(() => {
+        changeNavigationBarColor('#ffffff', true);
+    }, []);
 
     const persistor = persistStore(store);
 

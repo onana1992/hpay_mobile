@@ -14,6 +14,7 @@ import { Colors } from '../themes';
 import Button from '../components/Button';
 import { useTranslation } from 'react-i18next';
 import { Menu, MenuOptions, MenuOption, MenuTrigger } from 'react-native-popup-menu';
+import NoConnectedHeader from '../components/NoConnectedHeader';
 
 
 function StartScreen({ navigation }: {navigation:any}) {
@@ -31,7 +32,9 @@ function StartScreen({ navigation }: {navigation:any}) {
 
                 <View style={{ flex: 1 }}></View>
 
-                <View style={{ flex: 5, alignItems: 'flex-end' }}>
+                <NoConnectedHeader navigation={navigation} visible={false} /> 
+
+                {/*<View style={{ flex: 5, alignItems: 'flex-end' }}>
                     <Menu>
                         <MenuTrigger
                             customStyles={{
@@ -81,7 +84,7 @@ function StartScreen({ navigation }: {navigation:any}) {
                         </MenuOptions>
                     </Menu>
                 </View>
-            </View>
+            </View>*/}
 
             <View style={styles.main}>
                 <View style={{ flex: 4, justifyContent: 'flex-start', alignItems: 'center' }}>

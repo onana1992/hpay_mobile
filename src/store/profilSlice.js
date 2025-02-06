@@ -1,7 +1,8 @@
 import {createSlice} from '@reduxjs/toolkit';
 
 const initialState = {
-  user: null,
+    user: null,
+    token:null,
 };
 
 
@@ -17,12 +18,16 @@ const profilSlice = createSlice({
 
     signOut: (state, action) => {
       state.user = null;
+      },
+
+    saveToken: (state, action) => {
+        state.token = action.payload;
     },
 
   },
 });
 
 
-export const { signIn, signOut } = profilSlice.actions;
+export const { signIn, signOut, saveToken } = profilSlice.actions;
 
 export default profilSlice.reducer;

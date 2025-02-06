@@ -20,24 +20,21 @@ import {
     Keyboard,
     ScrollView
 } from 'react-native';
-import Logo from '../components/Logo';
-import Header from '../components/Header';
-import Paragraph from '../components/Paragraph';
-import Button from '../components/Button';
-import TextInput from '../components/TextInput';
-import { Colors } from '../themes';
-import { telValidator } from '../helpers/telValidator';
-import { passwordValidator } from '../helpers/passwordValidator';
-import { confirmPasswordValidator } from '../helpers/confirmPasswordValidator';
-import { TextInput as Input, Snackbar } from 'react-native-paper';
+import Button from '../../components/Button';
+import TextInput from '../../components/TextInput';
+import { Colors } from '../../themes';
+import { telValidator } from '../../helpers/telValidator';
+import { passwordValidator } from '../../helpers/passwordValidator';
+import { confirmPasswordValidator } from '../../helpers/confirmPasswordValidator';
+import { TextInput as Input } from 'react-native-paper';
 import { Checkbox } from 'react-native-paper';
 import { useTranslation } from 'react-i18next';
-import NoConnectedHeader from '../components/NoConnectedHeader';
+import NoConnectedHeader from '../../components/NoConnectedHeader';
 import PhoneInput from 'react-native-phone-number-input';
-import { signUpRequest } from '../services/request';
+import { signUpRequest } from '../../services/request';
 import Toast from 'react-native-toast-message';
-import LoadingModal from '../components/LoadingModal';
-import StepCompnent from '../components/StepCompnent';
+import LoadingModal from '../../components/LoadingModal';
+import StepCompnent from '../../components/StepCompnent';
 import { useRoute } from '@react-navigation/native';
 
 
@@ -47,9 +44,8 @@ function SignUpScreen({ navigation}: {navigation:any, route: any}) {
     const route = useRoute<any>();
     const { country, city } = route.params;
 
-
     console.log(country);
-    console.log(city);
+
 
     const [modalVisible, setModalVisible] = React.useState(false);
     const [telephone, setTelephone] = React.useState({ value: '', error: '' });
@@ -78,9 +74,8 @@ function SignUpScreen({ navigation}: {navigation:any, route: any}) {
     const onLoginPressed = () => {
 
         //navigation.navigate('TelVerification');
-     
-
-        console.log(telephone.value);
+    
+       
 
         const telError = telValidator(telephone.value);
         const passwordError = passwordValidator(password.value);
@@ -96,16 +91,22 @@ function SignUpScreen({ navigation}: {navigation:any, route: any}) {
         }
 
         if (checked) {
-            setModalVisible(true);
-            signUpRequest(country.indicator + telephone.value, password.value).then((response: any) => {
 
+            
+            const formatTel = country.indicator + telephone.value
+
+            setModalVisible(true);
+            signUpRequest(formatTel, password.value).then((response: any) => {
+                setModalVisible(false);
                 console.log(response.data.response.data);
                 setModalVisible(false);
-                navigation.navigate('TelVerification', { phone: telephone.value, idclient: response.data.response.data.idLoginClient });
+                navigation.navigate('TelVerification', { phone: formatTel, idclient: response.data.response.data.idLoginClient });
 
             }).catch((_error: any) => {
                
-                setModalVisible(false)
+                setModalVisible(false);
+               
+
                 if (_error.response.status === 409) {
                     Toast.show({
                         type: 'error',
@@ -300,7 +301,7 @@ const styles = StyleSheet.create({
         textAlign: 'left',
         color: Colors.text,
         fontWeight: 'bold',
-
+        marginBottom: 10,
     },
 
     error: {

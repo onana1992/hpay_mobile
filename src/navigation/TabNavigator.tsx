@@ -1,14 +1,16 @@
+﻿/* eslint-disable keyword-spacing */
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable quotes */
 /* eslint-disable react/no-unstable-nested-components */
 /* eslint-disable prettier/prettier */
 // eslint-disable-next-line react-native/no-inline-styles
-import { View, TouchableOpacity, Text, StatusBar, StyleSheet } from 'react-native';
+import { View, TouchableOpacity, Text, StatusBar, StyleSheet ,SafeAreaView} from 'react-native';
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import AntDesign  from 'react-native-vector-icons/AntDesign';
 import IconBadge from 'react-native-icon-badge';
 import { Badge } from 'react-native-paper';
 import {useTranslation} from 'react-i18next';
@@ -31,9 +33,17 @@ const TabNavigator = () => {
     };
 
 
+
     return (
 
-        <View style={{ flex: 1 }} >
+        <SafeAreaView style={{backgroundColor: 'black', flex:1}}>
+
+         <StatusBar
+          animated={true}
+          backgroundColor={Colors.primary}
+          barStyle="light-content"
+          hidden={false}
+        />
 
             <Tab.Navigator
                 screenOptions={{
@@ -48,7 +58,7 @@ const TabNavigator = () => {
                     options={{
                         tabBarLabel: 'Accueil',
                         tabBarIcon: ({ color, size }) => (
-                            <MaterialCommunityIcons name="home-outline" color={color} size={28} />
+                            <AntDesign name="home" color={color} size={28} />
                         ),
                         headerShown: false,
                     }}
@@ -62,7 +72,7 @@ const TabNavigator = () => {
                         tabBarLabel: 'Transactions',
                         tabBarIcon: ({ color, size }) => (
                             <View>
-                                <FontAwesome name="dollar" color="black" size={30} />
+                                <FontAwesome name="dollar" color={Colors.text} size={30} />
                                 <Portal hostName="transactionPanel">
                                     <TransactionSwipeablePanel
                                         isPanelActive={isPanelActive}
@@ -86,9 +96,9 @@ const TabNavigator = () => {
                     name="profile"
                     component={ProfilScreen}
                     options={{
-                        tabBarLabel: 'Profile',
+                        tabBarLabel: 'Paramètres',
                         tabBarIcon: ({ color, size }) => (
-                            <FontAwesome name="user-o" color={color} size={size} />
+                            <AntDesign name="setting" color={color} size={size} />
                         ),
                         headerShown: false,
                     }}
@@ -97,7 +107,7 @@ const TabNavigator = () => {
 
             </Tab.Navigator>
 
-        </View>
+        </SafeAreaView>
     );
 };
 

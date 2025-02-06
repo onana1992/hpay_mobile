@@ -16,40 +16,40 @@ import {
     Keyboard, Pressable, Platform, ScrollView
 } from 'react-native';
 
-import Button from '../components/Button';
-import TextInput from '../components/TextInput';
-import { Colors } from '../themes';
+import Button from '../../components/Button';
+import TextInput from '../../components/TextInput';
+import { Colors } from '../../themes';
 import { useTranslation } from 'react-i18next';
-import NoConnectedHeader from '../components/NoConnectedHeader';
-import LoadingModal from '../components/LoadingModal';
-import StepCompnent from '../components/StepCompnent';
-import EmailVerificationModal from '../components/EmailVerificationModal';
+import NoConnectedHeader from '../../components/NoConnectedHeader';
+import LoadingModal from '../../components/LoadingModal';
+import StepCompnent from '../../components/StepCompnent';
+import EmailVerificationModal from '../../components/EmailVerificationModal';
+import { useRoute } from '@react-navigation/native';
+import { emailValidator } from '../../helpers/emailValidator';
+import { postEmailRequest } from '../../services/request';
 
 
 
-function EmailScreen({ navigation,route}: {navigation:any,route:any}) {
+function EmailScreen({ navigation}: {navigation:any}) {
 
-
+    const route = useRoute<any>();
     const [email, setEmail] = React.useState({ value: '', error: '' })
     const { t } = useTranslation();
     const [modalVisible, setModalVisible] = React.useState(false);
     const [verifModalVisible, setVerifModalVisible] = React.useState<boolean>(false);
+    const { phone, idclient } = route.params;
 
-
-
-    //const { phone, idclient } = route.params;
-
-
+    console.log(phone);
 
     const onLoginPressed = () => {
 
-        setVerifModalVisible(true);
+       // setVerifModalVisible(true);
 
         //navigation.navigate('PhotoScreen');
 
         //console.log(email.value);
 
-        /*const emailError = emailValidator(email.value);  
+        const emailError = emailValidator(email.value);  
         
         if (emailError) {
             setEmail({ ...email, error: emailError })
@@ -57,42 +57,40 @@ function EmailScreen({ navigation,route}: {navigation:any,route:any}) {
         }
 
         
-        setModalVisible(true);*/
-        /*PostEmailRequest(idclient, email.value ).then((response: any) => {
+        setModalVisible(true);
+        postEmailRequest(idclient, email.value ).then((response: any) => {
 
             console.log(response.data);
+            setModalVisible(false);
+            setVerifModalVisible(true);
 
-            if (response.data.success === true) {
+
+           // navigation.navigate('PhotoScreen'); 
+
+           /* if (response.data.success === true) {
 
                 setModalVisible(false);
-                navigation.navigate('PhotoScreen'); *//*, { phone: phone, idclient: idclient })*//*;
+                navigation.navigate('PhotoScreen'); 
             } else {
 
                 console.log('echec');
                 setModalVisible(false);
 
-            }
+            }*/
 
 
-        }).catch((error: any) => {
+        }).catch((_error: any) => {
             //console.log(error);
             setModalVisible(false);
-        })*/
+        })
         
     }
 
 
 
     const pass = () => {
-
         navigation.navigate('PhotoScreen');
-  
     }
-
-    const openVerifMotal = () => {
-        setVerifModalVisible(true);
-    }
-
 
     
     return (
@@ -144,7 +142,7 @@ function EmailScreen({ navigation,route}: {navigation:any,route:any}) {
             <View style={{  marginTop: 10, width: '100%', justifyContent: 'flex-end' }}>
                 <Button
                     mode="contained"
-                    onPress={() => { openVerifMotal() }}>
+                    onPress={() => { onLoginPressed() }}>
                     {t('emailscreen.submit')}
                 </Button>
 
@@ -158,6 +156,8 @@ function EmailScreen({ navigation,route}: {navigation:any,route:any}) {
             <EmailVerificationModal
                 isVisible={verifModalVisible}
                 onClose={() => setVerifModalVisible(false)}
+                phone={phone}
+                idclient={idclient}
             />
         </KeyboardAvoidingView>       
     );

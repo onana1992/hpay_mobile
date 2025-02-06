@@ -15,10 +15,12 @@ export default function TextInput(props: any) {
         <View style={styles.container}>
             <Input
                 style={styles.input}
-                //selectionColor={theme.colors.primary}
                 underlineColor="transparent"
+                cursorColor="gray"
                 mode="outlined"
+                placeholderTextColor="gray"
                 activeOutlineColor={Colors.text}
+                textColor={Colors.text}
                 {...props}
             />
             {props.description && !props.errorText ? (
@@ -39,7 +41,9 @@ const styles = StyleSheet.create({
 
     input: {
         backgroundColor: '#ffff',
-        marginTop:0,
+        marginTop: 0,
+        color: 'red',
+
     },
 
     description: {

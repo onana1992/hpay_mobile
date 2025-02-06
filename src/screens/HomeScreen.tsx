@@ -244,7 +244,8 @@ function HomeScreen({ navigation,user }: { navigation: any, user:any }) {
     return (
         <ScrollView style={styles.main}>
 
-            <View style={styles.header}>
+            {/*
+                <View style={styles.header}>
                 <View style={{ flexDirection: 'row', marginTop:5 }}>
                     <View style={{ flex: 3, flexDirection:'row' }}>
                         <View style={styles.avatar} >
@@ -263,8 +264,10 @@ function HomeScreen({ navigation,user }: { navigation: any, user:any }) {
                     <View style={{ flex: 1 }}>
                     </View>
                 </View>
-            </View>
+            </View>*/
+            }
 
+            {/*
             <View style={{ height: 180, backgroundColor: 'white', margin: 10, marginTop: -50, borderRadius: 20 }}>
 
                 <View style={{ flexDirection: 'row', justifyContent: 'center', paddingTop: 20 }}>
@@ -313,7 +316,7 @@ function HomeScreen({ navigation,user }: { navigation: any, user:any }) {
                     </View>
 
 
-                </View>*/}
+                </View>
 
                 <View style={{ margin: 10 }}>
                     <View>

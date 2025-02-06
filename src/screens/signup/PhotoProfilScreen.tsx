@@ -14,49 +14,40 @@ import {
     StyleSheet,
     TouchableOpacity,
     KeyboardAvoidingView,
-    Pressable,
     Platform,
-    Keyboard,
     Image,
     PermissionsAndroid,
     Rationale,
     Text
 } from 'react-native';
-import Header from '../components/Header';
-import Paragraph from '../components/Paragraph';
-import Button from '../components/Button';
+
+import Button from '../../components/Button';
 import { useTranslation } from 'react-i18next';
-import NoConnectedHeader from '../components/NoConnectedHeader';
+import NoConnectedHeader from '../../components/NoConnectedHeader';
 import { useDispatch } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import ImagePickerModal from '../components/ImagePickerModal';
-
+import ImagePickerModal from '../../components/ImagePickerModal';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
-import { signIn, } from '../store/profilSlice';
-import { Colors } from '../themes';
+import { signIn, } from '../../store/profilSlice';
+import { Colors } from '../../themes';
 import axios from 'axios';
-import LoadingModal from '../components/LoadingModal';
-import StepCompnent from '../components/StepCompnent';
+import LoadingModal from '../../components/LoadingModal';
+import StepCompnent from '../../components/StepCompnent';
+import { useRoute } from '@react-navigation/native';
 
 
-function PhotoProfilScreen({ navigation,route }: { navigation: any,route:any }) {
+function PhotoProfilScreen({ navigation }: { navigation: any }) {
 
-
+    const route = useRoute<any>();
     const { t } = useTranslation();
     const dispatch = useDispatch();
     const [fileName, setFileName] = React.useState<string>('');
     const [filePath, setFilePath] = React.useState<string>('');
     const [visible, setVisible] = React.useState(false);
-
-    //const BASE_URL = 'http://10.0.0.133:80/api/';
-    //const BASE_URL = 'http://192.168.2.38:80/api/';
-    //const BASE_URL = 'http://10.110.96.97:80/api/';
-    const BASE_URL = 'https://backend.clanlantene.com/joe92/api/';
-    
+    const {phone, idclient } = route.params;
+    const BASE_URL = 'http://10.0.0.133:5000/api';
     const [modalVisible, setModalVisible] = React.useState(false);
-   // const { phone, idclient } = route.params;
-
-
+   
 
     const onLoginPressed = () => {
         dispatch(signIn({ tel: '4388833759' }));
@@ -78,7 +69,6 @@ function PhotoProfilScreen({ navigation,route }: { navigation: any,route:any }) 
                 );
 
                 // If CAMERA Permission is granted
-
                 return granted === PermissionsAndroid.RESULTS.GRANTED;
             } catch (err) {
 
@@ -91,23 +81,19 @@ function PhotoProfilScreen({ navigation,route }: { navigation: any,route:any }) 
 
 
 
-    const captureImage = async (type: any) => {
+    const captureImage = async (type: string) => {
 
         let options = {
-            mediaType: type,
+            mediaType: 'photo',
             maxWidth: 300,
             maxHeight: 550,
             quality: 1,
             allowsEditing: true,
-            videoQuality: 'low',
-            durationLimit: 30, //Video max duration in seconds
             saveToPhotos: true,
         };
        
         let isCameraPermitted = await requestCameraPermission();
 
-        //console.log(isCameraPermitted)
-        // let isStoragePermitted = await requestExternalWritePermission();
 
         if (isCameraPermitted) {
             launchCamera(options, (response) => {
@@ -115,7 +101,7 @@ function PhotoProfilScreen({ navigation,route }: { navigation: any,route:any }) 
                 console.log('Response = ', response);
 
                 if (response.didCancel) {
-                    console.log('User cancelled camera picker');
+                    //console.log('User cancelled camera picker');
                     return;
                 } else if (response.errorCode === 'camera_unavailable') {
                     /*Toast.show({
@@ -125,7 +111,7 @@ function PhotoProfilScreen({ navigation,route }: { navigation: any,route:any }) 
                     });*/
                     console.log('camera_unavailable');
                     return;
-                } else if (response.errorCode == 'permission') {
+                } else if (response.errorCode === 'permission') {
                     /*Toast.show({
                         type: 'message',
                         props: { message: I18n.t('permissionnotsatisfied') },
@@ -150,12 +136,9 @@ function PhotoProfilScreen({ navigation,route }: { navigation: any,route:any }) 
                 console.log('fileName -> ', response.fileName);*/
                 //console.log('fileName -> ', response.assets[0].uri)
 
-                setFilePath(response?.assets[0].uri );
-                setFileName(response?.assets[0].fileName);
-                //setFile(response?.assets[0]);
-
-                //sendpicture(response.assets[0].uri, response.assets[0].fileName)
-                setVisible(false)
+                setFilePath(response.assets[0].uri);
+                setFileName(response.assets[0].fileName);
+                setVisible(false);
 
             });
         }
@@ -166,13 +149,11 @@ function PhotoProfilScreen({ navigation,route }: { navigation: any,route:any }) 
     const chooseFile = (/*type*/) => {
 
         let options = {
-
-            //mediaType: type,
+            mediaType:'image',
             maxWidth: 600,
             maxHeight: 650,
             quality: 1,
             allowsEditing: true,
-
         };
 
 
@@ -218,7 +199,6 @@ function PhotoProfilScreen({ navigation,route }: { navigation: any,route:any }) 
             setFileName(response.assets[0].fileName);
             setVisible(false);
 
-
             //console.log(response.assets[0].uri);
 
         });
@@ -227,53 +207,40 @@ function PhotoProfilScreen({ navigation,route }: { navigation: any,route:any }) 
 
     const sendpicture = async () => {
 
-        //console.log(filePath);
-        //console.log(fileName);
+      
 
+        let form_data = new FormData();
+        let filename = filePath?.split('/').pop();
+        let match = /\.(\w+)$/.exec(filename);
+        let type = match ? `image/${match[1]}` : 'image';
+
+        console.log(type);
+        console.log(idclient);
+        console.log(fileName);
+
+        form_data.append('photo', { uri: filePath, name: filename, type: type });
+        setModalVisible(true);
+
+        console.log(`${BASE_URL}/auth/upload-photo/${idclient}`);
+
+        axios.post(`${BASE_URL}/auth/upload-photo/${idclient}`, form_data, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        }).then(response => {
+
+           // console.log(response.data);
+            setModalVisible(false);
+            navigation.navigate('ParrainageScreen', { phone: phone, idclient: idclient })
         
-        navigation.navigate('ParrainageScreen')
 
-        {/*let form_data = new FormData();
-            let filename = fileName?.split('/').pop();
-            let match = /\.(\w+)$/.exec(filename);
-            let type = match ? `image/${match[1]}` : 'image';
-            console.log(type);
-            console.log(idclient);
+        }).catch(function (error) {
+            setModalVisible(false);
+            console.log(error.response)
 
-            form_data.append('img', { uri: filePath, name: fileName, type: type });
-            form_data.append('idclient', idclient);
-            setModalVisible(true);
+        });
 
-
-
-            axios.post(`${BASE_URL}upload_profil_image`, form_data, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-            }).then(response => {
-
-           
-
-                if (response.data.success === true) {
-
-                    console.log(response.data.user[0]);
-                    setModalVisible(false);
-                    dispatch(signIn(response.data.user[0]));
-
-                }
-                else {
-
-                    setModalVisible(false);
-
-                }
-
-            }).catch(function (error) {
-
-                console.log(error)
-
-            });
-
-    /*/}
+    
     };
 
 
@@ -295,7 +262,7 @@ function PhotoProfilScreen({ navigation,route }: { navigation: any,route:any }) 
 
                         <View style={styles.avatar}>
                             <Image
-                                source={filePath ? { uri: filePath } : require('../assets/avatar.jpg')}
+                                source={filePath ? { uri: filePath } : require('../../assets/avatar.jpg')}
                                 style={styles.avatarImage}
                             />
                             <TouchableOpacity style={styles.addButton} onPress={() => setVisible(true)} >
@@ -330,7 +297,7 @@ function PhotoProfilScreen({ navigation,route }: { navigation: any,route:any }) 
 
                         <Button
                             mode="outlined"
-                            onPress={() => { onLoginPressed() }}>
+                            onPress={() => { navigation.navigate('ParrainageScreen', { phone: phone, idclient: idclient }) }}>
                             {t('emailscreen.pass')}
                         </Button>
 
@@ -424,7 +391,7 @@ const styles = StyleSheet.create({
         borderColor: 'gray',
         borderWidth:1,
         position: 'absolute',
-        right:70,
+        right:85,
         bottom: -5,
         alignItems: 'center',
         justifyContent: 'center'

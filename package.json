@@ -29,6 +29,7 @@
     "react-native-element-dropdown": "^2.10.4",
     "react-native-image-picker": "^7.1.2",
     "react-native-modal": "^13.0.1",
+    "react-native-navigation-bar-color": "^2.0.2",
     "react-native-paper": "^5.12.3",
     "react-native-paper-dates": "^0.22.3",
     "react-native-paper-select": "^1.1.1",

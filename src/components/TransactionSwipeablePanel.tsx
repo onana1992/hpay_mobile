@@ -113,11 +113,11 @@ export default function TransactionSwipeablePanel({ isPanelActive, setIsPanelAct
     return (
         <SwipeablePanel {...panelProps} isActive={isPanelActive} style={{ height: 410, padding: 0 }}>
             <View style={{marginTop:20}}>
-                <FlatList
+               {/* <FlatList
                     data={menu}
                     renderItem={renderRow}
                     keyExtractor={item => item.id}
-                />
+                />*/}
             </View>
         </SwipeablePanel>
     );

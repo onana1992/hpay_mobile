@@ -19,7 +19,7 @@ export default function StepCompnent(props: any) {
         <View style={{}}>
             <Text style={{
                 color: Colors.text,
-                fontSize: 24,
+                fontSize: 22,
                 fontWeight: 600,
                 textAlign: 'center',
                 paddingVertical: 7,

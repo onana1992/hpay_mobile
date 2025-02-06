@@ -18,7 +18,6 @@ import {
     Platform,
     Keyboard,
     ScrollView,
-
 } from 'react-native';
 
 
@@ -31,10 +30,11 @@ import { TextInput as Input, Snackbar } from 'react-native-paper';
 import { useTranslation } from 'react-i18next';
 import NoConnectedHeader from '../components/NoConnectedHeader';
 import { useDispatch } from 'react-redux';
-import { signIn, } from '../store/profilSlice';
+import { signIn, saveToken } from '../store/profilSlice';
 import { signInRequest } from '../services/request';
 import LoadingModal from '../components/LoadingModal';
 import Toast from 'react-native-toast-message';
+import Logo from '../components/Logo';
 
 function SignInScreen({ navigation }: {navigation:any}){
 
@@ -62,32 +62,33 @@ function SignInScreen({ navigation }: {navigation:any}){
         setModalVisible(true);
         signInRequest(telephone.value, password.value).then((response: any) => {
 
-          console.log(response.data);
 
-            if (response.data.success === true) {
+            //console.log(response.data.response.token)
 
+            if (response.data.statusCode === 200) {
+               
                 setModalVisible(false);
-                dispatch(signIn(response.data.data[0]));
+                dispatch(signIn(response.data.response.data));
+                dispatch(saveToken(response.data.response.token));
 
-            } else {
+            } 
 
-               console.log('echec');
-               setModalVisible(false);
-
-               Toast.show({
-                   type: 'error',
-                   text1: t('signinscreen.connexionfailure'), 
-                   text2: t('signinscreen.loginorpasswordinvalid'),
-                   position: 'top'
-               });
-
-            }
-
-
+            setModalVisible(false);
+              
             
         }).catch((error: any) => {
 
-            console.log(error);
+          
+            if (error.response.data.statusCode) {
+
+                Toast.show({
+                    type: 'error',
+                    text1: t('signinscreen.connexionfailure'),
+                    text2: t('signinscreen.loginorpasswordinvalid'),
+                    position: 'top'
+                });
+
+            }
             setModalVisible(false);
         })
 
@@ -102,16 +103,17 @@ function SignInScreen({ navigation }: {navigation:any}){
                 behavior={Platform.OS === 'ios' ? 'padding' : 'padding'}>
 
                 <Pressable style={{flex:1}} onPress={Keyboard.dismiss}>
-                    
-                    <NoConnectedHeader navigation={navigation} />
+
+                    <NoConnectedHeader navigation={navigation} visible={false} />
 
                     <View style={styles.content}>
 
-                       
+                        <Logo />
+
                         <View style={styles.pageheader}>
                             <Text style={styles.title}>{t('signinscreen.title')}</Text>
                             <Text style={styles.subtitle}>
-                                {t('signinscreen.titlemsg')}
+                                {t('signinscreen.titlemsg')}.
                             </Text>
                         </View>
 
@@ -126,6 +128,7 @@ function SignInScreen({ navigation }: {navigation:any}){
                                     onChangeText={(text:string) => setTelephone({ value: text, error: '' })}
                                     error={!!telephone.error}
                                     errorText={telephone.error}
+                                    inputMode="numeric"
                                     autoCapitalize="none"
                                     autoCompleteType="tel"
                                     textContentType="emailAddress"
@@ -187,8 +190,6 @@ function SignInScreen({ navigation }: {navigation:any}){
                             <Text style={{ color: 'red' }}>Echec de connexion. Numero ou mot de passe invalide.</Text>
                         </Snackbar>
                     </View>
-
-                    
                     
                 </Pressable>
             
@@ -239,7 +240,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'flex-start',
         alignItems: 'flex-start',
-        marginVertical: -10,
+        marginVertical: 10,
         marginTop: 10
     },
 
@@ -247,14 +248,15 @@ const styles = StyleSheet.create({
         flex: 1,
         textAlign: 'left',
         color: Colors.text,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        marginBottom: 10,
+        fontSize: 14
     },
 
     pageheader: {
         justifyContent: 'flex-start',
         alignItem: 'flex-start',
-        marginBottom: 30,
-        marginTop: 30
+        marginBottom: 10,
     },
 
     step: {

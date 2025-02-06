@@ -13,35 +13,40 @@ import {
     Text,
     StyleSheet,
     KeyboardAvoidingView,
-    Keyboard, SafeAreaView,Pressable,ScrollView
+    ScrollView, Platform
 } from 'react-native';
-import Logo from '../components/Logo';
-import Header from '../components/Header';
-import Paragraph from '../components/Paragraph';
-import Button from '../components/Button';
-import TextInput from '../components/TextInput';
-import { Colors } from '../themes';
-import { emailValidator } from '../helpers/emailValidator';
+import Button from '../../components/Button';
+import TextInput from '../../components/TextInput';
+import { Colors } from '../../themes';
 import { useTranslation } from 'react-i18next';
-import NoConnectedHeader from '../components/NoConnectedHeader';
-import { PostEmailRequest } from '../services/request';
-import LoadingModal from '../components/LoadingModal';
-import StepCompnent from '../components/StepCompnent';
-import { TextInput as Input, Snackbar } from 'react-native-paper';
-import { IconButton } from 'react-native-paper';
+import NoConnectedHeader from '../../components/NoConnectedHeader';
+import LoadingModal from '../../components/LoadingModal';
+import StepCompnent from '../../components/StepCompnent';
+import { TextInput as Input} from 'react-native-paper';
 import { Dropdown } from 'react-native-element-dropdown';
+import SponsorSearchModal from '../../components/SponsorSearchModal';
+import { searchClientByPhoneRequest } from '../../services/request';
+import { telValidator } from '../../helpers/telValidator';
+import Toast from 'react-native-toast-message';
+import { useRoute } from '@react-navigation/native';
 
 
 
-function CountryScreen({ navigation,route }: {navigation:any,route:any}) {
+function ParrainageScreen({ navigation}: {navigation:any}) {
 
-
-    const [email, setEmail] = React.useState({ value: '', error: '' })
-   
+    const route = useRoute<any>();
     const { t } = useTranslation();
     const [modalVisible, setModalVisible] = React.useState(false);
-    const [country, setCountry] = React.useState({ label: '🇨🇦 Canada', value: 'ca', indicator: "1" });
-    const [city, setCity] = React.useState({ label: 'Montreal', value: 'Montreal' });
+    const [telephone, setTelephone] = React.useState({ value: '', error: '' });
+    const [recipantCountry, setRecipantCountry] = React.useState({ label: '🇨🇦 Canada', value: 'ca', indicator: "1" });
+    const [client, setClient] = React.useState(null);
+    const { phone, idclient } = route.params;
+
+    console.log(route.params);
+
+    //const idclient = 43;
+    //const phone = '14388833743';
+
     const COUNTRIES = [
         { label: '🇨🇦 Canada', value: 'ca', indicator: "1" },
         { label: '🇨🇲 Cameroun', value: 'cm', indicator: '237' },
@@ -69,62 +74,60 @@ function CountryScreen({ navigation,route }: {navigation:any,route:any}) {
         { label: '🇹🇼 Taïwan', value: 'tw', indicator: '886' }
     ];
 
-   const CITIES = [
-      { label: 'Montreal', value: 'Montreal' },
-      { label: 'Toronto', value: 'Toronto' },
-      { label: 'Vancouver', value: 'Vancouver' },
-      { label: 'Ottawa', value: 'Ottawa' },
-      { label: 'Calgary', value: 'Calgary' },
-      { label: 'Edmonton', value: 'Edmonton' },
-      { label: 'Quebec City', value: 'Quebec City' },
-      { label: 'Winnipeg', value: 'Winnipeg' },
-      { label: 'Hamilton', value: 'Hamilton' },
-      { label: 'Kitchener', value: 'Kitchener' },
-      { label: 'London', value: 'London' },
-      { label: 'Victoria', value: 'Victoria' },
-      { label: 'Halifax', value: 'Halifax' },
-      { label: 'Mississauga', value: 'Mississauga' },
-      { label: 'Brampton', value: 'Brampton' },
-      { label: 'Surrey', value: 'Surrey' },
-      { label: 'Richmond', value: 'Richmond' },
-      { label: 'Burnaby', value: 'Burnaby' },
-      { label: 'Quebec', value: 'Quebec' },
-      { label: 'Regina', value: 'Regina' },
-      { label: 'Saskatoon', value: 'Saskatoon' },
-      { label: 'St. John’s', value: 'St. John’s' },
-      { label: 'Charlottetown', value: 'Charlottetown' },
-      { label: 'Fredericton', value: 'Fredericton' },
-      { label: 'Saint John', value: 'Saint John' },
-      { label: 'Thunder Bay', value: 'Thunder Bay' },
-      { label: 'Abbotsford', value: 'Abbotsford' },
-      { label: 'Guelph', value: 'Guelph' },
-      { label: 'Barrie', value: 'Barrie' },
-      { label: 'Kelowna', value: 'Kelowna' },
-      { label: 'Lethbridge', value: 'Lethbridge' },
-];
-
-
-
-
-    const next = () => {
-        navigation.navigate('SignUp',{ country: country, city: city });
-    }
-
+    const [sponsorModalVisible, setSponsorModalVisible] = React.useState<boolean>(false);
 
 
     const pass = () => {
-
-        navigation.navigate('PhotoScreen');
-  
+        navigation.popToTop();
     }
+
 
     const indicator = ()=>{
-    
         return '+' + recipantCountry.indicator;
-    
     }
 
-  
+
+    const lauchSponsorSearch = () => {
+
+
+        const telError = telValidator(telephone.value);
+       
+        if (telError) {
+            setTelephone({ ...telephone, error: t(`${telError}`) })
+            return
+        }
+
+       
+        setModalVisible(true);
+        searchClientByPhoneRequest(recipantCountry.indicator + telephone.value).then((response: any) => {
+
+            setModalVisible(false);
+            setClient(response.data.response.data);
+            setSponsorModalVisible(true);
+
+        }).catch((_error: any) => {
+
+            console.log(_error);
+
+            setModalVisible(false);
+
+            if (_error.response.status === 404) {
+                Toast.show({
+                    type: 'error',
+                    text1: t('sponsorship.failure'),
+                    text2: t('sponsorship.clientnotfound'),
+                    position: 'top'
+                });
+            } else {
+
+
+            }
+
+        })
+
+
+    }
+
      
     return (
    
@@ -134,28 +137,27 @@ function CountryScreen({ navigation,route }: {navigation:any,route:any}) {
             style={styles.main}
         >
             <NoConnectedHeader navigation={navigation} />
-            <ScrollView  >
+            <ScrollView >
 
                 <View style={{ alignItems:'flex-start' }}>
                            
-                    <StepCompnent step={1} />
+                    <StepCompnent step={7} />
 
                     <View style={styles.pageheader}>
-                        <Text style={styles.title}>{t('countryScreen.title')}</Text>
+                        <Text style={styles.title}>{t('sponsorship.title')}</Text>
                         <Text style={styles.subtitle}>
-                            {t('countryScreen.titlemsg')}
+                            {t('sponsorship.titlemsg')}
                         </Text>
                     </View>
 
                     <View style={{  alignContent: 'flex-end', justifyContent: 'flex-end',}}>
-                         <Text style={styles.inputTitleText}>{t('countryScreen.country')}*</Text>
+                         <Text style={styles.inputTitleText}>{t('sponsorship.sponsorcountry')}*</Text>
                           <View style={{ flexDirection: 'row', width: '100%',  }}>
                           <Dropdown
                                 style={styles.dropdown}
                                 placeholderStyle={styles.placeholderStyle}
                                 selectedTextStyle={styles.selectedTextStyle}
                                 inputSearchStyle={styles.inputSearchStyle}
-                                searchPlaceholderTextColor='gray'
                                 itemTextStyle={{ color: 'black' }}
                                 iconStyle={styles.iconStyle}
                                 data={COUNTRIES}
@@ -165,9 +167,9 @@ function CountryScreen({ navigation,route }: {navigation:any,route:any}) {
                                 valueField="value"
                                 placeholder="Selectionez un pays"
                                 searchPlaceholder={t('rechercher')}
-                                value={country}
+                                value={recipantCountry}
                                 onChange={(item) => {
-                                    setCountry(item);
+                                    setRecipantCountry(item);
                                 }}
                             />
                                
@@ -177,32 +179,23 @@ function CountryScreen({ navigation,route }: {navigation:any,route:any}) {
 
 
                     <View style={{  alignContent: 'flex-end', justifyContent: 'flex-end',  marginTop:20}}>
-                         <Text style={styles.inputTitleText}>{t('countryScreen.city')}*</Text>
-                         <View style={{ flexDirection: 'row', width: '100%',  }}>
-                          <Dropdown
-                                style={styles.dropdown}
-                                placeholderStyle={styles.placeholderStyle}
-                                selectedTextStyle={styles.selectedTextStyle}
-                                inputSearchStyle={styles.inputSearchStyle}
-                                searchPlaceholderTextColor='gray'
-                                itemTextStyle={{ color: 'black' }}
-                                iconStyle={styles.iconStyle}
-                                data={CITIES}
-                                search
-                                maxHeight={300}
-                                labelField="label"
-                                valueField="value"
-                                placeholder="Selectionez un pays"
-                                searchPlaceholder={t('rechercher')}
-                                value={city}
-                                onChange={(item) => {
-                                    setCity(item);
-                                }}
-                            />
+                         <Text style={styles.inputTitleText}>{t('sponsorship.sponsoryourphone')}*</Text>
+                          <View style={{ flexDirection: 'row', width: '100%',  }}>
+                                <TextInput
+                                    label={t('sponsorship.entrersponsorphonenumber')}
+                                    returnKeyType="done"
+                                    value={telephone.value}
+                                    inputMode="numeric"
+                                    error={!!telephone.error}
+                                    errorText={telephone.error}
+                                    onChangeText={(text: string) => setTelephone({ value: text, error: '' })}
+                                    description={undefined}
+                                    left={<Input.Affix textStyle={{ color: Colors.text }} text={indicator()} />}
+                                
+                                />
                                
                         
                         </View>
-                          
                     </View>
 
                 </View>
@@ -213,13 +206,24 @@ function CountryScreen({ navigation,route }: {navigation:any,route:any}) {
             <View style={{ marginTop: 10, width: '100%', justifyContent:'flex-end' }}>
                     <Button
                         mode="contained"
-                        onPress={() => { next() }}>
-                        {t('countryScreen.next')}
+                        onPress={() => { lauchSponsorSearch()   }}>
+                        {t('sponsorship.addassponsor')}
                     </Button>
 
+                    <Button
+                        mode="outlined"
+                        onPress={() => { pass() }}>
+                        {t('emailscreen.pass')}
+                    </Button>
                 </View>
             <LoadingModal setModalVisible={setModalVisible} modalVisible={modalVisible} />
-        </KeyboardAvoidingView>       
+            <SponsorSearchModal
+                isVisible={sponsorModalVisible}
+                onClose={() => setSponsorModalVisible(false)}
+                client={client}
+                phone={phone}
+            />
+        </KeyboardAvoidingView> 
     );
 }
 
@@ -263,7 +267,8 @@ const styles = StyleSheet.create({
      inputTitleText: {
         textAlign: 'left',
         color: Colors.text,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        marginBottom: 10,
     },
 
     pageheader: {
@@ -294,20 +299,24 @@ const styles = StyleSheet.create({
         fontStyle: 'italic',
         marginTop: 0
     },
+
     placeholderStyle: {
         fontSize: 16,
         color: 'gray',
     },
+
 
     selectedTextStyle: {
         fontSize: 16,
         color: 'black',
     },
 
+
     iconStyle: {
         width: 20,
         height: 20,
     },
+
 
     inputSearchStyle: {
         height: 40,
@@ -332,11 +341,14 @@ const styles = StyleSheet.create({
         marginTop: 10,
     },
 
+    error: {
+        fontSize: 13,
+        color: '#BA001A',
+        paddingTop: 4,
+    },
+
 });
 
-
-
-
-export default CountryScreen;
+export default ParrainageScreen;
 
 

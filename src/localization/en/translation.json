@@ -1,4 +1,5 @@
 {
+  
   "french": "Français",
   "english": "English",
 
@@ -13,7 +14,7 @@
 
   "signinscreen": {
     "title": "sign in",
-    "titlemsg": "Please enter your phone number and password to log in",
+    "titlemsg": "Please enter your phone number and password to sign in",
     "phone": "Phone",
     "yourphone": "Your phone number",
     "password": "Password",
@@ -103,19 +104,27 @@
     "ignore": "Ignore",
     "pass": "Pass",
     "cancel": "Cancel",
-    "verify": "Verify"
+    "verify": "Verify",
+    "veriftitle": "Let's verify your email address",
+    "verifmsg": "We sended you an verification code by email. Please enter this code to verify your email adress"
 
 
   },
 
   "sponsorship": {
     "title": "Get sponsored by a member",
-    "titlemsg": "The app was recommended to you by a member. Please search for their profile and add them as a referrer",
+    "titlemsg": "The app was recommended to you by a member ? Please search for their profile and add them as a sponsor",
     "sponsoryourphone": "Sponsor phone number",
+    "entrersponsorphonenumber": "Enter phone number",
     "sponsorcountry": "Sponsor country",
-    "addassponsor": "Add as sponsor",
+    "addassponsor": "Add",
     "cancel": "Cancel",
-    "confirm": "Confirm"
+    "confirm": "Confirm",
+    "clientnotfound": "No client holding this phone number found",
+    "failure": "Failure",
+    "confirmaddingsponsor": "Confirm adding sponsor",
+    "confirmmsg": "The member linked to the number entered has been found, please enter confirm to add him as a sponsor",
+    "sponsorshipalreadyaexist": "This sponsorship already exist",
   },
 
   "countryScreen": {
@@ -127,7 +136,7 @@
   },
 
   "passwordRecover": {
-    "title": "password recovery",
+    "title": "Your phone number",
     "titlemsg": "Please enter your  phone number used during the authentication",
     "id": "Email/Phone",
     "youremail": "Your Phone/email",
@@ -136,8 +145,17 @@
     "titlemsgverif": "Please enter the code received by SMS or by email",
     "titlenewpassword": "Verification Code",
     "titlemsgnewpassword": "Please enter the code received by SMS or by email",
-    "passwordrecover": "Recupération du mot de passe"
+    "passwordrecover": "Recupération du mot de passe",
+    "titlecreatenewpassword": "Create a new password",
+    "titlemsgcreatenewpassword": "Please fill the following form to  create a new password",
+    "failure": "Failure",
+    "noaccoundfound": "No account matches the number entered",
+    "incorrectverificationcode": "the code you enter is not correct",
+    "passwordchanged": "Succès",
+    "passwordchangedmsg": "Votre nouveau mot de passe a été enregistré avec succès"
   },
+
+
 
   "photoProfilScreen": {
     "title": "Add a profil photo",

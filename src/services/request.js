@@ -1,11 +1,17 @@
 import { client } from "./axiosClient";
 
-export function signInRequest(login,password) {
-    return client.get(`/signin?phone=${login}&password=${password}`);
 
+
+export function signInRequest(login, password) {
+    return client.post(`/auth/signin`,
+
+        {
+            "login": login,
+            "password": password,
+        }
+
+    );
 }
-
-
 
 
 export function signUpRequest(login, password) {
@@ -32,7 +38,7 @@ export function verifyTelRequest(idLogin, code) {
     );
 }
 
-
+//update activation code
 export function updateActivationCodeRequest(idLogin) {
     return client.post(`/auth/updateActivationCode/${idLogin}`,
 
@@ -44,41 +50,89 @@ export function updateActivationCodeRequest(idLogin) {
 }
 
 
-
-/*export function verifyTelRequest(login,code) {
-    return client.get(`/code-validation?phone=${login}&code=${code}`);
-}*/
-
-
+// post client identity
 export function PostIdentityRequest(idclient, name, firstName, sex, dateNaiss) {
-    return client.post(`/submit-identity`,
+    return client.post(`/auth/infoClient/${idclient}`,
 
-		{
-            "idclient": idclient,
-            "name": "Onana",
-            "firstname": "Joe Junior",
-            "sex": "M",
-            "datenaiss": "1992-04-09"
-		}
+        {
+            "nom": name,
+            "prenoms": firstName,
+            "dateNaissance": dateNaiss,
+            "lieuNaissance": '',
+            "sex": sex
+        }
 
 	);
 }
 
-export function PostEmailRequest(idclient,email) {
-    return client.post(`/submit-email`,
+
+// add email to a client
+export function postEmailRequest(idclient,email) {
+    return client.post(`/auth/2faemail/${idclient}/${email}`,
 
         {
-            "idclient": idclient,
-            "email": email
+           
+        }
+
+    );
+}
+
+// verify email
+export function verifyEmailRequest(idLogin, code) {
+    return client.post(`/auth/validate/email`,
+
+        {
+            "idLoginClient": idLogin,
+            "activationCode": code
         }
 
     );
 }
 
 
-export function getPaysRequest(login, code) {
-    return client.get(`/get_pays`);
+//search client by phone
+export function searchClientByPhoneRequest(phone) {
+    return client.get(`/auth/client/search/${phone}`);
 }
+
+
+//add sponsorship to a new client
+export function addParrain(parrainee,parrain) {
+    return client.post(`/auth/addparrainage/${parrainee}/${parrain}`,
+
+        {
+           
+        }
+
+    );
+}
+
+
+// fetch all the country
+export function getPaysRequest() {
+    return client.get(`/pays`);
+}
+
+
+//password forgot code request
+export function passforgotCodeRequest(phone) {
+    return client.get(`/auth/passwordforgot/requestcode/${phone}`);
+}
+
+
+//verify phone number for passord recover
+export function passforgotVerifyPhoneRequest(phone,code) {
+    return client.get(`/auth/passwordforgot/validatecode/${phone}/${code}`);
+}
+
+
+//update  the  password
+export function passforgotUpdatePasswordRequest(phone, newPassword) {
+    return client.get(`/auth/passwordforgot/update/${phone}/${newPassword}`);
+}
+
+
+
 
 export function postKycRequest(data) {
 

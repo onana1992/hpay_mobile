@@ -53,7 +53,8 @@
     "requiredvalue": "Valeur requise",
     "accountalreadyexist": "un compte existe déjà avec ce numéro de télephone",
     "registrationfailure": "Échec d'inscription",
-    "submit": "Soumettre"
+    "submit": "Soumettre",
+    
   },
 
 
@@ -101,24 +102,33 @@
 
   "emailscreen": {
     "title": "Soumettre votre adresse Email (2FA)",
-    "titlemsg": "Votre adresse email est nécessaire afin d'être utilisé au cas échéant  comme deuxième facteur d'authentification.",
+    "titlemsg": "Votre adresse email est nécessaire afin d'être utilisée au cas échéant  comme deuxième facteur d'authentification.",
     "email": "Email",
     "youremail": "Votre adresse email",
     "submit": "Soumettre",
     "ignore": "Ignorer",
     "pass": "Passer",
     "cancel": "Annluer",
-    "verify": "Vérifier"
+    "verify": "Vérifier",
+    "veriftitle": "Vérifions votre adresse e-mail",
+    "verifmsg": "Nous vous avons avons envoyé un code par email. Veuillez saisir ce code pour vérifier votre email"
   },
 
   "sponsorship": {
     "title": "Faite vous parrainer par un membre",
-    "titlemsg": "L'application vous a été recommandée par un membre.Veuillez rechercher son profil et l'ajouter comme parrain",
+    "titlemsg": "L'application vous a été recommandé par un membre? Veuillez rechercher son profil et l'ajouter comme parrain.",
     "sponsoryourphone": "Numéro de télephone du parrain",
+    "entrersponsorphonenumber": "Entrer le numéro de télephone ",
     "sponsorcountry": "Pays du parrain",
-    "addassponsor": "Ajouter comme sponsor",
+    "addassponsor": "Ajouter",
     "cancel": "Annuler",
-    "confirm": "confirmer"
+    "confirm": "confirmer",
+    "clientnotfound": "Aucun client n'a été trouvé avec ce numéro de téléphone",
+    "failure": "Echec",
+    "confirmaddingsponsor": "Confirmer l'ajout de parrain",
+    "confirmmsg": "Le membre lié au numéro entré a été trouvé, veuillez confirme pour l'ajouter comme parrain",
+    "sponsorshipalreadyaexist": "Ce parrainage existe dejà",
+    
 
   },
 
@@ -133,7 +143,7 @@
 
 
   "passwordRecover": {
-    "title": "Votre numéro d'inscription",
+    "title": "Votre numéro de téléphone",
     "titlemsg": "Veuillez entrer votre numéro de télephone utilisé lors de l'inscription",
     "id": "Telephone",
     "youremail": "Votre Telephone/email",
@@ -141,9 +151,16 @@
     "next": "Suivant",
     "titleverif": "Code de vérification",
     "titlemsgverif": "Veuillez saisir le code reçu par SMS ou par email",
-    "titlenewpassword": "Creer un nouveau mot de passe",
+    "titlenewpassword": "Créer un nouveau mot de passe",
     "titlemsgnewpassword": "Veuillez entrer et confirmer votre nouveau mot de passe",
     "passwordrecover": "Récupération du mot de passe",
+    "failure": "Échec",
+    "noaccoundfound": "Aucun compte ne correspond au numéro entré",
+    "incorrectverificationcode": "Le code entré n'est pas correct",
+    "passwordchanged": "Success",
+    "passwordchangedmsg": "Your new password has been successfully saved",
+    "titlecreatenewpassword": "Créez un nouveau mot de passe",
+    "titlemsgcreatenewpassword": "Veuillez remplir le formulaire suivant pour créer un nouveau mot de passe"
   },
 
 

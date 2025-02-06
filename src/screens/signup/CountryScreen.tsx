@@ -13,36 +13,30 @@ import {
     Text,
     StyleSheet,
     KeyboardAvoidingView,
-    Keyboard, SafeAreaView,Pressable,ScrollView
+    ScrollView
 } from 'react-native';
-import Logo from '../components/Logo';
-import Header from '../components/Header';
-import Paragraph from '../components/Paragraph';
-import Button from '../components/Button';
-import TextInput from '../components/TextInput';
-import { Colors } from '../themes';
-import { emailValidator } from '../helpers/emailValidator';
+import Button from '../../components/Button';
+import { Colors } from '../../themes';
 import { useTranslation } from 'react-i18next';
-import NoConnectedHeader from '../components/NoConnectedHeader';
-import { PostEmailRequest } from '../services/request';
-import LoadingModal from '../components/LoadingModal';
-import StepCompnent from '../components/StepCompnent';
-import { TextInput as Input, Snackbar } from 'react-native-paper';
-import { IconButton } from 'react-native-paper';
+import NoConnectedHeader from '../../components/NoConnectedHeader';
+import LoadingModal from '../../components/LoadingModal';
+import StepCompnent from '../../components/StepCompnent';
 import { Dropdown } from 'react-native-element-dropdown';
-import SponsorSearchModal from '../components/SponsorSearchModal';
+import { getPaysRequest } from '../../services/request';
 
 
 
-function ParrainageScreen({ navigation,route }: {navigation:any,route:any}) {
-
+function CountryScreen({ navigation,route }: {navigation:any,route:any}) {
 
 
    
     const { t } = useTranslation();
     const [modalVisible, setModalVisible] = React.useState(false);
-    const [telephone, setTelephone] = React.useState({ value: '', error: '' });
-    const [recipantCountry, setRecipantCountry] = React.useState({ label: '🇨🇦 Canada', value: 'ca', indicator: "1" });
+    const [country, setCountry] = React.useState({ label: '🇨🇦 Canada', value: 'ca', indicator: "1" });
+    const [selectedCountry, setSelectedCountry] = React.useState(null);
+    const [cities, setCities] = React.useState([]);
+    const [countries, setCountries] = React.useState([]);
+    const [city, setCity] = React.useState({ label: 'Montreal', value: 'Montreal' });
     const COUNTRIES = [
         { label: '🇨🇦 Canada', value: 'ca', indicator: "1" },
         { label: '🇨🇲 Cameroun', value: 'cm', indicator: '237' },
@@ -70,24 +64,110 @@ function ParrainageScreen({ navigation,route }: {navigation:any,route:any}) {
         { label: '🇹🇼 Taïwan', value: 'tw', indicator: '886' }
     ];
 
-    const [sponsorModalVisible, setSponsorModalVisible] = React.useState<boolean>(false);
+   const CITIES = [
+      { label: 'Montreal', value: 'Montreal' },
+      { label: 'Toronto', value: 'Toronto' },
+      { label: 'Vancouver', value: 'Vancouver' },
+      { label: 'Ottawa', value: 'Ottawa' },
+      { label: 'Calgary', value: 'Calgary' },
+      { label: 'Edmonton', value: 'Edmonton' },
+      { label: 'Quebec City', value: 'Quebec City' },
+      { label: 'Winnipeg', value: 'Winnipeg' },
+      { label: 'Hamilton', value: 'Hamilton' },
+      { label: 'Kitchener', value: 'Kitchener' },
+      { label: 'London', value: 'London' },
+      { label: 'Victoria', value: 'Victoria' },
+      { label: 'Halifax', value: 'Halifax' },
+      { label: 'Mississauga', value: 'Mississauga' },
+      { label: 'Brampton', value: 'Brampton' },
+      { label: 'Surrey', value: 'Surrey' },
+      { label: 'Richmond', value: 'Richmond' },
+      { label: 'Burnaby', value: 'Burnaby' },
+      { label: 'Quebec', value: 'Quebec' },
+      { label: 'Regina', value: 'Regina' },
+      { label: 'Saskatoon', value: 'Saskatoon' },
+      { label: 'St. John’s', value: 'St. John’s' },
+      { label: 'Charlottetown', value: 'Charlottetown' },
+      { label: 'Fredericton', value: 'Fredericton' },
+      { label: 'Saint John', value: 'Saint John' },
+      { label: 'Thunder Bay', value: 'Thunder Bay' },
+      { label: 'Abbotsford', value: 'Abbotsford' },
+      { label: 'Guelph', value: 'Guelph' },
+      { label: 'Barrie', value: 'Barrie' },
+      { label: 'Kelowna', value: 'Kelowna' },
+      { label: 'Lethbridge', value: 'Lethbridge' },
+   ];
 
-    const onLoginPressed = () => {
-        navigation.navigate('PhotoScreen');
+
+
+    React.useState(() => {
+        
+        getPaysRequest().then((response: any) => {
+
+          
+            setCountries(response.data);
+            const firstCountry = response.data.find(item => item.id === 9);
+            setSelectedCountry(firstCountry);
+          
+
+            const formattedCities = firstCountry.villes.map(city => ({
+                id: city.ville,
+                label: city.ville,
+                value: city.ville
+            }));
+
+            setCities(formattedCities);
+            setCity(formattedCities[0]);
+
+
+        }).catch((error: any) => {
+
+            if (error){
+                console.log(error);
+            }
+
+           // console.log(error)
+            /* if (error.response.data.statusCode) {
+ 
+                 setModalVisible(false);
+                 Toast.show({
+                     type: 'error',
+                     text1: t('passwordRecover.failure'),
+                     text2: t('passwordRecover.noaccoundfound'),
+                     position: 'top'
+                 });
+ 
+             }*/
+
+        });
+
+    },[]);
+
+
+
+
+    const next = () => {
+
+        if (city){
+             navigation.navigate('SignUp',{ country: country, city: city });
+        }
+       
     }
 
+    const changeCountry = (item) => {
+
+       // console.log(item.indicator);
+        const choosecountry = countries.find((it: { indicatif: any; })=> it.indicatif === item.indicator);
+        const formattedCities = choosecountry.villes.map((city: { ville: any; }) => ({
+            id: city.ville,
+            label: city.ville,
+            value: city.ville
+        }));
+
+        setCities(formattedCities)
+        setCity(formattedCities[0]);
 
 
-    const pass = () => {
-
-        navigation.navigate('PhotoScreen');
-  
-    }
-
-    const indicator = ()=>{
-    
-        return '+' + recipantCountry.indicator;
-    
     }
 
   
@@ -100,21 +180,21 @@ function ParrainageScreen({ navigation,route }: {navigation:any,route:any}) {
             style={styles.main}
         >
             <NoConnectedHeader navigation={navigation} />
-            <ScrollView >
+            <ScrollView  >
 
                 <View style={{ alignItems:'flex-start' }}>
                            
-                    <StepCompnent step={7} />
+                    <StepCompnent step={1} />
 
                     <View style={styles.pageheader}>
-                        <Text style={styles.title}>{t('sponsorship.title')}</Text>
+                        <Text style={styles.title}>{t('countryScreen.title')}</Text>
                         <Text style={styles.subtitle}>
-                            {t('sponsorship.titlemsg')}
+                            {t('countryScreen.titlemsg')}
                         </Text>
                     </View>
 
                     <View style={{  alignContent: 'flex-end', justifyContent: 'flex-end',}}>
-                         <Text style={styles.inputTitleText}>{t('sponsorship.sponsorcountry')}*</Text>
+                         <Text style={styles.inputTitleText}>{t('countryScreen.country')}*</Text>
                           <View style={{ flexDirection: 'row', width: '100%',  }}>
                           <Dropdown
                                 style={styles.dropdown}
@@ -131,9 +211,9 @@ function ParrainageScreen({ navigation,route }: {navigation:any,route:any}) {
                                 valueField="value"
                                 placeholder="Selectionez un pays"
                                 searchPlaceholder={t('rechercher')}
-                                value={recipantCountry}
+                                value={country}
                                 onChange={(item) => {
-                                    setRecipantCountry(item);
+                                    changeCountry(item)
                                 }}
                             />
                                
@@ -143,20 +223,32 @@ function ParrainageScreen({ navigation,route }: {navigation:any,route:any}) {
 
 
                     <View style={{  alignContent: 'flex-end', justifyContent: 'flex-end',  marginTop:20}}>
-                         <Text style={styles.inputTitleText}>{t('sponsorship.sponsoryourphone')}*</Text>
-                          <View style={{ flexDirection: 'row', width: '100%',  }}>
-                                <TextInput
-                                    label={t('signupscreen.yourphone')}
-                                    returnKeyType="done"
-                                    value={telephone.value}
-                                    inputMode="numeric"
-                                    onChangeText={(text: string) => setTelephone({ value: text, error: '' })}
-                                    description={undefined}
-                                    left={<Input.Affix text={indicator()}/>}
-                                />
-                                {telephone.error ? <Text style={styles.error}>{telephone.error}</Text> : null}
+                         <Text style={styles.inputTitleText}>{t('countryScreen.city')}*</Text>
+                         <View style={{ flexDirection: 'row', width: '100%',  }}>
+                          <Dropdown
+                                style={styles.dropdown}
+                                placeholderStyle={styles.placeholderStyle}
+                                selectedTextStyle={styles.selectedTextStyle}
+                                inputSearchStyle={styles.inputSearchStyle}
+                                searchPlaceholderTextColor='gray'
+                                itemTextStyle={{ color: 'black' }}
+                                iconStyle={styles.iconStyle}
+                                data={cities}
+                                search
+                                maxHeight={300}
+                                labelField="label"
+                                valueField="value"
+                                placeholder="Selectionez un pays"
+                                searchPlaceholder={t('rechercher')}
+                                value={city}
+                                onChange={(item) => {
+                                    setCity(item);
+                                }}
+                            />
+                               
                         
                         </View>
+                          
                     </View>
 
                 </View>
@@ -167,22 +259,13 @@ function ParrainageScreen({ navigation,route }: {navigation:any,route:any}) {
             <View style={{ marginTop: 10, width: '100%', justifyContent:'flex-end' }}>
                     <Button
                         mode="contained"
-                        onPress={() => {  setSponsorModalVisible(true) }}>
-                        {t('sponsorship.addassponsor')}
+                        onPress={() => { next() }}>
+                        {t('countryScreen.next')}
                     </Button>
 
-                    <Button
-                        mode="outlined"
-                        onPress={() => { pass() }}>
-                        {t('emailscreen.pass')}
-                    </Button>
                 </View>
             <LoadingModal setModalVisible={setModalVisible} modalVisible={modalVisible} />
-            <SponsorSearchModal
-                isVisible={sponsorModalVisible}
-                onClose={() => setSponsorModalVisible(false)}
-            />
-        </KeyboardAvoidingView> 
+        </KeyboardAvoidingView>       
     );
 }
 
@@ -226,7 +309,8 @@ const styles = StyleSheet.create({
      inputTitleText: {
         textAlign: 'left',
         color: Colors.text,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+         marginBottom: 10,
     },
 
     pageheader: {
@@ -300,6 +384,6 @@ const styles = StyleSheet.create({
 
 
 
-export default ParrainageScreen;
+export default CountryScreen;
 
 

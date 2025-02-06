@@ -14,27 +14,64 @@ import TextInput from '../../components/TextInput';
 import { Colors } from '../../themes';
 import { useTranslation } from 'react-i18next';
 import NoConnectedHeader from '../../components/NoConnectedHeader';
-import StepCompnent from '../../components/StepCompnent';
 import StepRecover from '../../components/StepRecover';
+import { telValidator } from '../../helpers/telValidator';
+import { passforgotCodeRequest } from '../../services/request';
+import LoadingModal from '../../components/LoadingModal';
+import Toast from 'react-native-toast-message';
+
 
 
 function RecoverScreen({ navigation }: { navigation: any }) {
 
 
-    const [email, setEmail] = React.useState({ value: '', error: '' })
     const { t } = useTranslation();
     const [telephone, setTelephone] = React.useState({ value: '', error: '' });
+    const [modalVisible, setModalVisible] = React.useState(false);
+   
 
     const onLoginPressed = () => {
 
-        /*const emailError = emailValidator(email.value);
-        if (emailError) {
-            setEmail({ ...email, error: emailError })
+        const phoneError = telValidator(telephone.value);
+
+        if (phoneError)   {
+            setTelephone({ ...telephone, error: phoneError })
             return
-        }*/
+        }
 
-        navigation.navigate('Verification');
+        setModalVisible(true);
 
+        passforgotCodeRequest(telephone.value).then((response: any) => {
+
+            console.log(response.data.response)
+
+            if (response.data.statusCode === 200) {
+                setModalVisible(false);
+                navigation.navigate('Verification', { phone: telephone.value });
+            }
+
+
+        }).catch((error: any) => {
+
+            console.log(error.response.data) 
+            
+            if (error.response.data.statusCode) {
+
+                setModalVisible(false);
+                Toast.show({
+                    type: 'error',
+                    text1: t('passwordRecover.failure'),
+                    text2: t('passwordRecover.noaccoundfound'),
+                    position: 'top'
+                });
+
+            }
+
+            
+           
+        })
+
+        
     }
 
 
@@ -43,15 +80,16 @@ function RecoverScreen({ navigation }: { navigation: any }) {
         <KeyboardAvoidingView
             style={styles.main}
             enabled={true}
-            behavior={Platform.OS === 'ios' ? 'padding' : 'padding'}>
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
 
                 <NoConnectedHeader navigation={navigation} />
                 <Pressable style={{ flex: 1 }} onPress={Keyboard.dismiss}>
 
                     <StepRecover step={1} />
 
-                    <View style={{ flex: 3, alignItems: 'flex-start' }}>
-                        <View style={styles.content}>
+                <View style={{ flex: 3, alignItems: 'flex-start', marginTop:40 }}>
+
+                    <View style={styles.content}>
 
                         <View style={styles.pageheader}>
                             <Text style={styles.title}>{t('passwordRecover.title')}</Text>
@@ -65,15 +103,16 @@ function RecoverScreen({ navigation }: { navigation: any }) {
                             <View style={{ flexDirection: 'row', width: '100%', }}>
                                 <TextInput
                                     label={t('signinscreen.yourphone')}
-                                    returnKeyType="next"
+                                    returnKeyType="done"
+                                    inputMode="numeric"
                                     value={telephone.value}
                                     onChangeText={(text: string) => setTelephone({ value: text, error: '' })}
                                     error={!!telephone.error}
                                     errorText={telephone.error}
                                     autoCapitalize="none"
                                     autoCompleteType="tel"
-                                    textContentType="emailAddress"
                                     description={undefined}
+                                    
                                 />
                             </View>
 
@@ -94,7 +133,7 @@ function RecoverScreen({ navigation }: { navigation: any }) {
 
                 </View>
             </Pressable>
-
+            <LoadingModal setModalVisible={setModalVisible} modalVisible={modalVisible} />
         </KeyboardAvoidingView>
     );
 }
@@ -146,13 +185,15 @@ const styles = StyleSheet.create({
     inputTitleText: {
         textAlign: 'left',
         color: Colors.text,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        marginBottom: 10,
+        fontSize:14
     },
 
     pageheader: {
         justifyContent: 'flex-start',
         alignItem: 'flex-start',
-        marginBottom: 30,
+        marginBottom: 10,
         marginTop: 30
     },
 
@@ -176,8 +217,6 @@ const styles = StyleSheet.create({
         fontStyle: 'italic',
         marginTop: 0
     },
-
-
 
 
 });

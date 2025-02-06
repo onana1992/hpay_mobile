@@ -32,18 +32,20 @@ const styles = StyleSheet.create({
         width: '100%',
         marginVertical: 10,
         paddingVertical: 2,
-        borderRadius:5,
+        borderRadius: 5,
+        
     },
 
     text: {
-        fontWeight: 'bold',
+        //fontWeight: 'bold',
         fontSize: 16,
         lineHeight: 26,
+        color: "white"
 
     },
 
     text_outline: {
-        fontWeight: 'bold',
+        //fontWeight: 'bold',
         fontSize: 16,
         color: 'black',
 

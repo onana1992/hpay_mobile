@@ -9,6 +9,9 @@ import { useTranslation } from 'react-i18next';
 import SmoothPinCodeInput from 'react-native-smooth-pincode-input';
 import Button from '../components/Button';
 import { useNavigation } from '@react-navigation/native';
+import { verifyEmailRequest } from '../services/request';
+import Toast from 'react-native-toast-message';
+import LoadingModal from '../components/LoadingModal';
 
 //import I18n from 'react-native-i18n';
 
@@ -16,23 +19,64 @@ import { useNavigation } from '@react-navigation/native';
 type PropType = {
     isVisible: boolean,
     onClose: () => void,
+    idclient: Number
+    phone:string
 }
 
 
 
-export default function EmailVerificationModal({ isVisible, onClose }: PropType) {
+export default function EmailVerificationModal({ isVisible, onClose, phone, idclient }: PropType) {
+
 
     const { t } = useTranslation();
-    const [code, setCode] = React.useState('');
+    const [code, setCode] = React.useState<string>('');
     const navigation = useNavigation();
+    const [modalVisible, setModalVisible] = React.useState(false);
 
     const cancel = () => {
         onClose();
     };
 
     const next = () => {
-        onClose();
-        navigation.navigate('PhotoScreen');
+        lauchVerification();
+    };
+
+
+    const lauchVerification = () => {
+
+        //console.log(idclient);
+        //console.log(code);
+
+        if (code.length === 4) {
+
+            setModalVisible(true);
+
+            verifyEmailRequest(idclient, code).then((response: any) => {
+
+                setModalVisible(false);
+                navigation.navigate("PhotoScreen", { phone : phone , idclient: idclient });
+                onClose();
+
+            }).catch((_error: any) => {
+
+                console.log(_error.response.data);
+                setModalVisible(false);
+                if (_error.response.data.statusCode === 404) {
+                    Toast.show({
+                        type: 'error',
+                        text1: t('telVerificationcreen.telverificationfailure'),
+                        text2: t('telVerificationcreen.novalidcode'),
+                        position: 'top',
+                    });
+                } else {
+
+
+                }
+
+            });
+
+        }
+
     };
 
     return (
@@ -46,9 +90,9 @@ export default function EmailVerificationModal({ isVisible, onClose }: PropType)
                 <ScrollView>
 
                     <View style={styles.pageheader}>
-                        <Text style={styles.title}>{t('telVerificationcreen.title')}</Text>
-                        <Text style={styles.subtitle}>
-                            {t('telVerificationcreen.titlemsg')}
+                        <Text style={styles.title}>{t('emailscreen.veriftitle')}</Text>
+                        <Text style={styles.verifmsg}>
+                            {t('emailscreen.veriftitlemsg')}
                         </Text>
                     </View>
 
@@ -100,6 +144,7 @@ export default function EmailVerificationModal({ isVisible, onClose }: PropType)
 
                 </View>
 
+                <LoadingModal setModalVisible={setModalVisible} modalVisible={modalVisible} />
             </SafeAreaView>
         </Modal>
     );

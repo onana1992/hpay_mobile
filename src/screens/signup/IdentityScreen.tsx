@@ -18,37 +18,35 @@ import {
     Keyboard,
     ScrollView
 } from 'react-native';
-import Logo from '../components/Logo';
-import Header from '../components/Header';
-import Paragraph from '../components/Paragraph';
-import Button from '../components/Button';
-import TextInput from '../components/TextInput';
-import { Colors } from '../themes';
+import Button from '../../components/Button';
+import TextInput from '../../components/TextInput';
+import { Colors } from '../../themes';
 import { RadioButton } from 'react-native-paper';
-import NoConnectedHeader from '../components/NoConnectedHeader';
+import NoConnectedHeader from '../../components/NoConnectedHeader';
 import { useTranslation } from 'react-i18next';
-import { firstNameValidator, familyNameValidator, dateNaissValidator } from '../helpers/identifyValidators';
-import DateInput from '../components/DateInput';
-import { PostIdentityRequest } from '../services/request';
-import LoadingModal from '../components/LoadingModal';
-import StepCompnent from '../components/StepCompnent';
-//import Toast from 'react-native-toast-message';
+import { firstNameValidator, familyNameValidator, dateNaissValidator } from '../../helpers/identifyValidators';
+import DateInput from '../../components/DateInput';
+import { PostIdentityRequest } from '../../services/request';
+import LoadingModal from '../../components/LoadingModal';
+import StepCompnent from '../../components/StepCompnent';
+import { useRoute } from '@react-navigation/native';
+import Toast from 'react-native-toast-message';
 
 
 
-function IdentityScreen({ navigation, route }: {navigation:any,route:any}) {
+function IdentityScreen({ navigation}: {navigation:any}) {
 
+    const route = useRoute<any>();
     const [modalVisible, setModalVisible] = React.useState(false);
     const [familyName, setFamilyName] = React.useState({ value: '', error: '' });
     const [firstName, setFirstName] = React.useState({ value: '', error: '' });
     const [sex, setSex] = React.useState({ value: 'M', error: '' });
     const [dateNaiss,setDateNaiss] = React.useState<{ value: Date | undefined, error: string }>({ value: undefined, error: '' });
     const { t } = useTranslation();
+    const { phone, idclient } = route.params;
 
-    //const { phone, idclient } = route.params;
 
-    //console.log(phone);
-    //console.log(idclient);
+    console.log(phone);
 
     function formatDate(val:any) {
 
@@ -61,9 +59,9 @@ function IdentityScreen({ navigation, route }: {navigation:any,route:any}) {
 
     const onSubmitPressed = () => {
 
-        navigation.navigate('Email');
+       // navigation.navigate('Email');
         
-       /* const firstNameError = firstNameValidator(firstName.value);
+        const firstNameError = firstNameValidator(firstName.value);
         const familyNameError = familyNameValidator(familyName.value);
         const dateNaissError = dateNaissValidator(dateNaiss.value);
 
@@ -78,36 +76,18 @@ function IdentityScreen({ navigation, route }: {navigation:any,route:any}) {
         const dataNaissString = dateNaiss.value?.getFullYear() + '-' + formatDate(dateNaiss.value?.getMonth()) + '-' + formatDate(dateNaiss.value?.getDate());
    
         setModalVisible(true);
-
+      
         PostIdentityRequest(idclient, familyName.value, firstName.value, sex.value, dataNaissString ).then((response: any) => {
 
             console.log(response.data);
-
-            if (response.data.success === true) {
-
-                setModalVisible(false); 
-                navigation.navigate('Email', { phone: phone, idclient: idclient });
-
-            } else {
-
-                console.log('echec');
-                setModalVisible(false);
-
-                Toast.show({
-                    type: 'error',
-                    text1: t('signinscreen.connexionfailure'),
-                    text2: t('signinscreen.loginorpasswordinvalid'),
-                    position: 'top'
-                });
-
-            }
+            setModalVisible(false);
+            navigation.navigate('Email', { phone: phone, idclient: idclient })
 
 
-
-       }).catch((error: any) => {
+        }).catch((error: any) => {
             console.log(error);
             setModalVisible(false);
-       })*/
+        })
 
 
 
@@ -151,7 +131,6 @@ function IdentityScreen({ navigation, route }: {navigation:any,route:any}) {
                                     error={!!firstName.error}
                                     errorText={firstName.error}
                                     autoCapitalize="none"
-                                    autoCompleteType="tel"
                                     description={undefined}
                                 />
                             </View>
@@ -277,7 +256,8 @@ const styles = StyleSheet.create({
         flex: 1,
         textAlign: 'left',
         color: Colors.text,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        marginBottom: 10,
     },
 
      pageheader: {

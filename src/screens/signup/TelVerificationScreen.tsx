@@ -19,18 +19,15 @@ import {
     Platform,
     Keyboard,
 } from 'react-native';
-import Logo from '../components/Logo';
-import Header from '../components/Header';
-import Paragraph from '../components/Paragraph';
-import Button from '../components/Button';
-import { Colors } from '../themes'
+import Button from '../../components/Button';
+import { Colors } from '../../themes'
 import SmoothPinCodeInput from 'react-native-smooth-pincode-input';
 import { useTranslation } from 'react-i18next';
-import NoConnectedHeader from '../components/NoConnectedHeader';
-import { verifyTelRequest, updateActivationCodeRequest } from '../services/request';
+import NoConnectedHeader from '../../components/NoConnectedHeader';
+import { verifyTelRequest, updateActivationCodeRequest } from '../../services/request';
 import Toast from 'react-native-toast-message';
-import LoadingModal from '../components/LoadingModal';
-import StepCompnent from '../components/StepCompnent';
+import LoadingModal from '../../components/LoadingModal';
+import StepCompnent from '../../components/StepCompnent';
 import { useRoute } from '@react-navigation/native';
 
 
@@ -42,6 +39,8 @@ function TelVerificationScreen({ navigation}: {navigation:any,}) {
     const { t } = useTranslation();
     const [modalVisible, setModalVisible] = React.useState(false);
     const { phone, idclient } = route.params;
+
+    console.log(phone);
 
 
     const lauchUpdateCode = () =>{
@@ -156,8 +155,8 @@ function TelVerificationScreen({ navigation}: {navigation:any,}) {
                         </Text>
                     </View>
 
-
-                    <View style={{ justifyContent: 'center', alignItems: 'center', marginVertical: 20 }}>
+                    
+                    <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginVertical: 20, width: '100%', marginTop:40 }}>
                         <SmoothPinCodeInput
                             cellStyle={{
                                 borderWidth: 2,
@@ -171,19 +170,21 @@ function TelVerificationScreen({ navigation}: {navigation:any,}) {
                         />
                     </View>
 
-                    <View style={{ flexDirection: 'row', marginTop: 30 }}>
+                    <View style={{ flexDirection: 'row', marginTop: 10, width: '100%', justifyContent:'center' }}>
                         <View style={styles.row}>
                             <Text style={{ color: Colors.text }}>{t('telVerificationcreen.nocode')}</Text>
                         </View>
                     </View>
 
-                    <View style={{ flexDirection: 'row', marginTop: 0 }}>
+                    <View style={{ flexDirection: 'row', marginTop: 0, width: '100%', justifyContent: 'center' }}>
                         <View style={styles.row}>
                             <TouchableOpacity onPress={() => lauchUpdateCode()}>
                                 <Text style={styles.link}>{t('telVerificationcreen.resendcode')}</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
+                  
+                    
                 </View>
 
 

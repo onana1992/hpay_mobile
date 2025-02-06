@@ -11,15 +11,15 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import SignInScreen from '../screens/SignInScreen';
 import StartScreen from '../screens/StartScreen';
-import SignUpScreen from '../screens/SignUpScreen';
-import TelVerificationScreen from '../screens/TelVerificationScreen';
-import CountryScreen from '../screens/CountryScreen';
-import IdentityScreen from '../screens/IdentityScreen';
-import  EmailScreen  from '../screens/EmailScreen';
-import ParrainageScreen from '../screens/ParrainageScreen';
+import SignUpScreen from '../screens/signup/SignUpScreen';
+import TelVerificationScreen from '../screens/signup/TelVerificationScreen';
+import CountryScreen from '../screens/signup/CountryScreen';
+import IdentityScreen from '../screens/signup/IdentityScreen';
+import  EmailScreen  from '../screens/signup/EmailScreen';
+import ParrainageScreen from '../screens/signup/ParrainageScreen';
 import { useSelector} from 'react-redux';
 import TabNavigator from './TabNavigator';
-import PhotoProfilScreen from '../screens/PhotoProfilScreen';
+import PhotoProfilScreen from '../screens/signup/PhotoProfilScreen';
 import RecoverScreen from '../screens/password/RecoverScreen';
 import VerificationScreen from '../screens/password/VerificationScreen';
 import NewPasswordScreen from '../screens/password/NewPasswordScreen';
@@ -34,7 +34,6 @@ function StackNavigation() {
     const user = useSelector((state:any) => state.profil.user);
 
     console.log(user);
-
 
 
     return (
@@ -76,8 +75,8 @@ function StackNavigation() {
                             options={{ headerShown: false }}
                        />*/}
 
-
-                        <Stack.Screen
+                      
+                       <Stack.Screen
                             name="SignIn"
                             component={SignInScreen}
                             options={{ headerShown: false }}
@@ -148,13 +147,12 @@ function StackNavigation() {
                             options={{ headerShown: false }}
                         />
 
+
                         <Stack.Screen
                             name="ParrainageScreen"
                             component={ParrainageScreen}
                             options={{ headerShown: false }}
                         />
-
-                        
                         
                     </Stack.Navigator>
             }
