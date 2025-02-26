@@ -114,16 +114,14 @@ function NewPasswordScreen({ navigation }: { navigation: any }) {
 
             <NoConnectedHeader navigation={navigation} />
 
-            <KeyboardAvoidingView
-                enabled={true}
-                behavior={Platform.OS === 'ios' ? 'padding' : 'padding'}
-            >
-                
+            
                 <Pressable onPress={Keyboard.dismiss}>
 
                     <StepRecover step={3} />
 
                     <View style={styles.content}>
+
+                    
 
                         <View style={styles.pageheader}>
                             <Text style={styles.title}>{t('passwordRecover.titlecreatenewpassword')}</Text>
@@ -184,7 +182,7 @@ function NewPasswordScreen({ navigation }: { navigation: any }) {
                     </View>
                 </Pressable>
                 <LoadingModal setModalVisible={setModalVisible} modalVisible={modalVisible} />
-            </KeyboardAvoidingView>
+            
 
         </ScrollView>
 
@@ -192,11 +190,13 @@ function NewPasswordScreen({ navigation }: { navigation: any }) {
 }
 
 const styles = StyleSheet.create({
+    
     main: {
         backgroundColor: '#ffff',
         flex: 1,
         padding: 20,
         width: '100%',
+       
     },
 
     content: {
@@ -205,6 +205,7 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
         alignItems: 'flex-start',
         width: '100%',
+        marginBottom:20
     },
 
     forgotPassword: {
@@ -244,16 +245,16 @@ const styles = StyleSheet.create({
 
     title: {
         color: Colors.text,
-        fontSize: 22,
-        fontWeight: 500,
+        fontSize: 28,
+        fontWeight: 'bold',
         textAlign: 'left',
-        paddingVertical: 0
+        paddingVertical: 5,
+        marginTop: 0
     },
 
     subtitle: {
-        color: Colors.gray,
         fontSize: 14,
-        fontStyle: 'italic',
+        color: Colors.text,
         marginTop: 0
     },
 

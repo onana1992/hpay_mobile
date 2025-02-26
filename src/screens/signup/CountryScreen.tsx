@@ -26,17 +26,17 @@ import { getPaysRequest } from '../../services/request';
 
 
 
-function CountryScreen({ navigation,route }: {navigation:any,route:any}) {
+function CountryScreen({ navigation }: {navigation:any}) {
 
 
    
     const { t } = useTranslation();
     const [modalVisible, setModalVisible] = React.useState(false);
     const [country, setCountry] = React.useState({ label: '🇨🇦 Canada', value: 'ca', indicator: "1" });
-    const [selectedCountry, setSelectedCountry] = React.useState(null);
+    const [selectedCountry, setSelectedCountry] = React.useState<any>(null);
     const [cities, setCities] = React.useState([]);
     const [countries, setCountries] = React.useState([]);
-    const [city, setCity] = React.useState({ label: 'Montreal', value: 'Montreal' });
+    const [city, setCity] = React.useState({id:1, label: 'Montreal', value: 'Montreal' });
     const COUNTRIES = [
         { label: '🇨🇦 Canada', value: 'ca', indicator: "1" },
         { label: '🇨🇲 Cameroun', value: 'cm', indicator: '237' },
@@ -64,54 +64,21 @@ function CountryScreen({ navigation,route }: {navigation:any,route:any}) {
         { label: '🇹🇼 Taïwan', value: 'tw', indicator: '886' }
     ];
 
-   const CITIES = [
-      { label: 'Montreal', value: 'Montreal' },
-      { label: 'Toronto', value: 'Toronto' },
-      { label: 'Vancouver', value: 'Vancouver' },
-      { label: 'Ottawa', value: 'Ottawa' },
-      { label: 'Calgary', value: 'Calgary' },
-      { label: 'Edmonton', value: 'Edmonton' },
-      { label: 'Quebec City', value: 'Quebec City' },
-      { label: 'Winnipeg', value: 'Winnipeg' },
-      { label: 'Hamilton', value: 'Hamilton' },
-      { label: 'Kitchener', value: 'Kitchener' },
-      { label: 'London', value: 'London' },
-      { label: 'Victoria', value: 'Victoria' },
-      { label: 'Halifax', value: 'Halifax' },
-      { label: 'Mississauga', value: 'Mississauga' },
-      { label: 'Brampton', value: 'Brampton' },
-      { label: 'Surrey', value: 'Surrey' },
-      { label: 'Richmond', value: 'Richmond' },
-      { label: 'Burnaby', value: 'Burnaby' },
-      { label: 'Quebec', value: 'Quebec' },
-      { label: 'Regina', value: 'Regina' },
-      { label: 'Saskatoon', value: 'Saskatoon' },
-      { label: 'St. John’s', value: 'St. John’s' },
-      { label: 'Charlottetown', value: 'Charlottetown' },
-      { label: 'Fredericton', value: 'Fredericton' },
-      { label: 'Saint John', value: 'Saint John' },
-      { label: 'Thunder Bay', value: 'Thunder Bay' },
-      { label: 'Abbotsford', value: 'Abbotsford' },
-      { label: 'Guelph', value: 'Guelph' },
-      { label: 'Barrie', value: 'Barrie' },
-      { label: 'Kelowna', value: 'Kelowna' },
-      { label: 'Lethbridge', value: 'Lethbridge' },
-   ];
-
-
+   
 
     React.useState(() => {
         
         getPaysRequest().then((response: any) => {
 
-          
+            console.log(response.data);
+
             setCountries(response.data);
             const firstCountry = response.data.find(item => item.id === 9);
             setSelectedCountry(firstCountry);
-          
+
 
             const formattedCities = firstCountry.villes.map(city => ({
-                id: city.ville,
+                id: city.id,
                 label: city.ville,
                 value: city.ville
             }));
@@ -147,19 +114,20 @@ function CountryScreen({ navigation,route }: {navigation:any,route:any}) {
 
 
     const next = () => {
-
         if (city){
-             navigation.navigate('SignUp',{ country: country, city: city });
+             navigation.navigate('SignUp',{ country: selectedCountry, city: city });
         }
-       
     }
 
-    const changeCountry = (item) => {
+    const changeCountry = (item:any) => {
 
-       // console.log(item.indicator);
-        const choosecountry = countries.find((it: { indicatif: any; })=> it.indicatif === item.indicator);
+
+        setCountry(item);
+        const choosecountry = countries.find((it: { indicatif: any; }) => it.indicatif === item.indicator);
+        setSelectedCountry(choosecountry);
+
         const formattedCities = choosecountry.villes.map((city: { ville: any; }) => ({
-            id: city.ville,
+            id: city.id,
             label: city.ville,
             value: city.ville
         }));
@@ -167,25 +135,21 @@ function CountryScreen({ navigation,route }: {navigation:any,route:any}) {
         setCities(formattedCities)
         setCity(formattedCities[0]);
 
-
     }
 
   
      
     return (
    
-        <KeyboardAvoidingView
-            enabled={true}
-            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        <View
             style={styles.main}
         >
             <NoConnectedHeader navigation={navigation} />
             <ScrollView  >
+                <StepCompnent step={1} />
 
                 <View style={{ alignItems:'flex-start' }}>
                            
-                    <StepCompnent step={1} />
-
                     <View style={styles.pageheader}>
                         <Text style={styles.title}>{t('countryScreen.title')}</Text>
                         <Text style={styles.subtitle}>
@@ -201,7 +165,6 @@ function CountryScreen({ navigation,route }: {navigation:any,route:any}) {
                                 placeholderStyle={styles.placeholderStyle}
                                 selectedTextStyle={styles.selectedTextStyle}
                                 inputSearchStyle={styles.inputSearchStyle}
-                                searchPlaceholderTextColor='gray'
                                 itemTextStyle={{ color: 'black' }}
                                 iconStyle={styles.iconStyle}
                                 data={COUNTRIES}
@@ -216,21 +179,18 @@ function CountryScreen({ navigation,route }: {navigation:any,route:any}) {
                                     changeCountry(item)
                                 }}
                             />
-                               
-                        
                         </View>
                     </View>
 
 
-                    <View style={{  alignContent: 'flex-end', justifyContent: 'flex-end',  marginTop:20}}>
+                    <View style={{ alignContent: 'flex-end', justifyContent: 'flex-end', marginTop: 20, marginBottom:10 }}>
                          <Text style={styles.inputTitleText}>{t('countryScreen.city')}*</Text>
-                         <View style={{ flexDirection: 'row', width: '100%',  }}>
+                         <View style={{ flexDirection: 'row', width: '100%'  }}>
                           <Dropdown
                                 style={styles.dropdown}
                                 placeholderStyle={styles.placeholderStyle}
                                 selectedTextStyle={styles.selectedTextStyle}
                                 inputSearchStyle={styles.inputSearchStyle}
-                                searchPlaceholderTextColor='gray'
                                 itemTextStyle={{ color: 'black' }}
                                 iconStyle={styles.iconStyle}
                                 data={cities}
@@ -245,14 +205,10 @@ function CountryScreen({ navigation,route }: {navigation:any,route:any}) {
                                     setCity(item);
                                 }}
                             />
-                               
-                        
                         </View>
-                          
                     </View>
 
                 </View>
-
 
 
             </ScrollView>
@@ -265,7 +221,7 @@ function CountryScreen({ navigation,route }: {navigation:any,route:any}) {
 
                 </View>
             <LoadingModal setModalVisible={setModalVisible} modalVisible={modalVisible} />
-        </KeyboardAvoidingView>       
+        </View>       
     );
 }
 
@@ -306,6 +262,7 @@ const styles = StyleSheet.create({
         color: Colors.primary,
     },
 
+
      inputTitleText: {
         textAlign: 'left',
         color: Colors.text,
@@ -327,24 +284,28 @@ const styles = StyleSheet.create({
         width: '100%'
     },
 
-     title: {
+    title: {
         color: Colors.text,
-        fontSize: 22,
-        fontWeight: 500,
+        fontSize: 28,
+        fontWeight: 'bold',
         textAlign: 'left',
-        paddingVertical: 0
-    },
-
-    subtitle: {
-        color: Colors.gray,
-        fontSize: 14,
-        fontStyle: 'italic',
+        paddingVertical: 5,
         marginTop: 0
     },
+
+
+    subtitle: {
+        fontSize: 14,
+        color: Colors.text,
+        marginTop: 0
+    },
+
+
     placeholderStyle: {
         fontSize: 16,
         color: 'gray',
     },
+
 
     selectedTextStyle: {
         fontSize: 16,

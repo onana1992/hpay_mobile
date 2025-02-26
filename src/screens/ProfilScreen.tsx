@@ -30,12 +30,16 @@ import ImagePickerModal from '../components/ImagePickerModal';
 import { useSelector, useDispatch } from 'react-redux';
 import { signIn} from '../store/profilSlice';
 import axios from 'axios';
+import { useTranslation } from 'react-i18next';
+import LangageModal from '../components/LangageModal';
 
 
 function ProfilScreen({ navigation }: { navigation: any }) {
 
+    const { t } = useTranslation();
     const dispatch = useDispatch();
     const [visible, setVisible] = React.useState(false);
+    const [langageModalvisible, setLangageModalvisible] = React.useState(false);
     const [filePath, setFilePath] = React.useState(null);
     const [fileName, setFileName] = React.useState(null);
 
@@ -202,6 +206,7 @@ function ProfilScreen({ navigation }: { navigation: any }) {
             sendpicture();
         });
 
+
     };
 
 
@@ -246,13 +251,20 @@ function ProfilScreen({ navigation }: { navigation: any }) {
         return (
             <View style={{
                 backgroundColor: '#ffff', marginTop: 20, marginHorizontal: 10, borderRadius: 20,paddingBottom: 15,
-                height: 200,  alignItems: 'center', paddingTop: 10,  borderBottomLeftRadius: 30, marginBottom:50,
+                height: 180,  alignItems: 'center', paddingTop: 10,  borderBottomLeftRadius: 30, marginBottom:50,
                 borderBottomRightRadius: 30 }}>
                 <View style={styles.avatar}>
-                    <Image
-                        source={filePath ? { uri: filePath } : require('../assets/avatar.jpg')}
-                        style={styles.avatarImage}
-                    />
+                    {filePath ?
+                        <Image
+                            source={filePath ? { uri: filePath } : require('../assets/avatar.jpg')}
+                            style={styles.avatarImage}
+                        />
+                        :
+                        <View>
+                            <Text style={{ color: Colors.text, fontWeight: 'bold', fontSize:26 }}>JJ</Text>
+                        </View>
+
+                    }
 
                     <TouchableOpacity style={styles.addButton} onPress={() => setVisible(true)} >
                         <Ionicons name="camera" size={30} color={Colors.text} />
@@ -261,8 +273,8 @@ function ProfilScreen({ navigation }: { navigation: any }) {
                 </View>
 
                 <View style={{ justifyContent: 'center', alignItems: 'center', }}>
-                    <Text style={{ color: Colors.text, paddingTop: 10, fontSize: 20, fontWeight: 'bold' }}> {user.client.prenoms}{''}{user.client.nom} </Text>
-                    <Text style={{ color: Colors.text, paddingTop: 0 ,marginTop:3,fontSize: 14 }}> {user.login}</Text>
+                    <Text style={{ color: Colors.text, paddingTop: 10, fontSize: 26, fontWeight: 'bold' }}> {user.client.prenoms}{' '}{user.client.nom} </Text>
+                    <Text style={{ color: Colors.text, paddingTop: 0 ,marginTop:3,fontSize: 16 }}> {user.login}</Text>
                 </View >
             </View>
         );
@@ -271,118 +283,166 @@ function ProfilScreen({ navigation }: { navigation: any }) {
 
 
     return (
-        <ScrollView style={styles.main}>
+        <View style={styles.main}>
 
-           <Header />
-
-            <View style={{ minHeight: 200, backgroundColor: '#ffff', marginTop: -40, marginHorizontal: 10, borderRadius: 20, paddingTop: 20, paddingBottom: 20 }}>
-                <ListItem bottomDivider onPress={() => alert()} >
-                     <AntDesign name="user" size={22} color={Colors.text} />
-                    <ListItem.Content>
-                        <ListItem.Title style={{ fontSize: 16  }}>Mes informations personelles</ListItem.Title>
-                    </ListItem.Content>
-
-                    <ListItem.Chevron />
-                </ListItem>
-
-                <ListItem bottomDivider onPress={() => alert()} >
-                    <MaterialIcons name="history" size={24} color={Colors.text} />
-                    <ListItem.Content>
-                        <ListItem.Title style={{ fontSize: 14}}>Mes Historiques</ListItem.Title>
-                    </ListItem.Content>
-                    <ListItem.Chevron />
-                </ListItem>
-
-                <ListItem bottomDivider onPress={() => alert()} >
-                    <AntDesign name="adduser" size={22} color={Colors.text} />
-                    <ListItem.Content>
-                        <ListItem.Title style={{ fontSize: 14 }}>Mes beneficiaires</ListItem.Title>
-                    </ListItem.Content>
-                    <ListItem.Chevron />
-                </ListItem>
-
-                <ListItem bottomDivider onPress={() => alert()} >
-                    <AntDesign name="message1" size={22} color={Colors.text} />
-                    <ListItem.Content>
-                        <ListItem.Title style={{ fontSize: 14}}>Mes messages</ListItem.Title>
-                    </ListItem.Content>
-                    <ListItem.Chevron />
-                </ListItem>
-
-                <ListItem bottomDivider onPress={() => alert()} >
-                    <AntDesign name="creditcard" size={22} color={Colors.text} />
-                    <ListItem.Content>
-                        <ListItem.Title style={{ fontSize: 14 }}>Mes cartes</ListItem.Title>
-                    </ListItem.Content>
-                    <ListItem.Chevron />
-                </ListItem>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 20, paddingVertical: 10 }} >
+                <TouchableOpacity style={{
+                    justifyContent: 'center',
+                    backgroundColor: '#e6e4e0',
+                    height: 40,
+                    width: 40,
+                    alignItems: 'center',
+                    borderRadius: 20,
+                }} onPress={() => { navigation.goBack(); }} >
+                    <View>
+                        <Ionicons name="chevron-back" color={Colors.text} size={24} />
+                    </View>
+                </TouchableOpacity>
             </View>
 
-            <View style={{ backgroundColor: '#ffff', marginTop: 20, marginHorizontal: 10, borderRadius: 20, paddingTop: 15, paddingBottom: 15 }}>
-                <ListItem bottomDivider onPress={() => navigation.navigate('kyc')} >
-                     <FontAwesome name="balance-scale" size={20} color={Colors.text} />
-                    <ListItem.Content>
-                        <ListItem.Title style={{ fontSize: 14, }}>Conformite KYC</ListItem.Title>
-                    </ListItem.Content>
+            <ScrollView>
+                <Header />
+                <View style={{ backgroundColor: '#ffff', marginHorizontal: 10, borderRadius: 20, paddingTop: 15, paddingBottom: 15 }}>
 
-                    <ListItem.Chevron />
-                </ListItem>
-
-                <ListItem bottomDivider onPress={() => alert()} >
-                    <AntDesign name="key" size={22} color={Colors.text} />
-                    <ListItem.Content>
-                        <ListItem.Title style={{ fontSize: 14, }}>Authentification 2FA</ListItem.Title>
-                    </ListItem.Content>
-                    <ListItem.Chevron />
-                </ListItem>
-
-            </View>
-
-            <View style={{  backgroundColor: '#ffff', marginTop: 20, marginHorizontal: 10, borderRadius: 20, paddingTop: 15, paddingBottom: 15 }}>
-                <ListItem bottomDivider onPress={() => alert()} >
-                     <Ionicons name="language-outline" size={22} color={Colors.text} />
-                    <ListItem.Content>
-                        <ListItem.Title style={{ fontSize: 14}}>Langue</ListItem.Title>
-                    </ListItem.Content>
-
-                    <ListItem.Chevron />
-                </ListItem>
-
-                <ListItem bottomDivider onPress={() => alert()} >
-                    <AntDesign name="bells" size={22} color={Colors.text} />
-                    <ListItem.Content>
-                        <ListItem.Title style={{ fontSize: 14 }}>Parametres de notifications</ListItem.Title>
-                    </ListItem.Content>
-                    <ListItem.Chevron />
-                </ListItem>
-
-            </View>
-
-            <View style={{ backgroundColor: '#ffff', marginTop: 20, marginBottom: 30, marginHorizontal: 10, borderRadius: 20, paddingTop: 15, paddingBottom: 15 }}>
-                <ListItem onPress={() => logout()} >
-                    <AntDesign name="logout" size={22} color={Colors.text} />
-                    <ListItem.Content>
-                        <ListItem.Title style={{ fontSize: 14}}>Déconnexion</ListItem.Title>
-                    </ListItem.Content>
-                    <ListItem.Chevron />
-                </ListItem>
-            </View>
-
-            <ImagePickerModal
-                isVisible={visible}
-                onClose={() => setVisible(false)}
-                captureImage={captureImage}
-                chooseFile={chooseFile}
-            />
+                    <View style={{ paddingHorizontal: 10 }}>
+                        <Text style={{ color: Colors.text, fontSize: 22, fontWeight: 'bold', paddingVertical: 10 }}>{t('profil.myaccount')}</Text>
+                    </View>
 
 
-        </ScrollView>
+                    <ListItem bottomDivider onPress={() => alert()} >
+                        <AntDesign name="user" size={22} color={Colors.text} />
+                        <ListItem.Content>
+                            <ListItem.Title style={{ fontSize: 16 }}>{t('profil.mypersonalInfo')}</ListItem.Title>
+                        </ListItem.Content>
+
+                        <ListItem.Chevron />
+                    </ListItem>
+
+                    <ListItem bottomDivider onPress={() => navigation.navigate('kyc')} >
+                        <FontAwesome name="balance-scale" size={20} color={Colors.text} />
+                        <ListItem.Content>
+                            <ListItem.Title style={{ fontSize: 14, }}>{t('profil.kyccompliance')}</ListItem.Title>
+                        </ListItem.Content>
+
+                        <ListItem.Chevron />
+                    </ListItem>
+
+                    <ListItem bottomDivider onPress={() => alert()} >
+                        <MaterialIcons name="history" size={24} color={Colors.text} />
+                        <ListItem.Content>
+                            <ListItem.Title style={{ fontSize: 14 }}>{t('profil.myhistory')}</ListItem.Title>
+                        </ListItem.Content>
+                        <ListItem.Chevron />
+                    </ListItem>
+
+                    <ListItem bottomDivider onPress={() => alert()} >
+                        <AntDesign name="adduser" size={22} color={Colors.text} />
+                        <ListItem.Content>
+                            <ListItem.Title style={{ fontSize: 14 }}>{t('profil.mybeneficiaries')}</ListItem.Title>
+                        </ListItem.Content>
+                        <ListItem.Chevron />
+                    </ListItem>
+
+                    <ListItem bottomDivider onPress={() => alert()} >
+                        <AntDesign name="message1" size={22} color={Colors.text} />
+                        <ListItem.Content>
+                            <ListItem.Title style={{ fontSize: 14 }}>{t('profil.mymessages')}</ListItem.Title>
+                        </ListItem.Content>
+                        <ListItem.Chevron />
+                    </ListItem>
+
+                    <ListItem bottomDivider onPress={() => alert()} >
+                        <AntDesign name="creditcard" size={22} color={Colors.text} />
+                        <ListItem.Content>
+                            <ListItem.Title style={{ fontSize: 14 }}>{t('profil.mycards')}</ListItem.Title>
+                        </ListItem.Content>
+                        <ListItem.Chevron />
+                    </ListItem>
+                </View>
+
+                <View style={{ backgroundColor: '#ffff', marginHorizontal: 10, borderRadius: 20, paddingTop: 15, paddingBottom: 15 }}>
+                    <View style={{ paddingHorizontal: 10 }}>
+                        <Text style={{ color: Colors.text, fontSize: 22, fontWeight: 'bold', paddingVertical: 10 }}>{t('profil.securityandconfidentiality')}</Text>
+                    </View>
+
+                    <ListItem bottomDivider onPress={() => alert()} >
+                        <AntDesign name="lock" size={22} color={Colors.text} />
+                        <ListItem.Content>
+                            <ListItem.Title style={{ fontSize: 14, }}>{t('profil.changepassword')}</ListItem.Title>
+                        </ListItem.Content>
+                        <ListItem.Chevron />
+                    </ListItem>
+
+                    <ListItem bottomDivider onPress={() => alert()} >
+                        <AntDesign name="key" size={22} color={Colors.text} />
+                        <ListItem.Content>
+                            <ListItem.Title style={{ fontSize: 14, }}>{t('profil.2faAuthentication')}</ListItem.Title>
+                        </ListItem.Content>
+                        <ListItem.Chevron />
+                    </ListItem>
+
+                </View>
+
+                <View style={{ backgroundColor: '#ffff', marginHorizontal: 10, borderRadius: 20, paddingTop: 15, paddingBottom: 15 }}>
+
+                    <View style={{ paddingHorizontal: 10 }}>
+                        <Text style={{ color: Colors.text, fontSize: 22, fontWeight: 'bold', paddingVertical: 10 }}>{t('profil.parameters')}</Text>
+                    </View>
+
+                    <ListItem bottomDivider onPress={() => setLangageModalvisible(true)} >
+                        <Ionicons name="language-outline" size={22} color={Colors.text} />
+                        <ListItem.Content>
+                            <ListItem.Title style={{ fontSize: 14 }}>{t('profil.language')}</ListItem.Title>
+                        </ListItem.Content>
+
+                        <ListItem.Chevron />
+                    </ListItem>
+
+                    <ListItem bottomDivider onPress={() => alert()} >
+                        <AntDesign name="bells" size={22} color={Colors.text} />
+                        <ListItem.Content>
+                            <ListItem.Title style={{ fontSize: 14 }}>{t('profil.notificationparameters')}</ListItem.Title>
+                        </ListItem.Content>
+                        <ListItem.Chevron />
+                    </ListItem>
+
+                    <ListItem onPress={() => logout()} >
+                        <AntDesign name="logout" size={22} color={Colors.text} />
+                        <ListItem.Content>
+                            <ListItem.Title style={{ fontSize: 14 }}>{t('profil.logout')}</ListItem.Title>
+                        </ListItem.Content>
+                        <ListItem.Chevron />
+                    </ListItem>
+
+                </View>
+
+
+
+                <ImagePickerModal
+                    title={t('addprofilpicture')}
+                    isVisible={visible}
+                    onClose={() => setVisible(false)}
+                    captureImage={captureImage}
+                    chooseFile={chooseFile}
+                />
+
+                <LangageModal
+                    isVisible={langageModalvisible}
+                    onClose={() => setLangageModalvisible(false)}
+                />
+
+            </ScrollView>
+
+
+
+        </View>
     );
 }
 
 const styles = StyleSheet.create({
     main: {
         flex: 1,
+        backgroundColor: '#ffffff',
     },
 
     header: {
@@ -398,7 +458,14 @@ const styles = StyleSheet.create({
     },
 
     avatar: {
+        width: 100,
+        height:100,
+        borderColor: '#e0e0e0',
+        borderWidth: 1,
+        borderRadius: 50,
+        justifyContent: 'center',
         alignItems: 'center',
+        backgroundColor: '#e6e4e0',
     },
 
     avatarImage: {

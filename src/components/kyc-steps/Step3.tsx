@@ -23,12 +23,11 @@ import {
     TouchableOpacity,
     ImageBackground
 } from 'react-native';
-/*import { Colors } from 'react-native/Libraries/NewAppScreen';*/
-import { useTranslation } from 'react-i18next';
 import TextInput from '../../components/TextInput';
 import { RadioButton } from 'react-native-paper';
 import { Colors } from '../../themes';
 import Button from '../../components/Button';
+import { useTranslation } from 'react-i18next';
 import DropdownInput from '../../components/DropdownInput';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import ImagePickerModal from '../../components/ImagePickerModal';
@@ -38,7 +37,7 @@ import {
     DocumentNumberValidator,
     DateExpValidator
 } from '../../helpers/kycValidators';
-
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 
 
@@ -47,28 +46,34 @@ const Step3 = ({ data, setData, step, setStep }: { data: any, setData: any, step
 
 
     const { t } = useTranslation();
- 
     const [countryData, setCountryData] = React.useState<any>([]);
     const [doc, setDoc] = React.useState<number>(1);
+    const [title, setTitle] = React.useState<string>(`${t('kyc.addthefrontofyouridentitycard')}`);
+
+
     //const BASE_URL = 'http://10.0.0.133:80/api/';
     const BASE_URL = 'https://backend.clanlantene.com/joe92/api/';
     const [file, setFile] = React.useState(null);
     const [visible, setVisible] = React.useState(false);
-    const [typeId, setTypesId] = React.useState({ value:1 , error: '' });
+    const [typeId, setTypeId] = React.useState({ value:null , error: '' });
     const [documentNumber, setDocumentNumber] = React.useState({ value: '', error: '' });
     const [date_exp, setDate_exp] = React.useState<{ value: Date | undefined, error: string }>({ value: undefined, error: '' });
+    const [documentFrontUri, setDocumentFrontUri] = React.useState<string | null | undefined>(null);
+    const [documentBackUri, setDocumentBackUri] = React.useState < string | null | undefined>(null);
 
-    const data1 = [
+
+
+    const identityTypes = [
         { label: t('kyc.idcard'), value: 1 },
         { label: t('kyc.passport'), value: 2 },
-        
     ];
-    
+
     const onBack = () => {
         setStep((PrevStep: number) => {
             return PrevStep - 1;
         })
     };
+
 
     function formatDate(val: any) {
         if (Number(val) > 9) {
@@ -78,41 +83,50 @@ const Step3 = ({ data, setData, step, setStep }: { data: any, setData: any, step
         }
     }
 
+
+
     const onValid = () => {
 
-        
+      
         const documentNumberError = DocumentNumberValidator(documentNumber.value);
         const dateExpError = DateExpValidator(date_exp.value);
+        const typeIdError = typeId.value === null;
+        const versoError = documentFrontUri == null;
 
-        if (documentNumberError || dateExpError || data.photo_piece_recto == null ) {
+       // data.photo_piece_recto == null
+
+        if (documentNumberError || dateExpError || typeIdError || versoError) {
             setDocumentNumber({ ...documentNumber, error: t(`${documentNumberError}`) });
             setDate_exp({ ...date_exp, error: t(`${documentNumberError}`) });
+            setTypeId({ ...typeId, error: t('requiredValue') });
             return;
         }
 
 
         const dataExpString = date_exp.value?.getFullYear() + '-' + formatDate(date_exp.value?.getMonth()) + '-' + formatDate(date_exp.value?.getDate());
 
-        console.log(typeId);
+        //console.log(typeId);
  
         setData(
             {
                 ...data,
                 idtype_piece: typeId.value,
                 num_piece: documentNumber.value,
-                expire_piece: dataExpString 
+                expire_piece: dataExpString, 
+                //photo_piece_recto: documentFrontUri,
+                // photo_piece_verso: documentBackUri,
             }
         );
 
+
+
         setStep(4);
 
-        setTimeout(() => {
+       /* setTimeout(() => {
 
             console.log(data);
 
-        }, 2000);
-
-        
+        }, 2000);*/
 
     }
 
@@ -148,16 +162,26 @@ const Step3 = ({ data, setData, step, setStep }: { data: any, setData: any, step
 
 
     const openPicker = (val: number) => {
+
+        if (val === 1) {
+            setTitle(`${t('kyc.addthefrontofyouridentitycard')}`)
+        } else {
+
+            setTitle(`${t('kyc.addthebackofyouridentitycard')}`)
+        }
+
         setDoc(val)
         setVisible(true);
     }
 
-    const captureImage = async (type: any) => {
+
+
+    const captureImage = async () => {
 
         let options = {
-            mediaType: type,
-            maxWidth: 300,
-            maxHeight: 550,
+            mediaType: 'photo',
+            maxWidth: 1200,
+            maxHeight: 1200,
             quality: 1,
             allowsEditing: true,
             videoQuality: 'low',
@@ -209,6 +233,24 @@ const Step3 = ({ data, setData, step, setStep }: { data: any, setData: any, step
                 setFile(response.assets[0]);*/
 
                 //sendpicture(response.assets[0].uri, response.assets[0].uri);
+                if (doc === 1) {
+                    setDocumentFrontUri(response.assets[0].uri);
+                    setData(
+                        {
+                            ...data,
+                            photo_piece_recto: response.assets[0],
+                        }
+                    );
+                } else {
+                    setData(
+                        {
+                            ...data,
+                            photo_piece_verso: response.assets[0].uri,
+                        }
+                    );
+                    setDocumentBackUri(response.assets[0].uri);
+                }
+               
                 setVisible(false);
                 
 
@@ -218,12 +260,12 @@ const Step3 = ({ data, setData, step, setStep }: { data: any, setData: any, step
 
 
 
-    const chooseFile = (/*type*/) => {
+    const chooseFile = () => {
 
         let options = {
-            //mediaType: type,
-            maxWidth: 600,
-            maxHeight: 650,
+            mediaType: 'photo',
+            maxWidth: 1200,
+            maxHeight: 1200,
             quality: 1,
             allowsEditing: true,
         };
@@ -258,27 +300,43 @@ const Step3 = ({ data, setData, step, setStep }: { data: any, setData: any, step
                 return;
             }
 
-            setFile(response?.assets[0]);
+            //setFile(response?.assets[0]);
             /*setFilePath(response.assets[0].uri);
             setFileName(response.assets[0].fileName);*/
+
+            if (doc === 1) {
+                console.log(response.assets[0])
+                setDocumentFrontUri(response.assets[0].uri);
+                setData(
+                    {
+                        ...data,
+                        photo_piece_recto: response.assets[0],
+                    }
+                );
+            } else {
+                setData(
+                    {
+                        ...data,
+                        photo_piece_verso: response.assets[0],
+                    }
+                );
+                setDocumentBackUri(response.assets[0].uri);
+            }
             setVisible(false);
 
-            setTimeout(() => {
+            /*setTimeout(() => {
 
                 sendpicture(response.assets[0].fileName, response.assets[0].uri);
 
-            }, 1000)
+            }, 1000)*/
             
-
-            
-
         });
 
     }
 
 
 
-    const sendpicture = async (fileName:string, filePath:string ) => {
+    /*const sendpicture = async (fileName:string, filePath:string ) => {
 
         let form_data = new FormData();
         let filename = fileName?.split('/').pop();
@@ -319,7 +377,7 @@ const Step3 = ({ data, setData, step, setStep }: { data: any, setData: any, step
 
         });
 
-    };
+    };*/
 
     
 
@@ -333,16 +391,26 @@ const Step3 = ({ data, setData, step, setStep }: { data: any, setData: any, step
 
                 <View style={{
                     width: '100%',
-                    justifyContent: 'center',
-                    backgroundColor: 'black',
-                    borderTopRightRadius: 5,
-                    borderTopLeftRadius: 5,
+                    backgroundColor: '#e6e4e0',
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    borderTopRightRadius: 10,
+                    borderTopLeftRadius: 10,
+                    borderRadius: 10,
                     height: 50,
-                    alignItems: 'flex-start',
-                    paddingLeft: 10
+                    paddingHorizontal: 10
                 }}>
 
-                    <Text style={{ fontSize: 16, color: 'white', fontWeight: 'bold' }}>3. {t('kyc.Identityproof')} </Text>
+                    <View style={{ justifyContent:'center'}}>
+                        <Text style={{ fontSize: 16, color: Colors.text, fontWeight: 'bold' }}>3. {t('kyc.Identityproof')} </Text>
+                    </View>
+
+                    <View style={{ justifyContent:'center'}}>
+                       <Ionicons name="checkmark-done-outline" size={20} color={step > 3 ? Colors.primary :'gray'}/>
+                    </View>
+
+                    
 
                 </View>
 
@@ -351,96 +419,109 @@ const Step3 = ({ data, setData, step, setStep }: { data: any, setData: any, step
                     &&
                     <View style={{ justifyContent: 'center', padding: 10 }}>
 
+                        <View style={{ flex: 1, alignContent: 'flex-start', justifyContent: 'flex-start', marginTop: 10}}>
+                            <View style={styles.inputTitle}>
+                                <Text style={styles.inputTitleText}>{t('kyc.typeidentitydocument')}*</Text>
+                            </View>
 
-                        <View style={styles.inputTitle}>
-                            <Text style={styles.inputTitleText}>{t('kyc.typeidentitydocument')}*</Text>
-                        </View>
-
-                        <DropdownInput
-                            placeholder={t('kyc.chooseadocumenttype')}
-                            data={data1}
-                            value={typeId}
-                            onChange={(item:any) => setTypesId({ value: item, error: '' })}
-                            search={false}
-                            error={!!typeId.error}
-                            errorText={typeId.error}
-                        />
-
-                        
-
-
-                        <View style={styles.inputTitle}>
-                                <Text style={styles.inputTitleText}>{t('kyc.numberofthedocument')}*</Text>
-                        </View>
-
-                        <TextInput
-                            label={t('kyc.numberofthechoosedocument')}
-                            returnKeyType="next"
-                            value={documentNumber.value}
-                            onChangeText={(text: string) => setDocumentNumber({ value: text, error: '' })}
-                                error={!!documentNumber.error}
-                                errorText={documentNumber.error}
-                            autoCapitalize="none"
-                            description={undefined}
-                        />
-
-                        <View style={styles.inputTitle}>
-                            <Text style={styles.inputTitleText}>{t('kyc.expirationdate')}*</Text>
-                        </View>
-
-                        <View style={{ flexDirection: 'row', marginVertical: 1, }}>
-                            <DateInput
-                                label={t('identitycreen.dateofbirth')}
-                                value={date_exp.value}
-                                onChange={(d: Date | undefined) => setDate_exp({ value: d, error: '' })}
-                                hasError={!!date_exp.error}
-                                errorText={date_exp.error}
+                            <DropdownInput
+                                placeholder={t('kyc.chooseadocumenttype')}
+                                placeholderStyle={styles.placeholderStyle}
+                                selectedTextStyle={styles.selectedTextStyle}
+                                inputSearchStyle={styles.inputSearchStyle}
+                                data={identityTypes}
+                                value={typeId.value}
+                                onChange={(item: any) => setTypeId(item)}
+                                search={false}
+                                error={!!typeId.error}
+                                errorText={typeId.error}
                             />
                         </View>
 
+                        
+                        <View style={{ flex: 1, alignContent: 'flex-start', justifyContent: 'flex-start', marginTop: 10}}>
 
-                        <View style={styles.inputTitle}>
-                            <Text style={styles.inputTitleText}>{t('kyc.front')}*</Text>
+                            <View style={styles.inputTitle}>
+                                    <Text style={styles.inputTitleText}>{t('kyc.numberofthedocument')}*</Text>
+                            </View>
+
+                            <TextInput
+                                label={t('kyc.numberofthechoosedocument')}
+                                returnKeyType="next"
+                                value={documentNumber.value}
+                                onChangeText={(text: string) => setDocumentNumber({ value: text, error: '' })}
+                                error={!!documentNumber.error}
+                                errorText={documentNumber.error}
+                                autoCapitalize="none"
+                                description={undefined}
+                            />
                         </View>
-                        <View style={{ marginTop: 20 }}>
-                                <TouchableOpacity disabled={false} style={styles.idcard} onPress={() => { openPicker(1) }}>
-                                    {
-                                        data.photo_piece_recto == null ?
-                                            <ImageBackground source={require('../../assets/imgplaceholder.png')} resizeMode="contain" style={styles.image}>
-                                                <Text style={{ color: 'black', padding: 10 }}>{t('kyc.clicktoaddthefront')}</Text>
-                                            </ImageBackground>
-                                            :
-                                            <ImageBackground source={{ uri: data.photo_piece_recto }}  resizeMode="cover" style={styles.image}>
-                                                <Text style={{ color: 'black', padding: 10 }}>{t('kyc.clicktoaddthefront')}</Text>
-                                            </ImageBackground>
 
-                                    }
+                        <View style={{ flex: 1, alignContent: 'flex-start', justifyContent: 'flex-start', marginTop: 10}}>
+                            <View style={styles.inputTitle}>
+                                <Text style={styles.inputTitleText}>{t('kyc.expirationdate')}*</Text>
+                            </View>
+
+                            <View style={{ flexDirection: 'row', marginVertical: 1, }}>
+                                <DateInput
+                                        label={t('kyc.expirationdate')}
+                                    value={date_exp.value}
+                                    onChange={(d: Date | undefined) => setDate_exp({ value: d, error: '' })}
+                                    hasError={!!date_exp.error}
+                                    errorText={date_exp.error}
+                                />
+                            </View>
+                        </View>
+
+
+
+                        <View style={{ flex: 1, alignContent: 'flex-start', justifyContent: 'flex-start', marginTop: 10}}>
+                            <View style={styles.inputTitle}>
+                                <Text style={styles.inputTitleText}>{t('kyc.front')}*</Text>
+                            </View>
+                            <View style={{ marginTop: 10 }}>
+                                <TouchableOpacity disabled={false} style={styles.idcard} onPress={() => { openPicker(1) }}>
+                                        {
+                                            data.photo_piece_recto == null ?
+                                                <ImageBackground source={require('../../assets/placeholderimg.png')} resizeMode="contain" style={styles.image}>
+                                                    <Text style={{ color: Colors.text, padding: 10 }}>{t('kyc.clicktoaddthefront')}</Text>
+                                                </ImageBackground>
+                                                :
+                                                <ImageBackground source={{ uri: data.photo_piece_recto.uri }}  resizeMode="cover" style={styles.image}>
+                                                    <Text style={{ color: Colors.text, padding: 10 }}>{t('kyc.clicktoaddthefront')}</Text>
+                                                </ImageBackground>
+
+                                        }
                                 
-                            </TouchableOpacity>
+                                </TouchableOpacity>
+                                </View>
+                                {/*{documentFrontUri === null ? <Text style={styles.error}>{t('requiredValue')}</Text> : null}*/}
+                                
                         </View>
 
                         {/*source={idFrontImgPath ? { uri: idFrontImgPath } : images.placeholder}*/}
 
 
+                        <View style={{ flex: 1, alignContent: 'flex-start', justifyContent: 'flex-start', marginTop: 10}}>
+                            <View style={styles.inputTitle}>
+                                <Text style={styles.inputTitleText}>{t('kyc.back')}</Text>
+                            </View>
 
-                        <View style={styles.inputTitle}>
-                            <Text style={styles.inputTitleText}>{t('kyc.back')}</Text>
-                        </View>
+                            <View style={{ marginTop: 10, marginBottom: 30 }}>
+                                <TouchableOpacity disabled={false} style={styles.idcard} onPress={() => { openPicker(2) }}>
+                                        {
+                                            data.photo_piece_verso == null ?
+                                                <ImageBackground source={require('../../assets/placeholderimg.png')} resizeMode="contain" style={styles.image}>
+                                                    <Text style={{ color: Colors.text, padding: 10 }}>{t('kyc.clicktoaddtheback')}</Text>
+                                                </ImageBackground>
+                                                :
+                                                <ImageBackground source={{ uri: data.photo_piece_verso.uri }} resizeMode="cover" style={styles.image}>
+                                                    <Text style={{ color: Colors.text, padding: 10 }}>{t('kyc.clicktoaddtheback')}</Text>
+                                                </ImageBackground>
 
-                        <View style={{ marginTop: 20, marginBottom: 30 }}>
-                            <TouchableOpacity disabled={false} style={styles.idcard} onPress={() => { openPicker(2) }}>
-                                    {
-                                        data.photo_piece_recto == null ?
-                                            <ImageBackground source={require('../../assets/imgplaceholder.png')} resizeMode="contain" style={styles.image}>
-                                                <Text style={{ color: 'black', padding: 10 }}>{t('kyc.clicktoaddtheback')}</Text>
-                                            </ImageBackground>
-                                            :
-                                            <ImageBackground source={{ uri: data.photo_piece_verso }} resizeMode="cover" style={styles.image}>
-                                                <Text style={{ color: 'black', padding: 10 }}>{t('kyc.clicktoaddtheback')}</Text>
-                                            </ImageBackground>
-
-                                    }
-                            </TouchableOpacity>
+                                        }
+                                </TouchableOpacity>
+                            </View>
                         </View>
 
 
@@ -471,9 +552,9 @@ const Step3 = ({ data, setData, step, setStep }: { data: any, setData: any, step
                 }
 
                 
-
             </KeyboardAvoidingView>
             <ImagePickerModal
+                title={title}
                 isVisible={visible}
                 onClose={() => setVisible(false)}
                 captureImage={captureImage}
@@ -507,7 +588,8 @@ const styles = StyleSheet.create({
         flex: 1,
         textAlign: 'left',
         color: Colors.text,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+         marginBottom: 15,
     },
 
 
@@ -520,9 +602,11 @@ const styles = StyleSheet.create({
         marginTop: 20
     },
 
+
     icon: {
         marginRight: 5,
     },
+
 
     label: {
         position: 'absolute',
@@ -533,19 +617,26 @@ const styles = StyleSheet.create({
         paddingHorizontal: 8,
         fontSize: 14,
     },
+
     placeholderStyle: {
         fontSize: 16,
+        color: Colors.text,
     },
+
     selectedTextStyle: {
         fontSize: 16,
+        color: Colors.text,
     },
+
     iconStyle: {
         width: 20,
         height: 20,
     },
+
     inputSearchStyle: {
         height: 40,
         fontSize: 16,
+        color: Colors.text
     },
 
     idcard: {
@@ -556,6 +647,7 @@ const styles = StyleSheet.create({
         overflow: 'hidden',
         borderColor: 'grey',
         borderWidth: 0.5,
+        borderRadius: 5
     },
 
 
@@ -567,6 +659,22 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
 
+    
+
+     iconImage: {
+        height: 70,
+        width: 70,
+        overflow: 'hidden',
+        marginBottom: 10,
+    },
+
+    error: {
+        fontSize: 13,
+        color: '#BA001A',
+        paddingTop: 4,
+    },
+
+    
 
 });
 

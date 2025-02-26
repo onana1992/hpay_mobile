@@ -1,25 +1,32 @@
-﻿/* eslint-disable react/self-closing-comp */
+/* eslint-disable react/self-closing-comp */
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable eol-last */
 /* eslint-disable prettier/prettier */
 import React from 'react';
-import { SafeAreaView, Text, Pressable, StyleSheet, View } from 'react-native';
+import { SafeAreaView, Text, Pressable, StyleSheet, View, Image } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';
 import Modal from 'react-native-modal';
-import { Colors } from '../themes'
+import { Colors } from '../themes';
+import { useTranslation } from 'react-i18next';
 //import I18n from 'react-native-i18n';
 
 
 type PropType = {
-    title:String,
     isVisible: boolean,
     onClose: () => void,
-    captureImage: (photo: string) => {},
-    chooseFile: () => void
 }
 
-export default function ImagePickerModal({title, isVisible, onClose, captureImage, chooseFile }: PropType) {
+
+export default function LangageModal({ isVisible, onClose }: PropType) {
+
+    const { t, i18n } = useTranslation();
+
+    const changeLangage = (lang: string) => {
+        i18n.changeLanguage(lang);
+        onClose();
+    };
+
     return (
         <Modal
             isVisible={isVisible}
@@ -32,60 +39,23 @@ export default function ImagePickerModal({title, isVisible, onClose, captureImag
             style={styles.modal}>
             <SafeAreaView style={styles.content}>
 
-                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginBottom:20 }}>
-                    <View style={{ height: 5, width: 40, borderRadius:5, backgroundColor: Colors.background }}>
+                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginBottom: 20 }}>
+                    <View style={{ height: 5, width: 40, borderRadius: 5, backgroundColor: Colors.background }}>
                     </View>
                 </View>
 
                 <View style={{}}>
-                    <Text style={{ color: Colors.text, fontSize: 26, fontWeight: 'bold', paddingVertical: 10 }}>{title}</Text>
+                    <Text style={{ color: Colors.text, fontSize: 26, fontWeight: 'bold', paddingVertical: 10 }}> {t('changethelangage')}  </Text>
                 </View>
 
-                <Pressable style={styles.item} onPress={() => { captureImage('photo'); }} >
+                <Pressable style={styles.item} onPress={() => { changeLangage('fr'); }} >
 
                     <View style={{
                         flex: 1,
                         alignItems: 'flex-start',
                         justifyContent: 'center',
                     }}>
-                        <View style={{
-                            borderColor: Colors.background,
-                            borderWidth: 1,
-                            height: 50,
-                            width:50,
-                            borderRadius: 25,
-                            alignItems:'center',
-                            justifyContent: 'center',
-                        } }>
-                            <Feather name="camera" size={18} color={Colors.text} />
-                        </View>
-
-                    </View>
-
-                    <View style={{
-                        flex: 3,
-                        alignItems: 'flex-start',
-                        justifyContent: 'center' }}>
-                        <Text style={styles.buttonText}>Prendre une photo</Text>
-                    </View>
-
-                    <View style={{
-                        flex:1,
-                        alignItems: 'flex-end',
-                        justifyContent: 'center',
-                    }}>
-                        <Ionicons name="chevron-forward-outline" size={16} color={Colors.text} />
-                    </View>
-               </Pressable>
-
-               <Pressable style={styles.item}  onPress={() => { chooseFile('photo'); }}>
-
-                    <View style={{
-                        flex: 1,
-                        alignItems: 'flex-start',
-                        justifyContent: 'center',
-                    }}>
-                        <View style={{
+                        {/*<View style={{
                             borderColor: Colors.background,
                             borderWidth: 1,
                             height: 50,
@@ -94,8 +64,45 @@ export default function ImagePickerModal({title, isVisible, onClose, captureImag
                             alignItems: 'center',
                             justifyContent: 'center',
                         }}>
-                            <Feather name="image" size={18} color={Colors.text} />
-                        </View>
+                            <Text>&#x1F1E8;&#x1F1F5;</Text>
+                        </View>*/}
+
+                        <Image
+                            source={require('../assets/france.png')}
+                            style={styles.avatarImage}
+                        />
+
+                    </View>
+
+                    <View style={{
+                        flex: 3,
+                        alignItems: 'flex-start',
+                        justifyContent: 'center'
+                    }}>
+                        <Text style={styles.buttonText}>{t('french')}</Text>
+                    </View>
+
+                    <View style={{
+                        flex: 1,
+                        alignItems: 'flex-end',
+                        justifyContent: 'center',
+                    }}>
+                        <Ionicons name="chevron-forward-outline" size={16} color={Colors.text} />
+                    </View>
+                </Pressable>
+
+                <Pressable style={styles.item} onPress={() => { changeLangage('en'); }}>
+
+                    <View style={{
+                        flex: 1,
+                        alignItems: 'flex-start',
+                        justifyContent: 'center',
+                    }}>
+
+                        <Image
+                            source={require('../assets/gb.png')}
+                            style={styles.avatarImage}
+                        />
 
                     </View>
 
@@ -105,7 +112,7 @@ export default function ImagePickerModal({title, isVisible, onClose, captureImag
                         justifyContent: 'center',
                     }}>
                         <Text style={styles.buttonText}>
-                        Selectioner une photo dans la galerie d'images </Text>
+                            {t('english')} </Text>
                     </View>
 
                     <View style={{
@@ -131,7 +138,7 @@ const styles = StyleSheet.create({
     content: {
         backgroundColor: '#ffffff',
         padding: 20,
-        height: 300,
+        height: 250,
     },
 
     item: {
@@ -161,7 +168,16 @@ const styles = StyleSheet.create({
         color: Colors.text,
         justifyContent: 'center',
         alignItems: 'center',
-        fontWeight:'bold',
+        fontWeight: 'bold',
+    },
+
+    avatarImage: {
+        height: 30,
+        width: 30,
+        overflow: 'hidden',
+        borderColor: '#ffffff',
+        borderWidth: 1,
+        borderRadius: 15,
     },
 
 

@@ -1,6 +1,7 @@
-/* eslint-disable @typescript-eslint/no-shadow */
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable @typescript-eslint/no-unused-vars */
+﻿/* eslint-disable @typescript-eslint/no-shadow */
+
+
+
 /* eslint-disable react/no-unstable-nested-components */
 /* eslint-disable jsx-quotes */
 /* eslint-disable no-trailing-spaces */
@@ -17,22 +18,16 @@ import {
     Text,
     StyleSheet,
     KeyboardAvoidingView,
-    Pressable,
-    Platform,
-    Keyboard,
     ScrollView,
 } from 'react-native';
 /*import { Colors } from 'react-native/Libraries/NewAppScreen';*/
 import { useTranslation } from 'react-i18next';
 import TextInput from '../../components/TextInput';
-import { RadioButton } from 'react-native-paper';
 import { Colors } from '../../themes';
 import Button from '../../components/Button';
-import DropdownInput from '../../components/DropdownInput'
-import { DatePickerInput } from 'react-native-paper-dates';
-import { PaperSelect } from 'react-native-paper-select';
 import { Dropdown } from 'react-native-element-dropdown';
-import AntDesign from 'react-native-vector-icons/AntDesign';
+import { getPaysRequest } from '../../services/request';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import {
     emailValidator,
     countryValidator,
@@ -42,21 +37,48 @@ import {
 
 
 
-const Step2 = ({ data, setData, step, setStep, countries }: { data: any, setData: any, step: any, setStep: any, countries: any }) => {
+const Step2 = ({ data, setData, step, setStep, }: { data: any, setData: any, step: any, setStep: any }) => {
 
-   
-    
+
+  
+    const [country, setCountry] = React.useState({ label: '🇨🇦 Canada', value: 'ca', indicator: "1" });
+    const [selectedCountry, setSelectedCountry] = React.useState(null);
+    const [cities, setCities] = React.useState([]);
+    const [countries, setCountries] = React.useState([]);
+    const [city, setCity] = React.useState({ label: 'Montreal', value: 'Montreal' });
     const [address, setAddress] = React.useState({ value: '', error: '' });
-    const [country, setCountry] = React.useState({ value: '', id:0, error: '' });
     const [town, setTown] = React.useState({ value: '', id: 0, error: '' });
     const [telephone, setTelephone] = React.useState({ value: data.telephone, error: '' });
     const [telephone2, setTelephone2] = React.useState({ value: '', error: '' });
     const [email, setEmail,] = React.useState({ value: '', error: '' });
     const { t } = useTranslation();
-    const [value, setValue] = React.useState(null);
-    const [isFocus, setIsFocus] = React.useState(false);
-    const [countryData, setCountryData] = React.useState<any>([]);
     const [townData, setTownData] = React.useState<any>([]);
+    const COUNTRIES = [
+        { label: '🇨🇦 Canada', value: 'ca', indicator: "1" },
+        { label: '🇨🇲 Cameroun', value: 'cm', indicator: '237' },
+        { label: "🇨🇮 Cote d'ivoire", value: 'ci', indicator: "225" },
+        { label: "🇭🇹 Haiti", value: 'ht', indicator: "509" },
+        { label: "🇹🇬 Togo", value: 'tg', indicator: "228" },
+        { label: '🇸🇳 Senegal', value: 'sn', indicator: '221' },
+        { label: '🇨🇭 Suisse', value: 'ch', indicator: '41' },
+        { label: '🇬🇲 Gambie', value: 'gm', indicator: '220' },
+        { label: '🇲🇱 Mali', value: 'ml', indicator: '223' },
+        { label: '🇧🇯 Benin', value: 'bj', indicator: '229' },
+        { label: '🇬🇦 Gabon', value: 'ga', indicator: '241' },
+        { label: '🇺🇸 États-Unis', value: 'us', indicator: '1' },
+        { label: '🇨🇩 Congo RD', value: 'cd', indicator: '243' },
+        { label: '🇩🇴 République Dominicaine', value: 'do', indicator: '1' },
+        { label: '🇬🇹 Guatemala', value: 'gt', indicator: '502' },
+        { label: '🇨🇬 République du Congo', value: 'cg', indicator: '242' },
+        { label: '🇫🇷 France', value: 'fr', indicator: '33' },
+        { label: '🇧🇪 Belgique', value: 'be', indicator: '32' },
+        { label: '🇳🇬 Nigeria', value: 'ng', indicator: '234' },
+        { label: '🇨🇱 Chili', value: 'cl', indicator: '56' },
+        { label: '🇨🇴 Colombie', value: 'co', indicator: '57' },
+        { label: '🇱🇧 Liban', value: 'lb', indicator: '961' },
+        { label: '🇵🇪 Panama', value: 'pa', indicator: '507' },
+        { label: '🇹🇼 Taïwan', value: 'tw', indicator: '886' }
+    ];
 
 
     const data1 = [
@@ -64,13 +86,70 @@ const Step2 = ({ data, setData, step, setStep, countries }: { data: any, setData
         { label: t('kyc.idcard'), value: '2' }
     ];
 
+
     const onBack = () => {
         setStep((PrevStep: number) => {
             return PrevStep - 1;
         })
     }
 
-    React.useEffect(() => {
+    const getPays = () =>{
+        
+         getPaysRequest().then((response: any) => {
+            
+            setCountries(response.data);
+            const firstCountry = response.data.find(item => item.id === 9);
+            setSelectedCountry(firstCountry);
+          
+
+            const formattedCities = firstCountry.villes.map(city => ({
+                id: city.id,
+                label: city.ville,
+                value: city.ville
+            }));
+
+            setCities(formattedCities);
+            setCity(formattedCities[0]);
+
+
+        }).catch((error: any) => {
+
+            if (error){
+                console.log(error);
+            }
+
+        });
+    
+    }
+
+
+
+    React.useState(() => {
+        
+        getPays();
+
+    },[]);
+
+
+
+
+   const changeCountry = (item) => {
+       
+       const choosecountry = countries.find((it: { indicatif: any; })=> it.indicatif === item.indicator);
+       setSelectedCountry(choosecountry);
+       const formattedCities = choosecountry.villes.map((city: { ville: any; }) => ({
+            id: city.id,
+            label: city.ville,
+            value: city.ville
+       }));
+
+        setCities(formattedCities)
+        setCity(formattedCities[0]);
+    }
+
+
+
+   /* React.useEffect(() => {
 
         let tab: any = [];
         countries.forEach((country, index) => {
@@ -80,11 +159,11 @@ const Step2 = ({ data, setData, step, setStep, countries }: { data: any, setData
 
        // console.log(tab);
 
-    }, []);
+    }, []);*/
 
     
 
-    const renderLabel = () => {
+    /*const renderLabel = () => {
         if (value || isFocus) {
             return (
                 <Text style={[styles.label, isFocus && { color: 'blue' }]}>
@@ -93,7 +172,7 @@ const Step2 = ({ data, setData, step, setStep, countries }: { data: any, setData
             );
         }
         return null;
-    };
+    };*/
 
 
 
@@ -110,8 +189,6 @@ const Step2 = ({ data, setData, step, setStep, countries }: { data: any, setData
 
 
     const selectCountry = (pays: any) => {
-
-        console.log(pays);
 
         setCountry({ value: pays.value, id: pays.id, error: '' });
 
@@ -153,14 +230,22 @@ const Step2 = ({ data, setData, step, setStep, countries }: { data: any, setData
             {
                 ...data,
                 email: email.value,
-                pays: country.id,
-                ville: town.id,
+                pays: selectedCountry.id,
+                ville: city.id,
                 adresse: address.value,
                 telephone2: telephone2.value
             }
         );
-
-        setStep(3);
+        
+            /*console.log({
+                ...data,
+                email: email.value,
+                pays: selectedCountry.id,
+                ville: city.id,
+                adresse: address.value,
+                telephone2: telephone2.value
+            });*/
+       setStep(3);
 
     }
 
@@ -174,22 +259,93 @@ const Step2 = ({ data, setData, step, setStep, countries }: { data: any, setData
 
                 <View style={{
                     width: '100%',
-                    justifyContent: 'center',
-                    backgroundColor: 'black',
-                    borderTopRightRadius: 5,
-                    borderTopLeftRadius: 5,
+                    backgroundColor: '#e6e4e0',
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    borderTopRightRadius: 10,
+                    borderTopLeftRadius: 10,
+                    borderRadius: 10,
                     height: 50,
-                    alignItems: 'flex-start',
-                    paddingLeft: 10
+                    paddingHorizontal: 10
                 }}>
+                    <View style={{alignItem:'center', justifyContent:'center'}}>
+                        <Text style={{ fontSize: 16, color: Colors.text, fontWeight: 'bold' }}>2. {t('kyc.Addressdetails')} </Text>
+                    </View>
 
-                    <Text style={{ fontSize: 16, color: 'white', fontWeight: 'bold' }}>2. {t('kyc.Addressdetails')} </Text>
+                    <View style={{alignItem:"center", justifyContent:'center'}}>
+                       <Ionicons name="checkmark-done-outline" size={20} color={step > 2 ? Colors.primary :'gray'}/>
+                    </View>
+                   
 
                 </View>
                 {
                     step === 2
                     &&
                     <View style={{ justifyContent: 'center', padding: 10 }}>
+                        
+                    
+
+
+                    
+
+                    <View style={{ flex: 1, alignContent: 'flex-start', justifyContent: 'flex-start', marginTop: 10}}>
+                        
+                        <View style={styles.inputTitle}>
+                            <Text style={styles.inputTitleText}>{t('kyc.country')}*</Text>
+                        </View>
+
+                        <Dropdown
+                                style={styles.dropdown}
+                                placeholderStyle={styles.placeholderStyle}
+                                selectedTextStyle={styles.selectedTextStyle}
+                                inputSearchStyle={styles.inputSearchStyle}
+                                searchPlaceholderTextColor='gray'
+                                itemTextStyle={{ color: 'black' }}
+                                iconStyle={styles.iconStyle}
+                                data={COUNTRIES}
+                                search
+                                maxHeight={300}
+                                labelField="label"
+                                valueField="value"
+                                placeholder="Selectionez un pays"
+                                searchPlaceholder={t('rechercher')}
+                                value={country}
+                                onChange={(item) => {
+                                    changeCountry(item)
+                                }}
+                         />
+                    </View>
+
+
+                    <View style={{ flex: 1, alignContent: 'flex-start', justifyContent: 'flex-start', marginTop: 10}}>
+                        <View style={styles.inputTitle}>
+                            <Text style={styles.inputTitleText}>{t('kyc.town')}*</Text>
+                        </View>
+
+                        <Dropdown
+                                style={styles.dropdown}
+                                placeholderStyle={styles.placeholderStyle}
+                                selectedTextStyle={styles.selectedTextStyle}
+                                inputSearchStyle={styles.inputSearchStyle}
+                                searchPlaceholderTextColor='gray'
+                                itemTextStyle={{ color: 'black' }}
+                                iconStyle={styles.iconStyle}
+                                data={cities}
+                                search
+                                maxHeight={300}
+                                labelField="label"
+                                valueField="value"
+                                placeholder="Selectionez un pays"
+                                searchPlaceholder={t('rechercher')}
+                                value={city}
+                                onChange={(item) => {
+                                    setCity(item);
+                                }}
+                            />
+                    </View>
+
+                    <View style={{ flex: 1, alignContent: 'flex-start', justifyContent: 'flex-start'}}>
 
                         <View style={styles.inputTitle}>
                             <Text style={styles.inputTitleText}>{t('kyc.address')}*</Text>
@@ -205,39 +361,9 @@ const Step2 = ({ data, setData, step, setStep, countries }: { data: any, setData
                             autoCapitalize="none"
                             description={undefined}
                         />
+                    </View>
 
-
-                        <View style={styles.inputTitle}>
-                            <Text style={styles.inputTitleText}>{t('kyc.country')}*</Text>
-                        </View>
-
-                        <DropdownInput
-                            placeholder={t('kyc.chooseacountry')}
-                            data={countryData}
-                            value={value}
-                            onChange={(text: string) => selectCountry(text)}
-                            search={false}
-                            error={!!country.error}
-                            errorText={country.error}
-                        />
-
-
-                        <View style={styles.inputTitle}>
-                            <Text style={styles.inputTitleText}>{t('kyc.town')}*</Text>
-                        </View>
-
-                        <DropdownInput
-                            placeholder={t('kyc.chooseatown')}
-                            data={townData}
-                            value={country}
-                            onChange={(val: any) => setTown({ value: val.value,id:val.id, error: '' })}
-                            //search={true}
-                            error={!!town.error}
-                            errorText={town.error}
-                        />
-
-
-
+                    <View style={{ flex: 1, alignContent: 'flex-start', justifyContent: 'flex-start', marginTop: 10}}>
                         <View style={styles.inputTitle}>
                             <Text style={styles.inputTitleText}>{t('signinscreen.phone')}*</Text>
                         </View>
@@ -254,8 +380,10 @@ const Step2 = ({ data, setData, step, setStep, countries }: { data: any, setData
                             description={undefined}
                             disabled={true}
                         />
+                    </View>
 
 
+                    <View style={{ flex: 1, alignContent: 'flex-start', justifyContent: 'flex-start', marginTop: 10}}>
                         <View style={styles.inputTitle}>
                             <Text style={styles.inputTitleText}>{t('kyc.telephone2')}</Text>
                         </View>
@@ -263,6 +391,7 @@ const Step2 = ({ data, setData, step, setStep, countries }: { data: any, setData
                             label={t('signinscreen.yourphone')}
                             returnKeyType="next"
                             value={telephone2.value}
+                            inputMode='numeric'
                             onChangeText={(text: string) => setTelephone2({ value: text, error: '' })}
                             error={!!telephone2.error}
                             errorText={telephone2.error}
@@ -270,8 +399,10 @@ const Step2 = ({ data, setData, step, setStep, countries }: { data: any, setData
                             autoCompleteType="tel"
                             description={undefined}
                         />
+                    </View>
 
 
+                    <View style={{ flex: 1, alignContent: 'flex-start', justifyContent: 'flex-start', marginTop: 10}}>
                         <View style={styles.inputTitle}>
                             <Text style={styles.inputTitleText}>{t('kyc.email')}*</Text>
                         </View>
@@ -286,7 +417,10 @@ const Step2 = ({ data, setData, step, setStep, countries }: { data: any, setData
                             textContentType="emailAddress"
                             description={undefined}
                         />
+                    </View>
 
+
+                    <View style={{ flex: 1, alignContent: 'flex-start', justifyContent: 'flex-start', marginTop: 20}}>
                         <View style={{ flexDirection: 'row', flex: 1 }}>
 
                             <View style={{ flex: 1, padding: 5 }}>
@@ -306,6 +440,7 @@ const Step2 = ({ data, setData, step, setStep, countries }: { data: any, setData
                             </View>
 
                         </View>
+                    </View>
 
 
                     </View>
@@ -326,30 +461,7 @@ const styles = StyleSheet.create({
         borderRadius: 5,
     },
 
-    inputTitle: {
-        flexDirection: 'row',
-        justifyContent: 'flex-start',
-        alignItems: 'flex-start',
-        marginVertical: -10,
-        marginTop: 10
-    },
-
-    inputTitleText: {
-        flex: 1,
-        textAlign: 'left',
-        color: Colors.text,
-        fontWeight: 'bold'
-    },
-
-    dropdown: {
-        height: 50,
-        borderColor: 'gray',
-        borderWidth: 0.5,
-        borderRadius: 8,
-        paddingHorizontal: 8,
-        marginTop:20
-    },
-
+     
     icon: {
         marginRight: 5,
     },
@@ -364,22 +476,61 @@ const styles = StyleSheet.create({
         fontSize: 14,
     },
 
-    placeholderStyle: {
-        fontSize: 16,
-    },
-
-    selectedTextStyle: {
-        fontSize: 16,
-    },
-
     iconStyle: {
         width: 20,
         height: 20,
     },
 
+
+    inputTitle: {
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
+        alignItems: 'flex-start',
+        marginVertical: -10,
+        marginTop: 10
+    },
+
+    inputTitleText: {
+        flex: 1,
+        textAlign: 'left',
+        color: Colors.text,
+        fontWeight: 'bold',
+        marginBottom: 15,
+        fontSize: 14
+    },
+
+     placeholderStyle: {
+        fontSize: 16,
+        color: 'gray',
+    },
+
+    selectedTextStyle: {
+        fontSize: 16,
+        color: 'black',
+    },
+
+
     inputSearchStyle: {
         height: 40,
         fontSize: 16,
+        color: 'black',
+    },
+
+     iconImage: {
+        height: 120,
+        width: 120,
+        overflow: 'hidden',
+        marginBottom: 10,
+    },
+
+     dropdown: {
+        width: '100%',
+        height: 50,
+        borderColor: 'gray',
+        borderWidth: 1,
+        borderRadius: 5,
+        paddingHorizontal: 8,
+      
     },
 
 });

@@ -43,10 +43,6 @@ function SignUpScreen({ navigation}: {navigation:any, route: any}) {
 
     const route = useRoute<any>();
     const { country, city } = route.params;
-
-    console.log(country);
-
-
     const [modalVisible, setModalVisible] = React.useState(false);
     const [telephone, setTelephone] = React.useState({ value: '', error: '' });
     const [password, setPassword] = React.useState({ value: '', error: '' })
@@ -57,25 +53,14 @@ function SignUpScreen({ navigation}: {navigation:any, route: any}) {
     const { t } = useTranslation();
 
 
-    const [value, setValue] = useState('');
-    const phoneInput = useRef<PhoneInput>(null);
-    const [snackVisible, setSnackVisible] = React.useState(false);
-    const onDismissSnackBar = () => setSnackVisible(false);
-
     const indice = (val:string) => {
         return '+' + val; 
     }
 
-    const countries = ['CI', 'SN', 'CH', 'GM', 'TG', 'ML', 'BJ', 'GA',
-        'CA', 'HT', 'US', 'CD', 'DO', 'GT', 'CM', 'CG', 'FR',
-        'BE', 'NG', 'CL', 'CO', 'LB', 'PA', 'TW'];
+   
 
 
     const onLoginPressed = () => {
-
-        //navigation.navigate('TelVerification');
-    
-       
 
         const telError = telValidator(telephone.value);
         const passwordError = passwordValidator(password.value);
@@ -93,7 +78,7 @@ function SignUpScreen({ navigation}: {navigation:any, route: any}) {
         if (checked) {
 
             
-            const formatTel = country.indicator + telephone.value
+            const formatTel = country.indicatif + telephone.value
 
             setModalVisible(true);
             signUpRequest(formatTel, password.value).then((response: any) => {
@@ -129,11 +114,6 @@ function SignUpScreen({ navigation}: {navigation:any, route: any}) {
         
             <NoConnectedHeader navigation={navigation} />
 
-            <KeyboardAvoidingView
-                enabled={true}
-                behavior={Platform.OS === 'ios' ? 'padding' : 'padding'}
-            >
-
                 <Pressable  onPress={Keyboard.dismiss}>
 
 
@@ -160,7 +140,7 @@ function SignUpScreen({ navigation}: {navigation:any, route: any}) {
                                     inputMode="numeric"
                                     onChangeText={(text: string) => setTelephone({ value: text, error: '' })}
                                     description={undefined}
-                                    left={<Input.Affix text={indice(country.indicator)} />}
+                                    left={<Input.Affix text={indice(country.indicatif)} />}
                                 />
                                 {telephone.error ? <Text style={styles.error}>{telephone.error}</Text> : null}
                             </View>
@@ -250,7 +230,6 @@ function SignUpScreen({ navigation}: {navigation:any, route: any}) {
                     </View>
                 </Pressable>
                 <LoadingModal setModalVisible={setModalVisible} modalVisible={modalVisible} />
-            </KeyboardAvoidingView>
             
         </ScrollView>
       
@@ -325,18 +304,19 @@ const styles = StyleSheet.create({
 
     title: {
         color: Colors.text,
-        fontSize: 22,
-        fontWeight: 500,
+        fontSize: 28,
+        fontWeight: 'bold',
         textAlign: 'left',
-        paddingVertical: 0
+        paddingVertical: 5,
+        marginTop: 0
     },
 
     subtitle: {
-        color: Colors.gray,
         fontSize: 14,
-        fontStyle: 'italic',
-        marginTop:0
-    }
+        color: Colors.text,
+        marginTop: 0
+    },
+
 });
 
 

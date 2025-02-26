@@ -79,11 +79,20 @@ export default function EmailVerificationModal({ isVisible, onClose, phone, idcl
 
     };
 
+    const resendCode = () => {
+
+        console.log("à implementer")
+    };
+
     return (
         <Modal
             isVisible={isVisible}
             onBackButtonPress={onClose}
             onBackdropPress={onClose}
+            onSwipeComplete={onClose} // Handle swipe to close
+            swipeDirection={['down']}
+          //  animationIn="slideInUp" // Optional: animation for modal entry
+          //  animationOut="slideOutDown" // Optional: animation for modal exit
             style={styles.modal}>
             <SafeAreaView style={styles.content}>
 
@@ -91,8 +100,8 @@ export default function EmailVerificationModal({ isVisible, onClose, phone, idcl
 
                     <View style={styles.pageheader}>
                         <Text style={styles.title}>{t('emailscreen.veriftitle')}</Text>
-                        <Text style={styles.verifmsg}>
-                            {t('emailscreen.veriftitlemsg')}
+                        <Text style={styles.subtitle}>
+                            {t('emailscreen.verifmsg')}
                         </Text>
                     </View>
 
@@ -118,7 +127,7 @@ export default function EmailVerificationModal({ isVisible, onClose, phone, idcl
 
                     <View style={{ flexDirection: 'row', marginTop: 0, justifyContent: 'center', alignItems: 'center' }}>
                         <View style={styles.row}>
-                            <TouchableOpacity onPress={() => navigation.navigate('SignIn')}>
+                            <TouchableOpacity onPress={() => resendCode()}>
                                 <Text style={styles.link}>{t('telVerificationcreen.resendcode')}</Text>
                             </TouchableOpacity>
                         </View>
@@ -162,7 +171,7 @@ const styles = StyleSheet.create({
     content: {
         backgroundColor:'#ffffff',
         width: '100%',
-        height: 550,
+        height: 570,
         borderTopRightRadius: 30,
         borderTopLeftRadius: 30,
         padding: 20,
@@ -185,16 +194,16 @@ const styles = StyleSheet.create({
 
     title: {
         color: Colors.text,
-        fontSize: 22,
-        fontWeight: 500,
+        fontSize: 28,
+        fontWeight: 'bold',
         textAlign: 'left',
-        paddingVertical: 0,
+        paddingVertical: 5,
+        marginTop: 0,
     },
 
     subtitle: {
-        color: Colors.gray,
         fontSize: 14,
-        fontStyle: 'italic',
+        color: Colors.text,
         marginTop: 0,
     },
 

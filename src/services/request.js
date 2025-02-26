@@ -1,4 +1,4 @@
-import { client } from "./axiosClient";
+import { client, client2 } from "./axiosClient";
 
 
 
@@ -129,6 +129,22 @@ export function passforgotVerifyPhoneRequest(phone,code) {
 //update  the  password
 export function passforgotUpdatePasswordRequest(phone, newPassword) {
     return client.get(`/auth/passwordforgot/update/${phone}/${newPassword}`);
+}
+
+
+//Save kyc
+export function saveKyc(formData) {
+
+    return client2.post(
+        `/kyc/save`,
+        formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data', // Required for file uploads
+            },
+        }
+        
+    );
+
 }
 
 

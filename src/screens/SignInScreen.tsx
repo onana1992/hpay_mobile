@@ -98,9 +98,7 @@ function SignInScreen({ navigation }: {navigation:any}){
 
     return (
         <ScrollView style={styles.main}>
-            <KeyboardAvoidingView
-                enabled={true}
-                behavior={Platform.OS === 'ios' ? 'padding' : 'padding'}>
+            
 
                 <Pressable style={{flex:1}} onPress={Keyboard.dismiss}>
 
@@ -108,7 +106,7 @@ function SignInScreen({ navigation }: {navigation:any}){
 
                     <View style={styles.content}>
 
-                        <Logo />
+                        {/*<Logo />*/}
 
                         <View style={styles.pageheader}>
                             <Text style={styles.title}>{t('signinscreen.title')}</Text>
@@ -193,7 +191,7 @@ function SignInScreen({ navigation }: {navigation:any}){
                     
                 </Pressable>
             
-            </KeyboardAvoidingView>
+            
             <LoadingModal setModalVisible={setModalVisible} modalVisible={modalVisible} />
         </ScrollView>
     );
@@ -210,9 +208,8 @@ const styles = StyleSheet.create({
     content: {
         flex: 1,
         flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
     },
+
 
      forgotPassword: {
         width: '100%',
@@ -267,20 +264,21 @@ const styles = StyleSheet.create({
 
     title: {
         color: Colors.text,
-        fontSize: 22,
-        fontWeight: 500,
+        fontSize: 28,
+        fontWeight: 'bold',
         textAlign: 'left',
-        paddingVertical: 0
+        paddingVertical: 5, 
+        marginTop:30
     },
 
     subtitle: {
-        color: Colors.gray,
+        color: Colors.text,
         fontSize: 14,
-        fontStyle: 'italic',
         marginTop: 0
     }
 
 });
+
 
 
 export default SignInScreen;

@@ -17,14 +17,8 @@ export default function StepRecover(props: any) {
 
     return (
 
-        <View style={{}}>
-            <Text style={{
-                color: Colors.text,
-                fontSize: 22,
-                fontWeight: 500,
-                textAlign: 'center',
-                paddingVertical: 7,
-            }}>{t('passwordRecover.passwordrecover')} <Text style={{ fontSize: 20 }}>({props.step}/3)</Text></Text>
+        <View>
+            
             <View style={{ flex: 1, flexDirection: 'row' }}>
                 <View style={{ flex: 1 }}>
                 </View>
@@ -37,14 +31,16 @@ export default function StepRecover(props: any) {
                                 style={{
                                     borderColor: index < props.step ? Colors.primary : Colors.text,
                                     borderWidth: 0.5,
-                                    flex: 1,
                                     height: 6,
+                                    width: 6,
+                                    borderRadius: 3,
                                     margin: 2,
                                     backgroundColor: index < props.step ? Colors.primary : 'white',
-                                    borderRadius: 5,
+                                    marginHorizontal:5
+                                  
                                 }}
                             >
-                                <Text>{' '}</Text>
+                                <Text>{''}</Text>
                             </View>
                         )
                     }
@@ -65,7 +61,9 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         height: 20,
         width: '100%',
-        flex:2
+        flex: 2,
+        alignItems: 'center',
+        justifyContent:'center',
     },
 
 });

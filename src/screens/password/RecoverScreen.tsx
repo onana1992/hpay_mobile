@@ -32,6 +32,9 @@ function RecoverScreen({ navigation }: { navigation: any }) {
 
     const onLoginPressed = () => {
 
+       
+    
+
         const phoneError = telValidator(telephone.value);
 
         if (phoneError)   {
@@ -53,7 +56,7 @@ function RecoverScreen({ navigation }: { navigation: any }) {
 
         }).catch((error: any) => {
 
-            console.log(error.response.data) 
+            //console.log(error.response.data) 
             
             if (error.response.data.statusCode) {
 
@@ -67,7 +70,6 @@ function RecoverScreen({ navigation }: { navigation: any }) {
 
             }
 
-            
            
         })
 
@@ -85,9 +87,9 @@ function RecoverScreen({ navigation }: { navigation: any }) {
                 <NoConnectedHeader navigation={navigation} />
                 <Pressable style={{ flex: 1 }} onPress={Keyboard.dismiss}>
 
-                    <StepRecover step={1} />
+                <StepRecover step={1} />
 
-                <View style={{ flex: 3, alignItems: 'flex-start', marginTop:40 }}>
+                <View style={{ flex: 3, alignItems: 'flex-start'}}>
 
                     <View style={styles.content}>
 
@@ -120,14 +122,12 @@ function RecoverScreen({ navigation }: { navigation: any }) {
                     </View>
                     
                     <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'flex-end' }}>
-
                         <View style={{ flexDirection: 'row', marginTop: 30, width: "100%" }}>
                             <Button
                                 mode="contained"
                                 onPress={() => { onLoginPressed() }}>
                                 {t('passwordRecover.next')}
                             </Button>
-
                         </View>
                     </View>
 
@@ -193,8 +193,6 @@ const styles = StyleSheet.create({
     pageheader: {
         justifyContent: 'flex-start',
         alignItem: 'flex-start',
-        marginBottom: 10,
-        marginTop: 30
     },
 
     step: {
@@ -205,16 +203,16 @@ const styles = StyleSheet.create({
 
     title: {
         color: Colors.text,
-        fontSize: 22,
-        fontWeight: 500,
+        fontSize: 28,
+        fontWeight: 'bold',
         textAlign: 'left',
-        paddingVertical: 0
+        paddingVertical: 5,
+        marginTop: 30
     },
 
     subtitle: {
-        color: Colors.gray,
         fontSize: 14,
-        fontStyle: 'italic',
+        color: Colors.text,
         marginTop: 0
     },
 

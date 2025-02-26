@@ -16,40 +16,37 @@ export default function StepCompnent(props: any) {
 
     return (
 
-        <View style={{}}>
-            <Text style={{
-                color: Colors.text,
-                fontSize: 22,
-                fontWeight: 600,
-                textAlign: 'center',
-                paddingVertical: 7,
-                //fontStyle: 'italic' 
-                //fontFamily:'Arial',
-            }}>{t('signupscreen.title')} <Text style={{ fontSize: 20 } }>({props.step}/7)</Text></Text>
-            <View style={styles.step}>
-                {
-                    [1, 2, 3, 4, 5, 6, 7].map((item, index) =>
+       
+            <View style={{ flex: 1, flexDirection: 'row' }}>
+                <View style={{ flex: 1 }}/>
+                <View style={styles.step}>
+                    {
+                        [1, 2, 3, 4, 6, 7].map((item, index) =>
 
-                        <View
-                            key={index.toString()}
-                            style={{
-                                borderColor: index < props.step ? Colors.primary : Colors.text,
-                                borderWidth: 0.5,
-                                flex: 1,
-                                height: 7,
-                                margin: 2,
-                                backgroundColor: index < props.step ? Colors.primary : 'white',
-                                borderRadius: 5,
-                            }}
+                            <View
+                                key={index.toString()}
+                                style={{
+                                    borderColor: index < props.step ? Colors.primary : Colors.text,
+                                    borderWidth: 0.5,
+                                    height: 6,
+                                    width: 6,
+                                    borderRadius: 3,
+                                    margin: 2,
+                                    backgroundColor: index < props.step ? Colors.primary : 'white',
+                                    marginHorizontal: 5,
 
-                        >
-                            <Text>{' '}</Text>
-                        </View>
-                    )
-                }
+                                }}
+                            >
+                                <Text>{''}</Text>
+                            </View>
+                        )
+                    }
 
+                </View>
+                <View style={{ flex: 1 }}/>
             </View>
-        </View>
+
+       
     );
 }
 
@@ -60,6 +57,9 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         height: 20,
         width: '100%',
+        flex: 2,
+        alignItems: 'center',
+        justifyContent: 'center',
     },
 
 });

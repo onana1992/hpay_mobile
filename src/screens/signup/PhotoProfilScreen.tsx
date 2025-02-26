@@ -257,6 +257,7 @@ function PhotoProfilScreen({ navigation }: { navigation: any }) {
                 <View style={styles.content}>
 
                     <StepCompnent step={6} />
+                    
 
                     <View style={{ flex: 4, marginTop:50 }}>
 
@@ -308,6 +309,7 @@ function PhotoProfilScreen({ navigation }: { navigation: any }) {
 
 
             <ImagePickerModal
+                title={t('addprofilpicture')}
                 isVisible={visible}
                 onClose={() => setVisible(false)}
                 captureImage={captureImage}
@@ -331,7 +333,8 @@ const styles = StyleSheet.create({
     content: {
         flex: 1,
         flexDirection: 'column',
-        alignItems: 'center',
+        alignItems: 'flex-start',
+        justifyContent:'center'
     },
 
     forgotPassword: {
@@ -412,19 +415,21 @@ const styles = StyleSheet.create({
 
     title: {
         color: Colors.text,
-        fontSize: 22,
-        fontWeight: 500,
+        fontSize: 24,
+        fontWeight: "bold",
         textAlign: 'center',
         paddingVertical: 0
     },
 
     subtitle: {
-        color: Colors.gray,
+        color: Colors.text,
         textAlign: 'center',
         fontSize: 14,
-        fontStyle: 'italic',
         marginTop:0
-    }
+    },
+
+
+  
 
 
 });

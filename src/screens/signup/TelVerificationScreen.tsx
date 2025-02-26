@@ -143,11 +143,11 @@ function TelVerificationScreen({ navigation}: {navigation:any,}) {
         >
             <NoConnectedHeader navigation={navigation} />
             <Pressable style={styles.content} onPress={Keyboard.dismiss}>
+              
 
-                <View style={{ flex: 3, alignItems:'flex-start' }}>
-                           
-                    <StepCompnent step={3} />
-
+                <View style={{ flex:1, alignItems: 'flex-start', justifyContent: 'flex-start' }}>
+                    <StepCompnent step={3} />     
+             
                     <View style={styles.pageheader}>
                         <Text style={styles.title}>{t('telVerificationcreen.title')}</Text>
                         <Text style={styles.subtitle}>
@@ -226,7 +226,6 @@ const styles = StyleSheet.create({
     },
 
     forgotPassword: {
-        
         alignItems: 'flex-end',
         marginBottom: 24,
     },
@@ -250,7 +249,7 @@ const styles = StyleSheet.create({
         width: '100%',
         justifyContent: 'flex-start',
         alignItem: 'flex-start',
-        marginBottom: 30,
+        marginBottom: 20,
         marginTop: 30
     },
 
@@ -262,18 +261,18 @@ const styles = StyleSheet.create({
 
     title: {
         color: Colors.text,
-        fontSize: 22,
-        fontWeight: 500,
+        fontSize: 28,
+        fontWeight: 'bold',
         textAlign: 'left',
-        paddingVertical: 0
+        paddingVertical: 5,
+        marginTop: 0
     },
 
     subtitle: {
-        color: Colors.gray,
         fontSize: 14,
-        fontStyle: 'italic',
+        color: Colors.text,
         marginTop: 0
-    }
+    },
 
 });
 

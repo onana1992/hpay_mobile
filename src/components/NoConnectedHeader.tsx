@@ -22,18 +22,31 @@ export default function NoConnectedHeader({ navigation, visible = true }: { navi
     return (
 
         < View style={styles.main}>
+
             <View style={{ flex: 1 }}>
                 {
                     visible &&
-                    <TouchableOpacity style={styles.backbutton} onPress={() => { navigation.goBack() }}>
-                        <Ionicons name="chevron-back" color="black" size={18} />
+                    <TouchableOpacity style={{
+                        justifyContent: 'center',
+                        backgroundColor: '#e6e4e0',
+                        height: 40,
+                        width: 40,
+                        alignItems: 'center',
+                        borderRadius: 20,
+                    }} onPress={() => { navigation.goBack(); }} >
+                        <View>
+                            <Ionicons name="chevron-back" color={Colors.text} size={24} />
+                        </View>
                     </TouchableOpacity>
+                    /*<TouchableOpacity style={styles.backbutton} onPress={() => { navigation.goBack() }}>
+                        <Ionicons name="chevron-back" color="black" size={18} />
+                    </TouchableOpacity>*/
 
                 }
                 
             </View>
 
-            <View style={{ flex: 5, alignItems: 'flex-end' }}>
+            <View style={{ flex: 5, alignItems: 'flex-end', justifyContent:'flex-start' }}>
                 <Menu>
                     <MenuTrigger>
                         {
@@ -63,8 +76,9 @@ export default function NoConnectedHeader({ navigation, visible = true }: { navi
 
 const styles = StyleSheet.create({
     main: {
-        height: 40,
+       // height: 40,
         flexDirection: 'row',
+        paddingVertical: 10 ,
     },
 
     backbutton: {

@@ -15,18 +15,13 @@ import {
     Text,
     StyleSheet,
     KeyboardAvoidingView,
-    Pressable,
     Platform,
-    Keyboard,
     ScrollView,
-    TouchableOpacity,
-    ImageBackground
 } from 'react-native';
 /*import { Colors } from 'react-native/Libraries/NewAppScreen';*/
 import { useTranslation } from 'react-i18next';
 import TextInput from '../../components/TextInput';
 import { RadioButton } from 'react-native-paper';
-import { Colors } from '../../themes';
 import Button from '../../components/Button';
 import DropdownInput from '../../components/DropdownInput';
 import { postKycRequest } from '../../services/request';
@@ -34,10 +29,10 @@ import { Checkbox } from 'react-native-paper';
 import LoadingModal from '../../components/LoadingModal';
 import Toast from 'react-native-toast-message';
 import { useNavigation } from '@react-navigation/native';
+import { Colors } from '../../themes';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
-
-
-const Step4 = ({ data, setData, step, setStep }: { data: any, setData: any, step: any, setStep: any }) => {
+const Step4 = ({ data, setData, step, setStep, kycSaveRequest }: { data: any, setData: any, step: any, setStep: any, kycSaveRequest:any }) => {
 
 
     const { t } = useTranslation();
@@ -55,9 +50,10 @@ const Step4 = ({ data, setData, step, setStep }: { data: any, setData: any, step
 
         if (checked) {
 
-            setModalVisible(true);
+            kycSaveRequest();
+            /*setModalVisible(true);
             console.log(data)
-            postKycRequest(data).then((response: any) => {
+            kycSaveRequest(data).then((response: any) => {
 
                 console.log(response.data);
 
@@ -83,7 +79,7 @@ const Step4 = ({ data, setData, step, setStep }: { data: any, setData: any, step
 
                 console.log(error);
                 // setModalVisible(false);
-            })
+            })*/
 
         }
 
@@ -100,16 +96,24 @@ const Step4 = ({ data, setData, step, setStep }: { data: any, setData: any, step
 
                 <View style={{
                     width: '100%',
-                    justifyContent: 'center',
-                    backgroundColor: 'black',
-                    borderTopRightRadius: 5,
-                    borderTopLeftRadius: 5,
+                    backgroundColor: '#e6e4e0',
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    borderTopRightRadius: 10,
+                    borderTopLeftRadius: 10,
+                    borderRadius: 10,
                     height: 50,
-                    alignItems: 'flex-start',
-                    paddingLeft: 10
+                    paddingHorizontal: 10
                 }}>
 
-                    <Text style={{ fontSize: 16, color: 'white', fontWeight: 'bold' }}>4. {t('kyc.declaration')}</Text>
+                    <View style={{ justifyContent: 'center',  }}>
+                        <Text style={{ fontSize: 16, color: Colors.text, fontWeight: 'bold' }}>4. {t('kyc.declaration')} </Text>
+                    </View>
+
+                    <View style={{justifyContent:'center'}}>
+                       <Ionicons name="checkmark-done-outline" size={20} color={step > 4 ? Colors.primary :'gray'}/>
+                    </View>
 
                 </View>
 
@@ -138,8 +142,8 @@ const Step4 = ({ data, setData, step, setStep }: { data: any, setData: any, step
 
                         </View>
 
-                        <View style={{ flexDirection: 'row', flex: 1 }}>
 
+                        <View style={{ flexDirection: 'row', flex: 1 }}>
                             <View style={{ flex: 1, padding: 5 }}>
                                 <Button
                                     mode="outlined"
@@ -216,16 +220,20 @@ const styles = StyleSheet.create({
         paddingHorizontal: 8,
         fontSize: 14,
     },
+
     placeholderStyle: {
         fontSize: 16,
     },
+
     selectedTextStyle: {
         fontSize: 16,
     },
+
     iconStyle: {
         width: 20,
         height: 20,
     },
+
     inputSearchStyle: {
         height: 40,
         fontSize: 16,

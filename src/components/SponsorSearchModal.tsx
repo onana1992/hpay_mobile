@@ -59,7 +59,7 @@ export default function SponsorSearchModal({ isVisible, onClose, client, phone }
         setModalVisible(true);
         addParrain(phone,client?.username).then((response: any) => {
 
-          //  console.log(response)
+            // console.log(response)
             setModalVisible(false);
             navigation.popToTop();
 
@@ -149,7 +149,7 @@ const styles = StyleSheet.create({
     content: {
         backgroundColor: '#ffffff',
         width: '100%',
-        height: 550,
+        height: 580,
         borderTopRightRadius: 30,
         borderTopLeftRadius: 30,
         padding: 20,
@@ -172,16 +172,16 @@ const styles = StyleSheet.create({
 
     title: {
         color: Colors.text,
-        fontSize: 22,
-        fontWeight: 500,
+        fontSize: 28,
+        fontWeight: 'bold',
         textAlign: 'left',
-        paddingVertical: 0,
+        paddingVertical: 5,
+        marginTop: 0,
     },
 
     subtitle: {
-        color: Colors.gray,
         fontSize: 14,
-        fontStyle: 'italic',
+        color: Colors.text,
         marginTop: 0,
     },
 

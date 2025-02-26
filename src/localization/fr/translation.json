@@ -32,8 +32,8 @@
   "signupscreen": {
     "step": "étape",
     "title": "Inscription",
-    "step1": "Numéro de téléphone et mot de passe",
-    "titlemsg": "Veuillez remplir le formulaire suivant pour créer votre compte",
+    "step1": "Votre numéro de téléphone et votre mot de passe",
+    "titlemsg": "Veuillez fournir votre numéro de téléphone et un  mot de passe.",
     "phone": "Numéro de télephone",
     "yourphone": "Votre numéro de teléphnone",
     "password": "Mot de passe",
@@ -53,8 +53,8 @@
     "requiredvalue": "Valeur requise",
     "accountalreadyexist": "un compte existe déjà avec ce numéro de télephone",
     "registrationfailure": "Échec d'inscription",
-    "submit": "Soumettre",
-    
+    "submit": "Soumettre"
+
   },
 
 
@@ -62,7 +62,7 @@
 
   "telVerificationcreen": {
     "title": "Vérification de votre numéro de téléphone",
-    "titlemsg": "Veuillez entrer le code reçu par SMS à votre numéro",
+    "titlemsg": "Nous vous avons envoyé un code de vérification par SMS sur votre numéro de téléphone. Veuillez saisir ce code.",
     "nocode": "Vous n'avez pas reçu de code?",
     "resendcode": "Renvoyez le code",
     "validate": "Vérifier",
@@ -127,18 +127,18 @@
     "failure": "Echec",
     "confirmaddingsponsor": "Confirmer l'ajout de parrain",
     "confirmmsg": "Le membre lié au numéro entré a été trouvé, veuillez confirme pour l'ajouter comme parrain",
-    "sponsorshipalreadyaexist": "Ce parrainage existe dejà",
-    
+    "sponsorshipalreadyaexist": "Ce parrainage existe dejà"
+
 
   },
 
   "countryScreen": {
-    "title": "Commençons par votre pays et votre ville",
-    "titlemsg": "Veuillez choisir votre pays et votre ville de residence",
+    "title": "Commençons par votre pays et votre ville de residence",
+    "titlemsg": "Veuillez selectionner  votre pays et votre ville de residence.",
     "sponsoryourphone": "Numéro de télephone du parrain",
     "country": "Pays de residence",
     "city": "Ville de residence",
-    "next" :  "Suivant"
+    "next": "Suivant"
   },
 
 
@@ -157,10 +157,10 @@
     "failure": "Échec",
     "noaccoundfound": "Aucun compte ne correspond au numéro entré",
     "incorrectverificationcode": "Le code entré n'est pas correct",
-    "passwordchanged": "Success",
-    "passwordchangedmsg": "Your new password has been successfully saved",
     "titlecreatenewpassword": "Créez un nouveau mot de passe",
-    "titlemsgcreatenewpassword": "Veuillez remplir le formulaire suivant pour créer un nouveau mot de passe"
+    "titlemsgcreatenewpassword": "Veuillez choisir un nouveau mot de passe et le confirmer.",
+    "passwordchanged": "Succès",
+    "passwordchangedmsg": "Votre nouveau mot de passe a été enregistré avec succès"
   },
 
 
@@ -192,8 +192,8 @@
     "back": "verso",
     "chooseatown": "Choisir une ville",
     "chooseacountry": "Choisir un pays",
-    "identitydetails": "Détails d'identité",
-    "Addressdetails": "Détails de l'adresse",
+    "identitydetails": "Identité",
+    "Addressdetails": "Coordonnées",
     "Identityproof": "Preuve d'identité",
     "declaration": "Déclaration",
     "declationtext": "Je déclare par la présente que les informations fournies dans ce formulaire sont exactes et complètes. Je confirme que toute information jugée incorrecte et/ou incomplète entraînant une violation de la réglementation peut engager des poursuites judiciaires, et j'accepte d'être la partie responsable de toutes les accusations, pénalités et violations.",
@@ -208,15 +208,39 @@
     "clicktoaddtheback": "Cliquer pour ajouter le verso",
     "expirationdate": "Date d'expriration",
     "numberofthedocument": "Numero du document",
-    "numberofthechoosedocument": "Numéro du document choisi"
-
+    "numberofthechoosedocument": "Numéro du document choisi",
+    "addthefrontofyouridentitycard": "Ajoutez le recto de votre pièce d'identité",
+    "addthebackofyouridentitycard": "Ajoutez le verso de votre pièce d'identité",
+    "processing": "En Attente de traitement",
+    "processingmsg": "Nous avons bien reçus vos informations KYC. Nous ne tarderons pas à les analyser et vous tenir informer du statut de votre compte.Merci.",
+    "completeyourregistration": "Completez votre inscription",
+    "completeyourregistrationmsg": "Afin de s'assurer de la conformité de votre compte, vous devez completer la procedure KYC (Know your Client).",
+    "accountvalidated": "Compte validé",
+    "accountvalidatedmsg": "Nous avons validé vos informations KYC. Vous avez maintenant  accès à toute les fonctionnalités de l'application."
   },
 
+
+  "profil": {
+    "myaccount": "Mon compte",
+    "mypersonalInfo": "Mes informations personnelles",
+    "kyccompliance": "Conformité KYC",
+    "myhistory": "Mon historique",
+    "mybeneficiaries": "Mes bénéficiaires",
+    "mymessages": "Mes messages",
+    "mycards": "Mes cartes",
+    "securityandconfidentiality": "Sécurité et confidentialité",
+    "changepassword": "Changer le mot de passe",
+    "2faAuthentication": "Authentification 2FA",
+    "parameters": "Paramètres",
+    "language": "Langue",
+    "notificationparameters": "Paramètres de notification",
+    "logout": "Se déconnecter"
+  },
 
 
   "loading": "Veuillez patienter ...",
   "settings": "Paramètres",
-  "requiredValue": "Value  required",
+  "requiredValue": "Valeur requise",
   "logout": "Déconnexion",
   "signoutConfirmMessage": "Do you really want to log out ?",
   "cancel": "Annuler",
@@ -230,7 +254,9 @@
   "success": "succès",
   "info": "Info",
   "failure": "Échec",
-  "myorders": "Mes commmandes"
+  "myorders": "Mes commmandes",
+  "addprofilpicture": "Ajoutez un photo de profil à votre compte",
+  "changethelangage": "Changez de langue"
 
 
 }

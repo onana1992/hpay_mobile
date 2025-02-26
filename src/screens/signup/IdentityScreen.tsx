@@ -116,7 +116,7 @@ function IdentityScreen({ navigation}: {navigation:any}) {
                         <View style={styles.pageheader}>
                             <Text style={styles.title}>{t('identitycreen.title')}</Text>
                             <Text style={styles.subtitle}>
-                                {t('signupscreen.titlemsg')}
+                                {t('identitycreen.titlemsg')}.
                             </Text>
                         </View>
 
@@ -275,18 +275,18 @@ const styles = StyleSheet.create({
 
     title: {
         color: Colors.text,
-        fontSize: 22,
-        fontWeight: 500,
+        fontSize: 28,
+        fontWeight: 'bold',
         textAlign: 'left',
-        paddingVertical: 0
+        paddingVertical: 5,
+        marginTop: 0
     },
 
     subtitle: {
-        color: Colors.gray,
         fontSize: 14,
-        fontStyle: 'italic',
+        color: Colors.text,
         marginTop: 0
-    }
+    },
 
 });
 

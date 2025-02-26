@@ -112,8 +112,6 @@ function VerificationScreen({ navigation }: { navigation: any }) {
                 });
 
             }
-
-            
            
         })
 
@@ -124,16 +122,16 @@ function VerificationScreen({ navigation }: { navigation: any }) {
     return (
 
         <KeyboardAvoidingView
-            enabled={true}
-            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             style={styles.main}
-        >
+            enabled={true}
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+
             <NoConnectedHeader navigation={navigation} />
             <Pressable style={{ flex: 1 }} onPress={Keyboard.dismiss}>
 
                 <StepRecover step={2}/>
 
-                <View style={{ flex: 3, alignItems: 'flex-start', marginTop: 40 }}>
+                <View style={{ flex: 3, alignItems: 'flex-start' }}>
                     
 
                     <View style={styles.pageheader}>
@@ -164,7 +162,7 @@ function VerificationScreen({ navigation }: { navigation: any }) {
                         </View>
                     </View>
 
-                    <View style={{ flexDirection: 'row', width:'100%', marginTop: 0, alignItems:'center', justifyContent:'center' }}>
+                    <View style={{ flexDirection: 'row', width:'100%', marginTop: 5, alignItems:'center', justifyContent:'center' }}>
                         <View style={styles.row}>
                             <TouchableOpacity onPress={() => lauchUpdateCode()}>
                                 <Text style={styles.link}>{t('telVerificationcreen.resendcode')}</Text>
@@ -246,18 +244,18 @@ const styles = StyleSheet.create({
 
     title: {
         color: Colors.text,
-        fontSize: 22,
-        fontWeight: 500,
+        fontSize: 28,
+        fontWeight: 'bold',
         textAlign: 'left',
-        paddingVertical: 0
+        paddingVertical: 5,
+        marginTop: 0
     },
 
     subtitle: {
-        color: Colors.gray,
         fontSize: 14,
-        fontStyle: 'italic',
+        color: Colors.text,
         marginTop: 0
-    }
+    },
 
 });
 

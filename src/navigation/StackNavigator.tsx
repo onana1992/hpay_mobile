@@ -23,6 +23,7 @@ import PhotoProfilScreen from '../screens/signup/PhotoProfilScreen';
 import RecoverScreen from '../screens/password/RecoverScreen';
 import VerificationScreen from '../screens/password/VerificationScreen';
 import NewPasswordScreen from '../screens/password/NewPasswordScreen';
+import ProfilScreen from '../screens/ProfilScreen';
 import kycScreen from '../screens/connected/KycScreen';
 import { Colors } from '../themes';
 
@@ -49,11 +50,29 @@ function StackNavigation() {
                         />
 
                         <Stack.Screen
+                            name="ProfilScreen"
+                            component={ProfilScreen}
+                            options={{
+                                title: 'Profil',
+                                headerShown: false,
+                                headerTintColor: '#fff',
+                                headerTitleAlign: 'left',
+                                headerTitleStyle: {
+                                },
+                                headerStyle: {
+                                    backgroundColor: Colors.primary,
+                                },
+                            }}
+                        />
+
+                         
+
+                        <Stack.Screen
                             name="kyc"
                             component={kycScreen}
                             options={{
                                 title: 'Conformite Kyc',
-                                headerShown: true,
+                                headerShown: false,
                                 headerTintColor: '#fff',
                                 headerTitleAlign: 'left',
                                 headerTitleStyle: {

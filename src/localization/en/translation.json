@@ -1,6 +1,6 @@
 {
-  
-  "french": "Français",
+
+  "french": "French",
   "english": "English",
 
 
@@ -37,8 +37,8 @@
   "signupscreen": {
     "step": "step",
     "title": "Registration",
-    "step1": "Phone number and password",
-    "titlemsg": "Please complete this form to create your account",
+    "step1": "Your phone number and password",
+    "titlemsg": "Please provide your phone number and a password.",
     "phone": "Phone number",
     "yourphone": "Your phone number",
     "password": "Password",
@@ -63,7 +63,7 @@
 
   "telVerificationcreen": {
     "title": "Vérification de votre numéro de télephone",
-    "titlemsg": "Please enter the code received by SMS to your number",
+    "titlemsg": "We have sent you a verification code by SMS to your phone number. Please enter this code.",
     "nocode": "Didn't receive a code?",
     "resendcode": "Resend the code",
     "validate": "Verify",
@@ -124,12 +124,12 @@
     "failure": "Failure",
     "confirmaddingsponsor": "Confirm adding sponsor",
     "confirmmsg": "The member linked to the number entered has been found, please enter confirm to add him as a sponsor",
-    "sponsorshipalreadyaexist": "This sponsorship already exist",
+    "sponsorshipalreadyaexist": "This sponsorship already exist"
   },
 
   "countryScreen": {
-    "title": "Let's start with your country and city",
-    "titlemsg": "Please choose your country and city of residence",
+    "title": "Let's start with your country and city of residence",
+    "titlemsg": "Please choose your country and city of residence.",
     "country": "Country of Residence",
     "city": "City of residence",
     "next": "Next"
@@ -147,12 +147,12 @@
     "titlemsgnewpassword": "Please enter the code received by SMS or by email",
     "passwordrecover": "Recupération du mot de passe",
     "titlecreatenewpassword": "Create a new password",
-    "titlemsgcreatenewpassword": "Please fill the following form to  create a new password",
+    "titlemsgcreatenewpassword": "Please choose a new password and confirm it.",
     "failure": "Failure",
     "noaccoundfound": "No account matches the number entered",
     "incorrectverificationcode": "the code you enter is not correct",
-    "passwordchanged": "Succès",
-    "passwordchangedmsg": "Votre nouveau mot de passe a été enregistré avec succès"
+    "passwordchanged": "Success",
+    "passwordchangedmsg": "Your new password has been successfully saved"
   },
 
 
@@ -182,7 +182,7 @@
     "chooseadocumenttype": "Choose a document type",
     "chooseatown": "Choose a town",
     "chooseacountry": "Choose a country",
-    "identitydetails": "Identity details",
+    "identitydetails": "Contact Information",
     "Addressdetails": "Details de l'adresse",
     "Identityproof": "Identity proof",
     "declaration": "Declaration",
@@ -198,13 +198,39 @@
     "clicktoaddtheback": "Click to add the back",
     "expirationdate": "Expiration date",
     "numberofthedocument": "Number of the document",
-    "numberofthechoosedocument": "Number of the choosed document"
+    "numberofthechoosedocument": "Number of the choosed document",
+    "addthefrontofyouridentitycard": "Add the front of your identity document",
+    "addthebackofyouridentitycard": "Add the back of your identity document",
+    "processing": "Awaiting processing",
+    "processingmsg": "We have received your KYC information. We will analyze it shortly and keep you informed of the status of your account. Thank you.",
+    "completeyourregistration": "Complete your registration",
+    "completeyourregistrationmsg": "To ensure the compliance of your account, you must complete the KYC (Know your Client) procedure.",
+    "accountvalidated": "Account validated",
+    "accountvalidatedmsg": "We have validated your KYC information. You now have access to all the features of the application."
+
+  },
+
+  "profil": {
+    "myaccount": "My account",
+    "mypersonalInfo": "My personal informations",
+    "kyccompliance": "Kyc compliance",
+    "myhistory": "My history",
+    "mybeneficiaries": "My beneficiaries",
+    "mymessages": "My messages",
+    "mycards": "My cards",
+    "securityandconfidentiality": "Security and Confidentiality",
+    "changepassword": "Change password",
+    "2faAuthentication": "2FA Authentication",
+    "parameters": "Parameters",
+    "language": "Language",
+    "notificationparameters": "Notification parameters",
+    "logout": "Log out"
   },
 
 
   "loading": "Please wait ...",
   "settings": "Settings",
-  "requiredValue": "Value  required",
+  "requiredValue": "Value required",
   "signoutConfirmMessage": "Do you really want to log out ?",
   "cancel": "Cancel",
   "no": "No",
@@ -220,6 +246,9 @@
   "failure": "Échec",
   "front": "recto",
   "back": "verso",
-  "clicktoaddthefront": "click to add the front"
+  "clicktoaddthefront": "click to add the front",
+  "addprofilpicture": "Add a profile picture to your account",
+  "changethelangage": "Change language"
+
 
 }

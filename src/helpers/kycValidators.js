@@ -1,4 +1,5 @@
 function firstNameValidator(firstName) {
+	if (!firstName) return "identitycreen.requiredvalue";
 	return ''
 }
 
@@ -11,6 +12,7 @@ function dateNaissValidator(dateNaiss) {
 	if (!dateNaiss || undefined) return "identitycreen.requiredvalue"
 	return ''
 }
+
 
 function nationalityValidator(nationality) {
 	if (!nationality) return "identitycreen.requiredvalue";

@@ -30,6 +30,7 @@ export default function DropdownInput(props: any) {
                 onBlur={() => setIsFocus(false)}
                 {...props}
             />
+            {props.errorText ? <Text style={styles.error}>{t(`${props.errorText}`)}</Text> : null}
 
         </View>
     );
@@ -58,19 +59,20 @@ const styles = StyleSheet.create({
     },
 
 
-
     dropdown: {
         height: 50,
         borderColor: 'gray',
         borderWidth: 2,
         borderRadius: 5,
         paddingHorizontal: 8,
-        marginTop: 10,
+        marginTop: 0,
     },
+
 
     icon: {
         marginRight: 5,
     },
+
 
     label: {
         position: 'absolute',
@@ -86,9 +88,11 @@ const styles = StyleSheet.create({
         fontSize: 16,
     },
 
+
     selectedTextStyle: {
         fontSize: 16,
     },
+
 
     iconStyle: {
         width: 20,
