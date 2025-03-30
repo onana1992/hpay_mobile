@@ -94,6 +94,7 @@ export default function TransactionSwipeablePanel({ isPanelActive, setIsPanelAct
                         <MaterialCommunityIcons name="send-circle-outline" size={28} color={Colors.primary} />
                     }
 
+
                     {
                         (item.id === '5') &&
                         <MaterialCommunityIcons name="qrcode" size={28} color={Colors.primary} />

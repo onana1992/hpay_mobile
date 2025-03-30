@@ -1,4 +1,4 @@
-/* eslint-disable react/no-unstable-nested-components */
+﻿/* eslint-disable react/no-unstable-nested-components */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable react/self-closing-comp */
 /* eslint-disable prettier/prettier */
@@ -6,37 +6,41 @@
 /* eslint-disable react-native/no-inline-styles */
 
 import * as React from 'react';
-import { StyleSheet, View, TouchableOpacity, Image, Text, SectionList, FlatList, Touchable } from 'react-native';
-import Logo from '../../components/Logo';
-import Header from '../../components/Header';
-import Background from '../../components/Background';
-import Paragraph from '../../components/Paragraph';
-import { useTranslation } from 'react-i18next';
-import { Menu, MenuOptions, MenuOption, MenuTrigger } from 'react-native-popup-menu';
+import { StyleSheet, View, TouchableOpacity, Image, Text,RefreshControl,FlatList } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
-import { signOut } from '../../store/profilSlice';
+import { saveBenef, saveAccount, signOut } from '../../store/profilSlice';
 import Colors from '../../themes/Colors';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import Feather from 'react-native-vector-icons/Feather';
-import Button from '../../components/Button';
-import { Portal } from '@gorhom/portal';
-import TransactionSwipeablePanel from '../../components/TransactionSwipeablePanel';
 import { ScrollView } from 'react-native-virtualized-view';
-import { useFocusEffect } from '@react-navigation/native';
 import { connect } from 'react-redux';
+import { currencyRateRequest, fetchBeficiariesRequest } from '../../services/request';
+import AvartarButton from '../../components/connected/AvartarButton';
+
 
 function HomeScreen({ navigation, user }: { navigation: any, user: any }) {
 
 
+   // console.log(user.client.comptes);
+
     const dispatch = useDispatch();
     const [isPanelActive, setIsPanelActive] = React.useState(false);
+    const [accounts, setAccounts] =  React.useState<any>([]);
     const [filePath, setFilePath] = React.useState(null);
+    const [refreshing, setRefreshing] = React.useState(false);
+    const [currencyVisible, setCurrencyVisible] = React.useState(true);
 
-    const logOut = () => {
-        dispatch(signOut(null));
-    };
+    console.log(user?.client);
 
-    console.log(user);
+
+    //console.log(user.idLoginClient);
+    React.useEffect(() => {
+        getBeneficiaries();
+        fetchAccount();
+
+    }, []);
+
+
 
 
     React.useEffect(() => {
@@ -44,9 +48,9 @@ function HomeScreen({ navigation, user }: { navigation: any, user: any }) {
     }, [user]);
 
 
+
     React.useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
-            // console.log(user);
             //setFilePath(user.photo_client);
         });
 
@@ -55,202 +59,164 @@ function HomeScreen({ navigation, user }: { navigation: any, user: any }) {
 
 
 
-    /*const DATA = [
-        {
-            jour: '15/03/2024',
-            data: [
-                {
-                    nom: 'Kasavubu',
-                    prenom: 'Henry Xavy',
-                    numCompte: '12457924798',
-                    type: 'Virement interne entrant',
-                    montant: +500,
-                    time: '10:30 AM',
-                },
-                {
-                    nom: 'Mastadi',
-                    prenom: 'Roland Joel',
-                    numCompte: '3454574798',
-                    type: 'Virement externe sortant',
-                    montant: -500,
-                    time: '11:45 AM',
-                },
-            ],
-        },
-
-        {
-            jour: '16/03/2024',
-            data: [
-                {
-                    nom: 'Deschamps',
-                    prenom: 'Jean charle',
-                    numCompte: '3724574788',
-                    type: 'Transfert Sortant',
-                    montant: -1000,
-                    time: '09:30 AM',
-                },
-                {
-                    nom: 'Benze',
-                    prenom: 'Olivier Chamberlin',
-                    numCompte: '37235774788',
-                    type: 'Recharge',
-                    montant: +3000,
-                    time: '12:30 AM',
-                },
-            ],
-        },
-
-        {
-            jour: '17/03/2024',
-            data: [
-                {
-                    nom: 'Abene',
-                    prenom: 'Lous De paul',
-                    type: 'Virement interne entrant',
-                    montant: +3000,
-                    numCompte: '372357747848',
-                    time: '09:30 AM',
-                },
-                {
-                    nom: 'Deschamps',
-                    prenom: 'Jean charle',
-                    type: 'Virement externe  entrant',
-                    numCompte: '372357747848',
-                    montant: +3000,
-                    time: '10:30 PM',
-                },
-            ],
-        },
-
-        {
-            jour: '18/03/2024',
-            data: [
-                {
-                    nom: 'Sage',
-                    prenom: 'Paul Alain',
-                    type: 'Virement interne entrant',
-                    numCompte: '372937747888',
-                    montant: +700,
-                    time: '10:30 PM',
-                },
-                {
-                    nom: 'Montana',
-                    prenom: 'Alexia Ciara',
-                    type: 'Transfert sortant',
-                    numCompte: '37293445747888',
-                    montant: -300,
-                    time: '10:30 PM',
-                },
-            ],
-        },
-    ];*/
-
-    /*const RECIPENTS = [
-
-        {
-            id: '0',
-            prenom: 'Henry Xavy',
-        },
-
-        {
-            id: '1',
-            prenom: 'Jean charle',
-        },
-
-        {
-            id: '3',
-            prenom: 'Lous De paul',
-        },
-
-        {
-            id: '4',
-            prenom: 'Jean charle',
-        },
-
-    ];*/
-
-    /* const AmountView = ({ amount }) => {
-         return (
-             <Currency
-                 quantity={amount}          // Required
-                 //currency=""            // Optional (USD by default)
-                 //locale="en_EN"            // Optional
-                 pattern="##,### !"        // Optional
-                 decimal=","               // Optional
-                 group=" "                 // Optional
-             />
-         );
-     };*/
 
 
-    /* const RenderRow = ({ item }) => {
+    const getBeneficiaries = () => {
+
+        fetchBeficiariesRequest(user.idLoginClient).then((response: any) => {
+
+            //console.log(response.data.response.data);
+            dispatch(saveBenef(response.data.response.data));
+
+        }).catch((error: any) => {
+
+
+        });
+
+    };
+
+
+
+
+
+
+    const getRate = async (currencyFrom: string, currencyTo: string) => {
+
+        currencyRateRequest(currencyFrom, currencyTo).then((response: any) => {
+            return response.data.realRate;
+
+        }).catch((error: any) => {
+            
+
+        });
+
+    };
+
+
+
+
+    const calculateAmmount = async () => {
+
+
+        
+       // console.log(accounts);
+
+        let amount = 0;
+
+        for (const acc of accounts) {
+
+            if (acc.compte.typeCompte.idTypeCompte == 6) {
+                console.log(acc.compte.devise);
+                console.log(accounts[0].compte.devise);
+                const rate =  getRate("CAD", "USD");
+                //amount +=  acc.compte.solde * rate;
+                console.log(rate);
+            }
+
+           /* else if (acc.compte.typeCompte.idTypeCompte == 1) {
+                console.log(acc.compte.devise);
+                amount += acc.compte.solde * getRate(acc.compte.devise, accounts[0].compte.devise);
+                console.log(amount);
+            }
+
+            else if (acc.compte.typeCompte.idTypeCompte == 4) {
+                console.log(acc.compte.devise);
+                amount += acc.compte.solde * getRate(acc.compte.devise, accounts[0].compte.devise);
+                console.log(amount);
+            }
+
+            else if (acc.compte.typeCompte.idTypeCompte == 5) {
+                console.log(acc.compte.devise);
+                amount += acc.compte.solde * getRate(acc.compte.devise, accounts[0].compte.devise);
+                console.log(amount);
+            }*/
+            
+        }
+
+
+    }
+
+
+
+
+
+    const fetchAccount = () => {
+
+        const mainAccount = user.client.comptes.find((account: any) => {
+            if (account.typeCompte.idTypeCompte == 6) {
+                return true;
+            }
+        })
+
+        const otherAccounts = user.client.comptes.filter((account: any) => {
+
+            if (account.typeCompte.idTypeCompte != 6 && account.typeCompte.idTypeCompte != 2) {
+
+                return account;
+            }
+
+        });
+
+
+        let allAccount = [];
+        allAccount.push(mainAccount);
+
+        for (const acc of otherAccounts) {
+            allAccount.push(acc);
+        }
+
+        const newAccountsList = allAccount.map((account: any) => {
+
+            if (account.typeCompte.idTypeCompte == 6) {
+                return {
+                    id: account.typeCompte.idTypeCompte,
+                    icon: require('../../assets/cad.png'),
+                    compte: account
+                };
+            }
+
+            else if (account.typeCompte.idTypeCompte == 1) {
+                return {
+                    id: account.typeCompte.idTypeCompte,
+                    icon: require('../../assets/us.png'),
+                    compte: account
+                };
+            }
+
+            else if (account.typeCompte.idTypeCompte == 4) {
+                return {
+                    id: account.typeCompte.idTypeCompte,
+                    icon: require('../../assets/ue.png'),
+                    compte: account
+                };
+            }
+
+            else if (account.typeCompte.idTypeCompte == 5) {
+                return {
+                    id: account.typeCompte.idTypeCompte,
+                    icon: require('../../assets/gb.png'),
+                    compte: account
+                };
+            }
+
+
+        })
+
+
+        setAccounts(newAccountsList);
+
+        // enregistrement dans le redux
+        dispatch(saveAccount(newAccountsList));
  
-         return (
- 
-             <View style={{ flexDirection: 'row', minHeight: 80, padding: 10, borderBottomColor: 'gray', borderBottomWidth: 0.5 }}>
- 
-                 <View style={{ flex: 2, }}>
-                     <Image
-                         source={require('../../assets/avatar.jpg')}
-                         style={{
-                             height: 40,
-                             width: 40,
-                             overflow: 'hidden',
-                             borderColor: 'gray',
-                             borderWidth: 1,
-                             borderRadius: 20,
-                         }}
-                     />
-                 </View>
- 
-                 <View style={{ flex: 7.5, paddingLeft: 8 }}>
-                     <Text style={{ color: "black", fontSize: 14, fontWeight: 'bold' }} numberOfLines={1}>
-                         {item.prenom} {item.nom}
-                     </Text>
-                     {*//*<Text style={{ color: "black", fontSize: 13 }}>{item.numCompte} </Text>*//*}
-    <Text style={{ color: "black", fontSize: 13 }}>{item.type}</Text>
-    <Text style={{ color: "gray", fontSize: 12 }}>{item.time} </Text>
-</View>
 
-<View style={{ flex: 3.5, justifyContent: 'center', alignItems: 'flex-end' }}>
-    <Text style={item.montant > 0 ? styles.entrant : styles.sortant}> {item.montant} HTC   </Text>
-</View>
-</View>
-);
-};*/
-
-    /*const RecipientItem = ({ item }) => {
-
-        return (
-            <View style={{ marginHorizontal: 20, justifyContent: 'center', alignItems: 'center' }} >
-                <Image
-                    source={require('../../assets/avatar.jpg')}
-                    style={{
-                        height: 40,
-                        width: 40,
-                        overflow: 'hidden',
-                        borderColor: 'gray',
-                        borderWidth: 1,
-                        borderRadius: 20,
-                    }}
-                />
-                <Text style={{ color: Colors.text, paddingTop: 5, fontWeight: 500 }}>{item.prenom}</Text>
-            </View>
-        );
-    };*/
-
-    const data = [
-        { id: '1', title: 'Item 1', icon: require('../../assets/cad.png'), currency: "CAD", amount: '0.00' },
-        { id: '2', title: 'Item 2', icon: require('../../assets/us.png'), currency: "USD", amount: '0.00' },
-        { id: '3', title: 'Item 3', icon: require('../../assets/gb.png'), currency: "GBP", amount: '0.00' },
-        { id: '4', title: 'Item 4', icon: require('../../assets/ue.png'), currency: "EUR", amount: '0.00' },
-    ];
-
-    const [currencyVisible, setCurrencyVisible] = React.useState(true);
+    }
 
 
-    const AmountItem = ({ item }) => (
-        <View style={styles.amountItem}>
+
+
+
+    const AccountItem = ({ item }) => (
+        <TouchableOpacity style={styles.accountItem} onPress={() => { navigation.navigate('AccountScreen', { account: item}); } }>
 
             <View style={{ flex: 1, flexDirection: 'row', height: 40, alignItems: 'flex-start' }}>
                 <Image
@@ -264,7 +230,7 @@ function HomeScreen({ navigation, user }: { navigation: any, user: any }) {
                     }}
                 />
                 <Text style={{ marginLeft: 10, fontWeight: 'bold', fontSize: 17, color: Colors.text }}>
-                    {item.currency}
+                    {item.compte.devise}
                 </Text>
             </View>
 
@@ -272,7 +238,7 @@ function HomeScreen({ navigation, user }: { navigation: any, user: any }) {
                 {
                     currencyVisible ?
                     <Text style={{ marginLeft: 10, fontWeight: 'bold', fontSize: 20, color: Colors.text }}>
-                        {item.amount}
+                            {item.compte.solde.toFixed(2)}
                     </Text>
                     :
                     <Text style={{ marginLeft: 10, fontWeight: 'bold', fontSize: 20, color: Colors.text }}>
@@ -281,9 +247,31 @@ function HomeScreen({ navigation, user }: { navigation: any, user: any }) {
                 }
             </View>
 
-        </View>
+        </TouchableOpacity>
     );
 
+
+
+    const EmptyCard = () => {
+
+        return (
+            <View style={styles.emptycard}>
+                <Text style={{ color: Colors.text,  }}>Aucune transaction effectué</Text>
+            </View>
+        );
+
+    };
+
+
+
+    const onRefresh = React.useCallback(() => {
+        setRefreshing(true);
+        setTimeout(() => {
+            setRefreshing(false);
+        }, 2000);
+    }, []);
+
+    
 
 
     return (
@@ -291,185 +279,162 @@ function HomeScreen({ navigation, user }: { navigation: any, user: any }) {
 
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 20, paddingVertical:10 }} >
 
-                <TouchableOpacity style={{ justifyContent: "flex-start" }} onPress={() => { navigation.navigate('ProfilScreen'); }} >
-                    <View style={styles.avatar} >
-                        { filePath ?
-                            <Image
-                                source={filePath ? { uri: filePath } : require('../../assets/avatar.jpg')}
-                                style={styles.avatarImage}
-                            />
-                            :
-                            <View>
-                                <Text style={{ color: Colors.text, fontWeight: 'bold'}}>JJ</Text>
+
+                <AvartarButton
+                    prenom={user?.client.prenoms}
+                    profilUrl={user?.client.photoClient}
+                />
+
+                <View style={{ flexDirection: 'row' }}>
+
+                    <TouchableOpacity style={{ justifyContent: 'center', marginRight: 10 }} onPress={() => { navigation.navigate('MyMessageScreen'); }}>
+                        <View style={styles.eye} >
+                            <Feather name="bell" size={16} color={Colors.text} />
+
+                            <View style={{}}>
+
                             </View>
+                        </View>
+                    </TouchableOpacity>
 
-                        }
+                    <TouchableOpacity style={{ justifyContent: 'center' }} onPress={() => { setCurrencyVisible((prev) => !prev); }}>
+                        <View style={styles.eye} >
+                            {
+                                currencyVisible ?
+                                    <Feather name="eye" size={16} color={Colors.text} />
+                                    :
+                                    <Feather name="eye-off" size={16} color={Colors.text} />
+                            }
+                        </View>
+                    </TouchableOpacity>
 
-                    </View>
-                </TouchableOpacity>
-
-                <TouchableOpacity style={{ justifyContent: 'flex-end' }} onPress={() => { setCurrencyVisible((prev) => !prev); } }>
-                    <View style={styles.eye} >
-                        {
-                            currencyVisible ?
-                                <Feather name="eye" size={20} color={Colors.text} />
-                                :
-                                <Feather name="eye-off" size={20} color={Colors.text} />
-                        }
-
-                    </View>
-                </TouchableOpacity>
+                 </View>
 
             </View>
 
 
 
-            <ScrollView style={{ height: "100%", padding: 20, paddingVertical:10 }}>
+            <ScrollView
+                style={{ height: "100%", padding: 20, paddingVertical: 10 }}
+                refreshControl={
+                    <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+                }
+            >
+
                 <View>
-                    <View><Text style={{ fontSize: 16, color: Colors.text }}>Solde Total</Text></View>
-                    <View><Text style={{ fontSize: 26, color: Colors.text, fontWeight:'bold' }}>0.00 CAD</Text></View>
+                    <View>
+                        <Text style={{ fontSize: 16, color: Colors.text }}>Solde Total</Text>
+                    </View>
+                    <View>
+                        <Text style={{ fontSize: 26, color: Colors.text, fontWeight: 'bold' }}>0.00 CAD</Text>
+                    </View>
                 </View>
 
 
                 <FlatList
-                    data={data}
-                    renderItem={AmountItem}
+                    data={accounts}
+                    renderItem={AccountItem}
                     keyExtractor={item => item.id}
                     horizontal={true}  // Makes the FlatList scroll horizontally
                     showsHorizontalScrollIndicator={false}  // Hide horizontal scroll indicator (optional)
                 />
 
+                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginTop:10 }}>
+
+                    <View style={{ flex:1,  alignItems: 'center', justifyContent: 'flex-start' }}>
+                        <TouchableOpacity style={{
+                            height: 60,
+                            width: 60,
+                            borderRadius: 25,
+                            backgroundColor: Colors.primary,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                        }}
+                            onPress={() => { navigation.navigate("CashInScreen")}  }
+                        >
+                            <AntDesign name="pluscircleo" size={26} color={Colors.text} />
+                        </TouchableOpacity>
+                        <View style={{ height: 50 }}>
+                            <Text style={{ color: 'black', fontWeight: 'bold', marginTop: 5, textAlign: 'center' }}>Ajouter</Text>
+                        </View>
+                    </View>
+
+
+                    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                        <TouchableOpacity
+                            style={{
+                                height: 60,
+                                width: 60,
+                                borderRadius: 25,
+                                backgroundColor: '#e6e4e0',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                            }}
+
+                            onPress={() => { navigation.navigate("TransfertScreen") }}
+                        >
+                            <Feather name="send" size={26} color={Colors.text} />
+                        </TouchableOpacity>
+                        <View style={{ height: 50 }}>
+                            <Text style={{ color: 'black', fontWeight: 'bold', marginTop: 5, textAlign: 'center' }}>Envoyer</Text>
+                        </View>
+                    </View>
+
+                    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                        <TouchableOpacity style={{
+                            height: 60,
+                            width: 60,
+                            borderRadius: 25,
+                            backgroundColor: '#e6e4e0',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                        }}
+                            onPress={() => { navigation.navigate('PayScreen'); } }
+                        >
+                            <AntDesign name="qrcode" size={26} color={Colors.text} />
+                        </TouchableOpacity>
+                        <View style={{ height: 50 }}>
+                            <Text style={{ color: 'black', fontWeight: 'bold', marginTop: 5, textAlign: 'center' }}>Payer</Text>
+                        </View>
+                    </View>
+
+                    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                        <TouchableOpacity style={{
+                            height: 60,
+                            width: 60,
+                            borderRadius: 25,
+                            backgroundColor: '#e6e4e0',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                        }}
+                            onPress={() => navigation.navigate('Transactions')}
+                        >
+                            <AntDesign name="swap" size={28} color={Colors.text} />
+                        </TouchableOpacity>
+                        <View style={{ height:50 }}>
+                            <Text style={{ color: 'black', fontWeight: 'bold', marginTop: 5, textAlign: 'center' }}>Tout</Text>
+                        </View>
+                    </View>
+
+                </View>
+
+                
+
+                <View style={{ marginTop:10}}>
+                    <Text style={{ fontSize: 22, fontWeight: 'bold', color: Colors.text }}>Transactions récentes</Text>
+                    <EmptyCard/> 
+                </View>
+
+                
+
 
             </ScrollView>
-
-
-            {/*
-                <View style={styles.header}>
-                <View style={{ flexDirection: 'row', marginTop:5 }}>
-                    <View style={{ flex: 3, flexDirection:'row' }}>
-                        <View style={styles.avatar} >
-                            <TouchableOpacity onPress={() => { viewProfil() }}>
-                                <Image
-                                    source={filePath ? { uri: filePath } : require('../assets/avatar.jpg')}
-                                    style={styles.avatarImage}
-                                />
-                            </TouchableOpacity>
-                        </View>
-                        <View style={styles.profil} >
-                            <Text style={{ color: '#fff', paddingTop: 5, fontWeight: 'bold', fontSize: 16 }}> {user?.prenoms}{' '}{user?.nom} </Text>
-                            <Text style={{ color: '#fff', fontSize: 12 }}> {user?.telephone}</Text>
-                        </View>
-                    </View>
-                    <View style={{ flex: 1 }}>
-                    </View>
-                </View>
-            </View>*/
-            }
-
-            {/*
-            <View style={{ height: 180, backgroundColor: 'white', margin: 10, marginTop: -50, borderRadius: 20 }}>
-
-                <View style={{ flexDirection: 'row', justifyContent: 'center', paddingTop: 20 }}>
-                    <Text style={{ color: 'black', fontWeight: 'bold', fontSize:15 }}>SOLDE TOTAL DES COMPTES</Text>
-                </View>
-
-                <View style={{ flexDirection: 'row', justifyContent: 'center', paddingTop: 10 }}>
-                    <Text style={{ color: 'black', fontWeight: 'bold', fontSize:18, }}>O HTC</Text>
-                </View>
-
-                <View style={{ flexDirection: 'row', borderBottomWidth: 0.5, borderColor: '#d3d3d3', height: 5, margin: 10}}></View>
-
-                <View style={{ flexDirection: 'row', justifyContent: 'center', paddingTop: 10 }}>
-                    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                        <MaterialCommunityIcons name="cash-plus" size={35} style={{ color: Colors.primary }} />
-                        <Text style={{ color: 'black', fontWeight: 'bold' }}>Recharge</Text>
-                    </View>
-
-                    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                        <MaterialCommunityIcons name="swap-vertical-circle-outline" size={35} style={{ color: Colors.primary }} />
-                        <Text style={{ color: 'black', fontWeight: 'bold' }}>Virement interne</Text>
-                    </View>
-
-                    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                        <MaterialCommunityIcons name="send-circle-outline" size={35} style={{ color: Colors.primary }} />
-                        <Text style={{ color: 'black', fontWeight: 'bold' }}>Transfert</Text>
-                    </View>
-                </View>
-
-            </View>
-
-            <View style={{ backgroundColor: 'white', padding: 10, marginTop:30 }}>
-
-               {/* <View style={{ margin: 10 }}>
-                    <View>
-                        <Text style={{ color: 'black', fontWeight: 'bold', fontSize:16 }}>Recents beneficiaires</Text>
-                    </View>
-
-                    <View style={{ marginTop: 15 }}>
-                        <FlatList
-                            horizontal
-                            data={RECIPENTS}
-                            renderItem={({ item }) => <RecipientItem item={item} />}
-                            showsHorizontalScrollIndicator={false}
-                        />
-                    </View>
-
-
-                </View>
-
-                <View style={{ margin: 10 }}>
-                    <View>
-                        <Text style={{ color: 'black', fontWeight: 'bold', fontSize: 16 }}>Historiques des transactions</Text>
-                    </View>
-
-                    <View style={{ minHeight: 180, backgroundColor: 'white', marginTop: 10, borderRadius: 20 }}>
-                        <SectionList
-                            sections={DATA}
-                            keyExtractor={(item, index) => item + index}
-                            renderItem={({ item }) => <RenderRow item={item} />}
-                            renderSectionHeader={({ section: { jour } }) => (
-                                <Text style={{
-                                    fontSize: 14,
-                                    fontWeight: 'bold',
-                                    color: 'black',
-                                    paddingLeft: 10,
-                                    paddingTop: 10,
-                                }}>{jour}</Text>
-                            )}
-                            ListFooterComponent={
-                                <View style={{ margin: 10 }}>
-                                    <Button
-                                        mode="contained"
-                                        onPress={() => { logOut(); }}
-                                    >
-                                        Voir plus de transactions
-                                    </Button>
-                                </View>
-                            }
-                        />
-                    </View>
-
-                </View>
-
-            </View>
-
-
-            <Portal hostName="">
-                <TransactionSwipeablePanel isPanelActive={isPanelActive} setIsPanelActive={setIsPanelActive}/>
-            </Portal>
-
-
-
-
-            {/*<Button
-                mode="contained"
-                onPress={() => { logOut(); }}>
-                    Se d�connecter
-            </Button>*/}
 
         </View>
     );
 }
+
+
 
 const styles = StyleSheet.create({
 
@@ -488,7 +453,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#e6e4e0',
     },
 
-    amountItem: {
+    accountItem: {
         height: 150,
         width: 220,
         backgroundColor: '#e6e4e0',
@@ -510,14 +475,6 @@ const styles = StyleSheet.create({
     },
 
 
-
-
-
-
-
-
-
-
     header: {
         height: 160,
         backgroundColor: Colors.primary,
@@ -527,9 +484,11 @@ const styles = StyleSheet.create({
     },
 
 
+
     profif: {
         marginLeft:0,
     },
+
 
     avatarImage: {
         height: 50,
@@ -540,17 +499,29 @@ const styles = StyleSheet.create({
         borderRadius: 25,
     },
 
+
     entrant: {
         fontSize: 12,
         color: '#00665e',
         fontWeight: 'bold',
     },
 
+
     sortant: {
         color: 'red',
         fontSize: 12,
         fontWeight: 'bold',
     },
+
+    emptycard: {
+        marginTop:20,
+        backgroundColor: '#e6e4e0',
+        padding: 20,
+        borderRadius: 10,
+        height: 160,
+        alignItems: 'center',
+        justifyContent: 'center',
+    }
 
 });
 
@@ -562,6 +533,8 @@ const mapStateToProps = (state) => {
         user: state.profil.user,
     };
 };
+
+
 
 export default connect(mapStateToProps)(HomeScreen);
 

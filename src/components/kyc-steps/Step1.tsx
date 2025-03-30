@@ -225,7 +225,8 @@ const Step1 = ({ data, setData, step, setStep }: { data:any, setData:any, step:a
                                         autoCapitalize="none"
                                         description={undefined}
                                     />
-                            </View>
+                                </View>
+
 
                             <View style={{ flex: 1, alignContent: 'flex-start', justifyContent: 'flex-start', marginTop: 10 }}>
                                 <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'flex-start', marginTop: 10 }}>

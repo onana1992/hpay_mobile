@@ -42,8 +42,6 @@ function KycScreen({ navigation, user }: { navigation: any, user: any }) {
 
 
     console.log(user);
-    
-    
     const { height } = Dimensions.get('window');
     const [step, setStep] = React.useState(1);
     const { t } = useTranslation();
@@ -185,9 +183,7 @@ function KycScreen({ navigation, user }: { navigation: any, user: any }) {
 
 
     React.useEffect(() => {
-
        // paysRequest();
-
     },[])
 
     
@@ -210,67 +206,71 @@ function KycScreen({ navigation, user }: { navigation: any, user: any }) {
                 </TouchableOpacity>
             </View>
 
-            {
-                user.kycStatus === 'EN_ATTENTE' &&
-                <View style={{ flex: 1, alignItems: 'center', justifyContent: 'flex-start', marginTop: 70 }}>
-                    <Image
-                        source={require('../../assets/synergy.png')}
-                        style={styles.waitingImg}
+            <ScrollView>
+
+                {
+                    user.kycStatus === 'EN_ATTENTE' &&
+                    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'flex-start', marginTop: 70 }}>
+                        <Image
+                            source={require('../../assets/synergy.png')}
+                            style={styles.waitingImg}
                         />
                         <View style={{ alignItems: 'center', }}>
                             <Text style={{ color: Colors.text, textAlign: 'center', fontSize: 26, fontWeight: 'bold', paddingVertical: 10 }}>{t('kyc.processing').toLocaleUpperCase()}</Text>
                             <Text style={{ color: Colors.text, textAlign: 'center', fontSize: 14, }}>{t('kyc.processingmsg')}</Text>
                         </View>
-                </View>
-            }
-
-            {
-                user.kycStatus === 'VALIDE' &&
-                <View style={{ flex: 1, alignItems: 'center', justifyContent: 'flex-start', marginTop: 70 }}>
-                    <Image
-                        source={require('../../assets/check-mark.png')}
-                        style={styles.waitingImg}
-                    />
-                    <View style={{ alignItems: 'center', }}>
-                            <Text style={{ color: Colors.text, textAlign: 'center', fontSize: 26, fontWeight: 'bold', paddingVertical: 10 }}>{t('kyc.accountvalidated').toLocaleUpperCase()}</Text>
-                                < Text style = {{ color: Colors.text, textAlign: 'center', fontSize: 14, }}>{t('kyc.accountvalidatedmsg')}</Text>
                     </View>
-                </View>
-            }
+                }
 
-            {
-                (user.kycStatus === 'NON_SOUMIS' || user.kycStatus === 'NON_VALIDE') && 
-                <ScrollView>
-                    <KeyboardAvoidingView
-                        enabled={true}
-                    //behavior={Platform.OS === 'ios' ? 'padding' : 'padding'}
-                    >
-                        {
-                            !isLoading ?
-                                <Pressable style={{ flex: 1 }} onPress={Keyboard.dismiss}>
-                                    <View style={{}}>
-                                            <Text style={{ color: Colors.text, fontSize: 24, fontWeight: 'bold', paddingVertical: 10 }}>{t('kyc.completeyourregistration')}</Text>
+
+                {
+                    user.kycStatus === 'VALIDE' &&
+                    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'flex-start', marginTop: 70 }}>
+                        <Image
+                            source={require('../../assets/check-mark.png')}
+                            style={styles.waitingImg}
+                        />
+                        <View style={{ alignItems: 'center', }}>
+                            <Text style={{ color: Colors.text, textAlign: 'center', fontSize: 26, fontWeight: 'bold', paddingVertical: 10 }}>{t('kyc.accountvalidated').toLocaleUpperCase()}</Text>
+                            < Text style={{ color: Colors.text, textAlign: 'center', fontSize: 14, }}>{t('kyc.accountvalidatedmsg')}</Text>
+                        </View>
+                    </View>
+                }
+
+
+                {
+                    (user.kycStatus === 'NON_SOUMIS' || user.kycStatus === 'NON_VALIDE')  &&
+                    <ScrollView>
+                        
+                            {
+                                !isLoading ?
+                                    <Pressable style={{ flex: 1 }} onPress={Keyboard.dismiss}>
+                                        <View style={{}}>
+                                            <Text style={styles.title}>{t('kyc.completeyourregistration')}</Text>
                                             <Text style={{ color: Colors.text, fontSize: 14, }}>{t('kyc.completeyourregistrationmsg')}</Text>
+                                        </View>
+
+                                        <Step1 data={data} setData={setData} step={step} setStep={setStep} />
+                                        <Step2 data={data} setData={setData} step={step} setStep={setStep} />
+                                        <Step3 data={data} setData={setData} step={step} setStep={setStep} />
+                                        <Step4 data={data} setData={setData} step={step} setStep={setStep} kycSaveRequest={kycSaveRequest} />
+
+                                    </Pressable>
+                                    :
+                                    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', height: height }}>
+                                        <ActivityIndicator size="small" color={Colors.primary} />
+                                        <Text style={{ marginTop: 10, fontSize: 12, color: 'black' }}> {t('loading')} </Text>
                                     </View>
+                            }
+                       
+                    </ScrollView>
+                }
 
-                                    <Step1 data={data} setData={setData} step={step} setStep={setStep} />
-                                    <Step2 data={data}  setData={setData} step={step} setStep={setStep} />
-                                    <Step3 data={data} setData={setData} step={step} setStep={setStep} />
-                                    <Step4 data={data} setData={setData} step={step} setStep={setStep} kycSaveRequest={kycSaveRequest} />
+                <LoadingModal setModalVisible={setModalVisible} modalVisible={modalVisible} />
 
-                                </Pressable>
-                                :
-                                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', height: height }}>
-                                    <ActivityIndicator size="small" color={Colors.primary} />
-                                    <Text style={{ marginTop: 10, fontSize: 12, color: 'black' }}> {t('loading')} </Text>
-                                </View>
-                        }
-                    </KeyboardAvoidingView>
-                </ScrollView>
-            }
+            </ScrollView>
 
-            
-            <LoadingModal setModalVisible={setModalVisible} modalVisible={modalVisible} />
+
         </View>
     );
 }
@@ -288,7 +288,16 @@ const styles = StyleSheet.create({
         height: 200,
         width: 200,
         overflow: 'hidden',
-    }
+    },
+
+     title: {
+        color: Colors.text,
+        fontSize: 28,
+        fontWeight: 'bold',
+        textAlign: 'left',
+        paddingVertical: 5,
+        marginTop: 0,
+    },
 
 });
 

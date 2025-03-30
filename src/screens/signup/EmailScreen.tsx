@@ -58,29 +58,18 @@ function EmailScreen({ navigation}: {navigation:any}) {
 
         
         setModalVisible(true);
+        setEmail({ ...email, error: '' });
         postEmailRequest(idclient, email.value ).then((response: any) => {
-
-            console.log(response.data);
+           
             setModalVisible(false);
             setVerifModalVisible(true);
 
 
-           // navigation.navigate('PhotoScreen'); 
-
-           /* if (response.data.success === true) {
-
-                setModalVisible(false);
-                navigation.navigate('PhotoScreen'); 
-            } else {
-
-                console.log('echec');
-                setModalVisible(false);
-
-            }*/
-
-
         }).catch((_error: any) => {
-            //console.log(error);
+            console.log(_error.response.data);
+            if (_error.response.data.message == "email already used") {
+                setEmail({ ...email, error: t('emailscreen.emailalreadyused') })
+            }
             setModalVisible(false);
         })
         

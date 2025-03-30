@@ -1,0 +1,472 @@
+﻿/* eslint-disable curly */
+/* eslint-disable no-alert */
+/* eslint-disable react/no-unstable-nested-components */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable react/self-closing-comp */
+/* eslint-disable prettier/prettier */
+/* eslint-disable eol-last */
+/* eslint-disable react-native/no-inline-styles */
+
+import * as React from 'react';
+import {
+    StyleSheet,
+    View,
+    TouchableOpacity,
+    Image,
+    Text,
+    FlatList,
+    RefreshControl,
+    Platform,
+    PermissionsAndroid,
+} from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import { Colors } from '../../themes';
+import { useSelector, useDispatch } from 'react-redux';
+import { useTranslation } from 'react-i18next';
+import { Searchbar } from 'react-native-paper';
+import Feather from 'react-native-vector-icons/Feather';
+import { useFocusEffect } from '@react-navigation/native';
+import { fetchBeficiariesRequest, fetchBeficiariesInMyContactRequest } from '../../services/request';
+import { saveBenef, saveBenefs, saveNewClients } from '../../store/profilSlice';
+import Contacts from 'react-native-contacts';
+
+
+function ChooseBenefScreen() {
+
+    const navigation = useNavigation();
+    const { t } = useTranslation();
+    const dispatch = useDispatch();
+    const [visible, setVisible] = React.useState(false);
+    const user = useSelector((state: any) => state.profil.user);
+    const newClients = useSelector((state: any) => state.profil.newClients);
+    const benefs = useSelector((state: any) => state.profil.benefs);
+    const [filePath, setFilePath] = React.useState(null);
+    const [searchQuery, setSearchQuery] = React.useState('');
+    const [isRefreshing, setIsRefreshing] = React.useState(false);
+    const [hasPermission, setHasPermission] = React.useState(false);
+    const [contacts, setContacts] = React.useState<number[]>([]);
+
+
+    useFocusEffect(
+        React.useCallback(() => {
+
+            checkPermissions();
+            getBeneficiaries();
+            fetchContacts();
+
+            return () => {
+            };
+
+        }, [])
+    );
+
+
+    const chooseClient = (client: any) => {
+        dispatch(saveBenef(client));
+        navigation.goBack();
+    }
+
+
+    function getInitials(phrase: string) {
+        const words = phrase.split(' '); // Divise la phrase en mots
+        if (words.length < 2) {
+            // Si la phrase a moins de 2 mots, retourner les initiales du premier mot
+            return words[0][0].toUpperCase();
+        }
+
+        // Retourne les initiales des deux premiers mots en majuscule
+        return words[0][0].toUpperCase() + words[1][0].toUpperCase();
+    }
+
+
+
+    const getBeneficiaries = () => {
+
+        fetchBeficiariesRequest(user.idLoginClient).then((response: any) => {
+            //console.log(response.data.response.data);
+            dispatch(saveBenefs(response.data.response.data));
+            setIsRefreshing(false);
+
+        }).catch((error: any) => {
+
+
+        });
+    };
+
+
+    const onRefresh = () => {
+        getBeneficiaries();
+        fetchContacts();
+    };
+
+
+    const checkPermissions = async () => {
+        if (Platform.OS === 'android') {
+            const granted = await PermissionsAndroid.request(
+                PermissionsAndroid.PERMISSIONS.READ_CONTACTS
+            );
+            if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                setHasPermission(true);
+            } else {
+                console.log('Permission denied');
+            }
+        } else {
+            setHasPermission(true); // iOS automatically handles permissions
+        }
+    };
+
+
+    const fetchContacts = () => {
+        if (hasPermission) {
+            Contacts.getAll()
+                .then(contacts => {
+
+                    const phoneNumbersArray = contacts
+                        .map(contact => contact.phoneNumbers)  // Get phone numbers from each contact
+                        .flat()  // Flatten the array of phone numbers
+                        .map(phone => {
+                            // Remove '+', '(', ')', '-', and white spaces and convert to Number
+                            const cleanedNumber = phone.number.replace(/[+\s\(\)\-]/g, '');
+                            return Number(cleanedNumber);  // Convert to Number
+                        });
+
+
+                    //setPhoneNumbers(phoneNumbersArray);
+
+                    setContacts(phoneNumbersArray);
+                    getClientInMyContact(phoneNumbersArray);
+
+                })
+                .catch(error => {
+                    console.log('Error fetching contacts:', error);
+                });
+        } else {
+            console.log('Permission not granted');
+        }
+    };
+
+
+
+    const getClientInMyContact = (contactList) => {
+
+        console.log(contactList);
+
+        fetchBeficiariesInMyContactRequest(Number(user.idLoginClient), contactList).then((response: any) => {
+            console.log(response.data.response.data);
+            dispatch(saveNewClients(response.data.response.data));
+        }).catch((error: any) => {
+
+            console.log(error);
+
+        });
+
+    };
+
+
+    const EmptyCard = () => {
+
+        return (
+            <View style={styles.emptycard}>
+                <Text style={{ color: Colors.text }}>Aucun beneficiaire enegistré</Text>
+            </View>
+        );
+
+    };
+
+
+
+    const Header = () => {
+
+        return (
+            <View>
+                <View>
+                    <Text style={styles.title}>Veuillez Choissir le beneficiaire de votre transfert </Text>
+                </View>
+
+                <View style={{ marginTop: 10, flexDirection: 'row', width: '100%' }}>
+                    <Searchbar
+                        placeholder="Prenom, nom, numero"
+                        onChangeText={setSearchQuery}
+                        value={searchQuery}
+                        style={{ flex: 1, backgroundColor: '#ffffff', borderColor: 'gray', borderWidth: 1 }}
+                    />
+                </View>
+
+                <View style={{ marginBottom: 20, marginTop: 20 }}>
+
+                    <TouchableOpacity style={styles.addrow} onPress={() => { navigation.navigate('AddBeneficiariesScreen'); }} >
+
+                        <View style={{
+                            flex: 1,
+                            alignItems: 'flex-start',
+                            justifyContent: 'center',
+                        }}>
+                            <View style={{
+                                borderColor: Colors.background,
+                                borderWidth: 1,
+                                height: 50,
+                                width: 50,
+                                borderRadius: 25,
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                            }}>
+                                <Feather name="plus" size={22} color={Colors.text} />
+                            </View>
+
+                        </View>
+
+                        <View style={{
+                            flex: 3,
+                            alignItems: 'flex-start',
+                            justifyContent: 'center',
+                        }}>
+                            <Text style={styles.addrowText}>Ajouter manuellement un bénéficiaire</Text>
+                        </View>
+
+                        <View style={{
+                            flex: 1,
+                            alignItems: 'flex-end',
+                            justifyContent: 'center',
+                        }}>
+                            <Ionicons name="chevron-forward-outline" size={16} color={Colors.gray} />
+                        </View>
+                    </TouchableOpacity>
+
+                    {
+                        newClients.length > 0 &&
+                        <TouchableOpacity style={styles.addrow} onPress={() => { navigation.navigate('AddDirectoryBenefScreen'); }} >
+
+                            <View style={{
+                                flex: 1,
+                                alignItems: 'flex-start',
+                                justifyContent: 'center',
+                            }}>
+                                <View style={{
+                                    borderColor: Colors.background,
+                                    borderWidth: 1,
+                                    height: 50,
+                                    width: 50,
+                                    borderRadius: 25,
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                }}>
+                                    <AntDesign name="addusergroup" size={22} color={Colors.text} />
+                                </View>
+
+                            </View>
+
+                            <View style={{
+                                flex: 2,
+                                alignItems: 'flex-start',
+                                justifyContent: 'center',
+                            }}>
+                                <Text style={styles.addrowText}>{newClients[0].prenoms} et  {newClients.length - 1} autre personnes de votre repertoire utilisent  HPay</Text>
+
+                            </View>
+
+                            <View style={{
+                                flex: 2,
+                                alignItems: 'flex-end',
+                                justifyContent: 'center',
+                            }}>
+                                <View style={styles.display}>
+                                    <Text>Tout afficher</Text>
+                                </View>
+                            </View>
+                        </TouchableOpacity>
+
+                    }
+
+
+
+                    <View style={{ marginTop: 20 }}>
+                        <Text style={{ fontWeight: 'bold', color: Colors.text, fontSize: 22 }}>Bénéficiaires enregistrés</Text>
+                    </View>
+
+
+                </View>
+
+
+            </View>
+        );
+
+
+
+    };
+
+
+    return (
+        <View style={styles.main}>
+
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', }} >
+                <TouchableOpacity style={{ justifyContent: 'flex-start' }} onPress={() => { navigation.goBack(); }} >
+                    <View style={styles.avatar} >
+                        <Ionicons name="chevron-back" color={Colors.text} size={24} />
+                    </View>
+                </TouchableOpacity>
+
+                <View >
+
+                </View>
+            </View>
+
+
+            <FlatList
+                data={benefs}
+                keyExtractor={item => item.id.toString()}
+                ListHeaderComponent={Header}
+                renderItem={({ item }) => (
+                    <TouchableOpacity style={styles.item} onPress={() => { chooseClient(item) }} >
+
+                        <View style={{ flexDirection: 'row' }}>
+
+                            <View style={{ flex: 1 }}>
+                                <View style={styles.benefavatar}>
+                                    {filePath ?
+                                        <Image
+                                            source={filePath ? { uri: filePath } : require('../../assets/avatar.jpg')}
+                                            style={styles.avatarImage}
+                                        />
+                                        :
+                                        <View>
+                                            <Text style={{ color: Colors.text, fontWeight: 'bold', fontSize: 16 }}>{getInitials(item.prenoms)}</Text>
+                                        </View>
+                                    }
+                                </View>
+                            </View>
+
+
+                            <View style={{ flex: 3 }}>
+                                <Text style={styles.name}>{item.prenoms} {item.nom}</Text>
+                                <Text style={styles.phone}>{item.telephone}</Text>
+                            </View>
+
+                            <View style={{ flex: 1, alignItems: 'flex-end' }}>
+                                <View style={styles.display}>
+                                    <Text>Envoyer</Text>
+                                </View>
+                            </View>
+
+                        </View>
+
+                    </TouchableOpacity>
+                )}
+
+                ListEmptyComponent={<EmptyCard />}
+                refreshControl={
+                    <RefreshControl
+                        refreshing={isRefreshing}
+                        onRefresh={onRefresh}
+                        tintColor="blue"  // Optional, customize the refresh indicator color
+                    />
+                }
+            />
+
+
+        </View>
+    );
+
+}
+
+const styles = StyleSheet.create({
+
+    main: {
+        flex: 1,
+        backgroundColor: '#ffffff',
+        padding: 20,
+    },
+
+    title: {
+        color: Colors.text,
+        fontSize: 28,
+        fontWeight: 'bold',
+        textAlign: 'left',
+        paddingVertical: 5,
+        marginTop: 10,
+    },
+
+    avatar: {
+        width: 40,
+        height: 40,
+        borderColor: '#e0e0e0',
+        borderWidth: 1,
+        borderRadius: 20,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#e6e4e0',
+    },
+
+    addrow: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingVertical: 15,
+    },
+
+    addrowText: {
+        fontSize: 16,
+        color: Colors.text,
+        justifyContent: 'center',
+        alignItems: 'center',
+        fontWeight: 'bold',
+    },
+
+    display: {
+        marginTop: 5,
+        padding: 5,
+        backgroundColor: Colors.background,
+        borderRadius: 20,
+    },
+
+    item: {
+        paddingVertical: 10,
+    },
+
+    name: {
+        fontWeight: 'bold',
+        fontSize: 16,
+        color: Colors.text,
+    },
+
+    phone: {
+        fontSize: 12,
+        color: 'gray',
+    },
+
+    benefavatar: {
+        width: 50,
+        height: 50,
+        borderColor: '#e0e0e0',
+        borderWidth: 1,
+        borderRadius: 25,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#ffffff',
+    },
+
+    avatarImage: {
+        height: 100,
+        width: 100,
+        overflow: 'hidden',
+        borderColor: Colors.primary,
+        borderWidth: 1,
+        borderRadius: 30,
+    },
+
+    emptycard: {
+        backgroundColor: '#e6e4e0',
+        padding: 20,
+        borderRadius: 10,
+        height: 160,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+
+
+
+});
+
+
+export default ChooseBenefScreen;

@@ -17,21 +17,23 @@ import {
     ScrollView,
     Platform,
     PermissionsAndroid,
-    Rationale, Alert } from 'react-native';
-import { signOut } from '../store/profilSlice';
+    Rationale,
+    Alert
+} from 'react-native';
+import { signOut } from '../../store/profilSlice';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import AntDesign from  'react-native-vector-icons/AntDesign';
 import MaterialIcons from  'react-native-vector-icons/MaterialIcons';
 import FontAwesome from  'react-native-vector-icons/FontAwesome';
 import { ListItem } from '@rneui/themed';
-import { Colors } from '../themes';
+import { Colors } from '../../themes';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
-import ImagePickerModal from '../components/ImagePickerModal';
+import ImagePickerModal from '../../components/ImagePickerModal';
 import { useSelector, useDispatch } from 'react-redux';
-import { signIn} from '../store/profilSlice';
+import { signIn} from '../../store/profilSlice';
 import axios from 'axios';
 import { useTranslation } from 'react-i18next';
-import LangageModal from '../components/LangageModal';
+import LangageModal from '../../components/LangageModal';
 
 
 function ProfilScreen({ navigation }: { navigation: any }) {
@@ -40,21 +42,17 @@ function ProfilScreen({ navigation }: { navigation: any }) {
     const dispatch = useDispatch();
     const [visible, setVisible] = React.useState(false);
     const [langageModalvisible, setLangageModalvisible] = React.useState(false);
-    const [filePath, setFilePath] = React.useState(null);
     const [fileName, setFileName] = React.useState(null);
-
-    //const BASE_URL = 'http://10.0.0.133:80/api/';
-    // const BASE_URL = 'http://192.168.2.38:80/api/';
-    //const BASE_URL = 'http://10.110.96.97:80/api/';
-    const BASE_URL = 'https://backend.clanlantene.com/joe92/api/';
+    const [filePath, setFilePath] = React.useState<string>('');
+    const BASE_URL = 'http://10.0.0.133:5000/api';
 
     const user = useSelector((state: any) => state.profil.user);
-    console.log(user);
+    //console.log(user);
 
-  ///  console.log(user.idclients);
+   // console.log(user.client.photoClient);
 
    React.useEffect(() => {
-       setFilePath(() => user.photo_client);
+       setFilePath(user.client.photoClient);
    }, []);
 
 
@@ -103,29 +101,27 @@ function ProfilScreen({ navigation }: { navigation: any }) {
 
 
 
-    const captureImage = async (type: any) => {
+    const captureImage = async (type: string) => {
 
         let options = {
-            mediaType: type,
+            mediaType: 'photo',
             maxWidth: 300,
             maxHeight: 550,
             quality: 1,
             allowsEditing: true,
-            videoQuality: 'low',
-            durationLimit: 30, //Video max duration in seconds
             saveToPhotos: true,
         };
 
         let isCameraPermitted = await requestCameraPermission();
 
-        if (isCameraPermitted) {
 
+        if (isCameraPermitted) {
             launchCamera(options, (response) => {
 
-                //console.log('Response = ', response);
+                console.log('Response = ', response);
 
                 if (response.didCancel) {
-                    console.log('User cancelled camera picker');
+                    //console.log('User cancelled camera picker');
                     return;
                 } else if (response.errorCode === 'camera_unavailable') {
                     /*Toast.show({
@@ -135,7 +131,7 @@ function ProfilScreen({ navigation }: { navigation: any }) {
                     });*/
                     console.log('camera_unavailable');
                     return;
-                } else if (response.errorCode == 'permission') {
+                } else if (response.errorCode === 'permission') {
                     /*Toast.show({
                         type: 'message',
                         props: { message: I18n.t('permissionnotsatisfied') },
@@ -151,26 +147,36 @@ function ProfilScreen({ navigation }: { navigation: any }) {
                     });*/
                     return;
                 }
+                /*console.log('base64 -> ', response.base64);
+                console.log('uri -> ', response.uri);
+                console.log('width -> ', response.width);
+                console.log('height -> ', response.height);
+                console.log('fileSize -> ', response.fileSize);
+                console.log('type -> ', response.type);
+                console.log('fileName -> ', response.fileName);*/
+                //console.log('fileName -> ', response.assets[0].uri)
 
-                setFilePath(response?.assets[0].uri);
-                setFileName(response?.assets[0].fileName);
-                setVisible(false);
-                sendpicture();
+                setFilePath(response.assets[0].uri);
+                setFileName(response.assets[0].fileName);
+                //setVisible(false);
+                sendpicture(response.assets[0].uri);
 
             });
         }
-    };
+    }
+
 
 
     const chooseFile = (/*type*/) => {
 
         let options = {
-            // mediaType: type,
+            mediaType: 'image',
             maxWidth: 600,
             maxHeight: 650,
             quality: 1,
             allowsEditing: true,
         };
+
 
         launchImageLibrary(options, (response) => {
 
@@ -197,55 +203,78 @@ function ProfilScreen({ navigation }: { navigation: any }) {
                     props: { message: I18n.t('permissionnotsatisfied') },
                     position: 'bottom'
                 });*/
+                //alert(response.errorMessage);
                 return;
             }
 
+            /*console.log('base64 -> ', response.assets[0].base64);
+            console.log('uri -> ', response.assets[0].uri);
+            console.log('width -> ', response.assets[0].width);
+            console.log('height -> ', response.assets[0].height);
+            console.log('fileSize -> ', response.assets[0].fileSize);
+            console.log('type -> ', response.assets[0].type);
+            console.log('fileName -> ', response.assets[0].fileName);*/
+
+            // setFile(response?.assets[0]);
             setFilePath(response.assets[0].uri);
             setFileName(response.assets[0].fileName);
-            setVisible(false);
-            sendpicture();
+           // setVisible(false);
+            sendpicture(response.assets[0].uri);
+
+            //console.log(response.assets[0].uri);
+
         });
 
+    }
 
-    };
 
-
-    const sendpicture = async () => {
+    const sendpicture = async (path:string) => {
 
         let form_data = new FormData();
-        let filename = fileName?.split('/').pop();
+        let filename = path?.split('/').pop();
         let match = /\.(\w+)$/.exec(filename);
         let type = match ? `image/${match[1]}` : 'image';
 
+        //console.log(path)
+       // console.log(filename)
+        //console.log(type)
 
-        form_data.append('img', { uri: filePath, name: fileName, type: type });
-        form_data.append('idclient', user.idclients);
+        form_data.append('photo',
+            {
+                uri: filePath,
+                name: filename,
+                type: type
+            }
+        );
 
+       // setModalVisible(true);
 
-        axios.post(`${BASE_URL}upload_profil_image`, form_data, {
+       // console.log(`${BASE_URL}/auth/upload-photo/${user.idLoginClient}`);
+
+        axios.post(`${BASE_URL}/auth/upload-photo/${user.idLoginClient}`, form_data, {
             headers: {
                 'Content-Type': 'multipart/form-data',
             },
         }).then(response => {
 
-            console.log(response.data);
+           // console.log('success')
+           // console.log(response.data.response.data.client.photoClient);
+            dispatch(signIn(response.data.response.data));
+            
+            //setModalVisible(false);
+           // navigation.navigate('ParrainageScreen', { phone: phone, idclient: idclient })
 
-            if (response.data.success == true) {
-                //setFilePath(response.data.user[0].photo_client);
-                //dispatch(signIn({ ...user, photo_client: response.data.url }));
-                dispatch(signIn(response.data.user[0]));
-                /*console.log(response.data.user[0].photo_client);
-                console.log(response.data.url);*/
-            }
-            else {
-
-            }
         }).catch(function (error) {
-            console.log(error);
-            // setIsloading(false);
+            // setModalVisible(false);
+            console.log('error')
+            console.log(error.response)
+
         });
 
+
     };
+
+
 
     const Header = () => {
         return (
@@ -256,7 +285,7 @@ function ProfilScreen({ navigation }: { navigation: any }) {
                 <View style={styles.avatar}>
                     {filePath ?
                         <Image
-                            source={filePath ? { uri: filePath } : require('../assets/avatar.jpg')}
+                            source={filePath ? { uri: filePath } : require('../../assets/avatar.jpg')}
                             style={styles.avatarImage}
                         />
                         :
@@ -273,7 +302,7 @@ function ProfilScreen({ navigation }: { navigation: any }) {
                 </View>
 
                 <View style={{ justifyContent: 'center', alignItems: 'center', }}>
-                    <Text style={{ color: Colors.text, paddingTop: 10, fontSize: 26, fontWeight: 'bold' }}> {user.client.prenoms}{' '}{user.client.nom} </Text>
+                    <Text style={{ color: Colors.text, textAlign:'center', paddingTop: 10, fontSize: 26, fontWeight: 'bold' }}> {user.client.prenoms}{' '}{user.client.nom} </Text>
                     <Text style={{ color: Colors.text, paddingTop: 0 ,marginTop:3,fontSize: 16 }}> {user.login}</Text>
                 </View >
             </View>
@@ -309,7 +338,7 @@ function ProfilScreen({ navigation }: { navigation: any }) {
                     </View>
 
 
-                    <ListItem bottomDivider onPress={() => alert()} >
+                    <ListItem bottomDivider onPress={() => navigation.navigate('MyInfoPersoScreen')} >
                         <AntDesign name="user" size={22} color={Colors.text} />
                         <ListItem.Content>
                             <ListItem.Title style={{ fontSize: 16 }}>{t('profil.mypersonalInfo')}</ListItem.Title>
@@ -327,7 +356,7 @@ function ProfilScreen({ navigation }: { navigation: any }) {
                         <ListItem.Chevron />
                     </ListItem>
 
-                    <ListItem bottomDivider onPress={() => alert()} >
+                    <ListItem bottomDivider onPress={() => navigation.navigate('MyHistoriesScreen')} >
                         <MaterialIcons name="history" size={24} color={Colors.text} />
                         <ListItem.Content>
                             <ListItem.Title style={{ fontSize: 14 }}>{t('profil.myhistory')}</ListItem.Title>
@@ -335,7 +364,8 @@ function ProfilScreen({ navigation }: { navigation: any }) {
                         <ListItem.Chevron />
                     </ListItem>
 
-                    <ListItem bottomDivider onPress={() => alert()} >
+
+                    <ListItem bottomDivider onPress={() => navigation.navigate('Beneficiaries')} >
                         <AntDesign name="adduser" size={22} color={Colors.text} />
                         <ListItem.Content>
                             <ListItem.Title style={{ fontSize: 14 }}>{t('profil.mybeneficiaries')}</ListItem.Title>
@@ -343,7 +373,8 @@ function ProfilScreen({ navigation }: { navigation: any }) {
                         <ListItem.Chevron />
                     </ListItem>
 
-                    <ListItem bottomDivider onPress={() => alert()} >
+
+                    <ListItem bottomDivider onPress={() => navigation.navigate('MyMessageScreen')} >
                         <AntDesign name="message1" size={22} color={Colors.text} />
                         <ListItem.Content>
                             <ListItem.Title style={{ fontSize: 14 }}>{t('profil.mymessages')}</ListItem.Title>
@@ -351,21 +382,15 @@ function ProfilScreen({ navigation }: { navigation: any }) {
                         <ListItem.Chevron />
                     </ListItem>
 
-                    <ListItem bottomDivider onPress={() => alert()} >
-                        <AntDesign name="creditcard" size={22} color={Colors.text} />
-                        <ListItem.Content>
-                            <ListItem.Title style={{ fontSize: 14 }}>{t('profil.mycards')}</ListItem.Title>
-                        </ListItem.Content>
-                        <ListItem.Chevron />
-                    </ListItem>
                 </View>
+
 
                 <View style={{ backgroundColor: '#ffff', marginHorizontal: 10, borderRadius: 20, paddingTop: 15, paddingBottom: 15 }}>
                     <View style={{ paddingHorizontal: 10 }}>
                         <Text style={{ color: Colors.text, fontSize: 22, fontWeight: 'bold', paddingVertical: 10 }}>{t('profil.securityandconfidentiality')}</Text>
                     </View>
 
-                    <ListItem bottomDivider onPress={() => alert()} >
+                    <ListItem bottomDivider onPress={() => navigation.navigate('ChangePasswordScreen')} >
                         <AntDesign name="lock" size={22} color={Colors.text} />
                         <ListItem.Content>
                             <ListItem.Title style={{ fontSize: 14, }}>{t('profil.changepassword')}</ListItem.Title>
@@ -382,6 +407,8 @@ function ProfilScreen({ navigation }: { navigation: any }) {
                     </ListItem>
 
                 </View>
+
+
 
                 <View style={{ backgroundColor: '#ffff', marginHorizontal: 10, borderRadius: 20, paddingTop: 15, paddingBottom: 15 }}>
 
@@ -426,6 +453,8 @@ function ProfilScreen({ navigation }: { navigation: any }) {
                     chooseFile={chooseFile}
                 />
 
+                
+
                 <LangageModal
                     isVisible={langageModalvisible}
                     onClose={() => setLangageModalvisible(false)}
@@ -460,7 +489,7 @@ const styles = StyleSheet.create({
     avatar: {
         width: 100,
         height:100,
-        borderColor: '#e0e0e0',
+       // borderColor: '#e0e0e0',
         borderWidth: 1,
         borderRadius: 50,
         justifyContent: 'center',
@@ -474,7 +503,7 @@ const styles = StyleSheet.create({
         overflow: 'hidden',
         borderColor: Colors.primary,
         borderWidth: 1,
-        borderRadius: 30,
+        borderRadius: 50,
     },
 
     addButton: {

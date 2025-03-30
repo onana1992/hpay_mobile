@@ -27,24 +27,16 @@ type PropType = {
 
 export default function SponsorSearchModal({ isVisible, onClose, client, phone }: PropType) {
 
-    console.log(client?.username);
 
     const { t } = useTranslation();
     const navigation = useNavigation();
-    const url = client?.client.photoClient == null ? '' : client.client.photoClient;
+    const url = client?.client?.photoClient ? '' : client?.client?.photoClient;
     const [filePath, setFilePath] = React.useState<string>('');
     const [modalVisible, setModalVisible] = React.useState(false);
 
 
-
     React.useEffect(() => {
-        var updatedUrl = null;
-        if (url !== null) {
-            updatedUrl = url.replace("localhost", "10.0.0.133");
-             setFilePath(updatedUrl);
-        } else {
-            updatedUrl = null;
-        }
+        
 
     }, [isVisible]);
 
@@ -57,7 +49,7 @@ export default function SponsorSearchModal({ isVisible, onClose, client, phone }
     const lauchAdd = () => {
 
         setModalVisible(true);
-        addParrain(phone,client?.username).then((response: any) => {
+        addParrain(phone, client?.telephone).then((response: any) => {
 
             // console.log(response)
             setModalVisible(false);
@@ -93,7 +85,7 @@ export default function SponsorSearchModal({ isVisible, onClose, client, phone }
             style={styles.modal}>
             <SafeAreaView style={styles.content}>
 
-                <ScrollView>
+                <ScrollView style={{flex:1} }>
 
                     <View style={styles.pageheader}>
                         <Text style={styles.title}>{t('sponsorship.confirmaddingsponsor')}</Text>
@@ -107,7 +99,7 @@ export default function SponsorSearchModal({ isVisible, onClose, client, phone }
                             source={filePath ? { uri: filePath } : require('../assets/avatar.jpg')}
                             style={styles.avatarImage}
                         />
-                        <Text style={{ marginTop:10, fontSize: 16, color: Colors.text, fontWeight: 'bold' }} >{client?.client.prenoms} {client?.client.nom}</Text>
+                        <Text style={{ marginTop:10, fontSize: 16, color: Colors.text, fontWeight: 'bold' }} >{client?.client?.prenoms} {client?.client?.nom}</Text>
                         <Text style={{ fontSize: 14, color: Colors.gray }}>{client?.login}</Text>
                     </View>
 

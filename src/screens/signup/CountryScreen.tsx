@@ -12,7 +12,6 @@ import {
     View,
     Text,
     StyleSheet,
-    KeyboardAvoidingView,
     ScrollView
 } from 'react-native';
 import Button from '../../components/Button';
@@ -22,7 +21,8 @@ import NoConnectedHeader from '../../components/NoConnectedHeader';
 import LoadingModal from '../../components/LoadingModal';
 import StepCompnent from '../../components/StepCompnent';
 import { Dropdown } from 'react-native-element-dropdown';
-import { getPaysRequest } from '../../services/request';
+import { getPaysRequest1, getVilleRequest } from '../../services/request';
+import { COUNTRIES }  from '../../assets/country/countries_fr';
 
 
 
@@ -37,47 +37,37 @@ function CountryScreen({ navigation }: {navigation:any}) {
     const [cities, setCities] = React.useState([]);
     const [countries, setCountries] = React.useState([]);
     const [city, setCity] = React.useState({id:1, label: 'Montreal', value: 'Montreal' });
-    const COUNTRIES = [
-        { label: '🇨🇦 Canada', value: 'ca', indicator: "1" },
-        { label: '🇨🇲 Cameroun', value: 'cm', indicator: '237' },
-        { label: "🇨🇮 Cote d'ivoire", value: 'ci', indicator: "225" },
-        { label: "🇭🇹 Haiti", value: 'ht', indicator: "509" },
-        { label: "🇹🇬 Togo", value: 'tg', indicator: "228" },
-        { label: '🇸🇳 Senegal', value: 'sn', indicator: '221' },
-        { label: '🇨🇭 Suisse', value: 'ch', indicator: '41' },
-        { label: '🇬🇲 Gambie', value: 'gm', indicator: '220' },
-        { label: '🇲🇱 Mali', value: 'ml', indicator: '223' },
-        { label: '🇧🇯 Benin', value: 'bj', indicator: '229' },
-        { label: '🇬🇦 Gabon', value: 'ga', indicator: '241' },
-        { label: '🇺🇸 États-Unis', value: 'us', indicator: '1' },
-        { label: '🇨🇩 Congo RD', value: 'cd', indicator: '243' },
-        { label: '🇩🇴 République Dominicaine', value: 'do', indicator: '1' },
-        { label: '🇬🇹 Guatemala', value: 'gt', indicator: '502' },
-        { label: '🇨🇬 République du Congo', value: 'cg', indicator: '242' },
-        { label: '🇫🇷 France', value: 'fr', indicator: '33' },
-        { label: '🇧🇪 Belgique', value: 'be', indicator: '32' },
-        { label: '🇳🇬 Nigeria', value: 'ng', indicator: '234' },
-        { label: '🇨🇱 Chili', value: 'cl', indicator: '56' },
-        { label: '🇨🇴 Colombie', value: 'co', indicator: '57' },
-        { label: '🇱🇧 Liban', value: 'lb', indicator: '961' },
-        { label: '🇵🇪 Panama', value: 'pa', indicator: '507' },
-        { label: '🇹🇼 Taïwan', value: 'tw', indicator: '886' }
-    ];
-
    
 
     React.useState(() => {
-        
-        getPaysRequest().then((response: any) => {
 
-            console.log(response.data);
+        setModalVisible(true);
+        getPaysRequest1().then((response: any) => {
 
-            setCountries(response.data);
-            const firstCountry = response.data.find(item => item.id === 9);
+            setCountries(response.data.response.data);
+            const firstCountry = response.data.response.data.find((item: { id: number; }) => item.id === 9);
             setSelectedCountry(firstCountry);
+            fetchCities(firstCountry.id);
+
+        }).catch((error: any) => {
+
+            if (error){
+                console.log(error);
+            }
+            setModalVisible(false);
+
+        });
+
+    }, []);
 
 
-            const formattedCities = firstCountry.villes.map(city => ({
+
+    const fetchCities = (idPays: number) => {
+
+        getVilleRequest(idPays).then((response: any) => {
+
+           
+            const formattedCities = response.data.response.data.map(city => ({
                 id: city.id,
                 label: city.ville,
                 value: city.ville
@@ -85,31 +75,16 @@ function CountryScreen({ navigation }: {navigation:any}) {
 
             setCities(formattedCities);
             setCity(formattedCities[0]);
-
+            setModalVisible(false);
 
         }).catch((error: any) => {
 
-            if (error){
-                console.log(error);
-            }
+            console.log(error);
+            setModalVisible(false);
 
-           // console.log(error)
-            /* if (error.response.data.statusCode) {
- 
-                 setModalVisible(false);
-                 Toast.show({
-                     type: 'error',
-                     text1: t('passwordRecover.failure'),
-                     text2: t('passwordRecover.noaccoundfound'),
-                     position: 'top'
-                 });
- 
-             }*/
+        })
 
-        });
-
-    },[]);
-
+    }
 
 
 
@@ -119,22 +94,14 @@ function CountryScreen({ navigation }: {navigation:any}) {
         }
     }
 
+
+
     const changeCountry = (item:any) => {
-
-
         setCountry(item);
-        const choosecountry = countries.find((it: { indicatif: any; }) => it.indicatif === item.indicator);
+        const choosecountry : any = countries.find((it: { indicatif: any; }) => it.indicatif === item.indicator);
         setSelectedCountry(choosecountry);
-
-        const formattedCities = choosecountry.villes.map((city: { ville: any; }) => ({
-            id: city.id,
-            label: city.ville,
-            value: city.ville
-        }));
-
-        setCities(formattedCities)
-        setCity(formattedCities[0]);
-
+        setModalVisible(true);
+        fetchCities(choosecountry?.id);
     }
 
   

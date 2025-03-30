@@ -33,8 +33,6 @@ function RecoverScreen({ navigation }: { navigation: any }) {
     const onLoginPressed = () => {
 
        
-    
-
         const phoneError = telValidator(telephone.value);
 
         if (phoneError)   {
@@ -70,7 +68,6 @@ function RecoverScreen({ navigation }: { navigation: any }) {
 
             }
 
-           
         })
 
         

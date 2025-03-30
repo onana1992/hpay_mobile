@@ -101,8 +101,8 @@
 
 
   "emailscreen": {
-    "title": "Soumettre votre adresse Email (2FA)",
-    "titlemsg": "Votre adresse email est nécessaire afin d'être utilisée au cas échéant  comme deuxième facteur d'authentification.",
+    "title": "Soumettez votre adresse Email",
+    "titlemsg": "Votre adresse e-mail est nécessaire. Elle pourra être utilisée, le cas échéant, à des fins de communication ainsi que pour des raisons de sécurité.",
     "email": "Email",
     "youremail": "Votre adresse email",
     "submit": "Soumettre",
@@ -111,7 +111,8 @@
     "cancel": "Annluer",
     "verify": "Vérifier",
     "veriftitle": "Vérifions votre adresse e-mail",
-    "verifmsg": "Nous vous avons avons envoyé un code par email. Veuillez saisir ce code pour vérifier votre email"
+    "verifmsg": "Nous vous avons avons envoyé un code par email. Veuillez saisir ce code pour vérifier votre email",
+    "emailalreadyused": "Adresse email déjà utilisé"
   },
 
   "sponsorship": {
@@ -123,11 +124,13 @@
     "addassponsor": "Ajouter",
     "cancel": "Annuler",
     "confirm": "confirmer",
-    "clientnotfound": "Aucun client n'a été trouvé avec ce numéro de téléphone",
+    "clientnotfound": "Aucun membre avec ce code de parrainage n'a été trouvé",
     "failure": "Echec",
     "confirmaddingsponsor": "Confirmer l'ajout de parrain",
-    "confirmmsg": "Le membre lié au numéro entré a été trouvé, veuillez confirme pour l'ajouter comme parrain",
-    "sponsorshipalreadyaexist": "Ce parrainage existe dejà"
+    "confirmmsg": "Le propietaire du code a été trouvé, veuillez confirme pour l'ajouter comme parrain",
+    "sponsorshipalreadyaexist": "Ce parrainage existe dejà",
+    "code": "Code de parrainnage",
+    "entrersponsorcode": "Entrer le code de votre parrain"
 
 
   },
@@ -166,7 +169,8 @@
 
   "photoProfilScreen": {
     "title": "Ajoutez une photo de profil",
-    "titlemsg": "Veuillez choisir une photo de profil afin de permettre à vos correspondants de vous identifier"
+    "titlemsg": "Veuillez choisir une photo de profil afin de permettre à vos correspondants de vous identifier",
+    
   },
 
 
@@ -235,6 +239,12 @@
     "language": "Langue",
     "notificationparameters": "Paramètres de notification",
     "logout": "Se déconnecter"
+  },
+
+  "benef": {
+    "addsuccess": "Le client été ajouté à vos beneficiaire.",
+    "alreadyinyourbeneficiaries": "Client dejà ajouté dans les beneficiaires",
+    "addlistsuccess": "Liste de clients ajouté dans les beneficiaires"
   },
 
 

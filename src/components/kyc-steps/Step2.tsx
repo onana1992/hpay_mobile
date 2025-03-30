@@ -245,7 +245,7 @@ const Step2 = ({ data, setData, step, setStep, }: { data: any, setData: any, ste
                 adresse: address.value,
                 telephone2: telephone2.value
             });*/
-       setStep(3);
+            setStep(3);
 
     }
 

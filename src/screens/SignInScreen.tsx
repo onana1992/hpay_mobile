@@ -34,7 +34,7 @@ import { signIn, saveToken } from '../store/profilSlice';
 import { signInRequest } from '../services/request';
 import LoadingModal from '../components/LoadingModal';
 import Toast from 'react-native-toast-message';
-import Logo from '../components/Logo';
+//import Logo from '../components/Logo';
 
 function SignInScreen({ navigation }: {navigation:any}){
 
@@ -63,7 +63,7 @@ function SignInScreen({ navigation }: {navigation:any}){
         signInRequest(telephone.value, password.value).then((response: any) => {
 
 
-            //console.log(response.data.response.token)
+            console.log(response.data.response.token)
 
             if (response.data.statusCode === 200) {
                
@@ -78,7 +78,8 @@ function SignInScreen({ navigation }: {navigation:any}){
             
         }).catch((error: any) => {
 
-          
+            //console.log(error)
+
             if (error.response.data.statusCode) {
 
                 Toast.show({
@@ -180,14 +181,7 @@ function SignInScreen({ navigation }: {navigation:any}){
 
                     </View>
 
-                    <View style={{ marginTop: 45 }}>
-                        <Snackbar
-                            visible={snackVisible}
-                            onDismiss={onDismissSnackBar}
-                        >
-                            <Text style={{ color: 'red' }}>Echec de connexion. Numero ou mot de passe invalide.</Text>
-                        </Snackbar>
-                    </View>
+                    
                     
                 </Pressable>
             
@@ -221,6 +215,7 @@ const styles = StyleSheet.create({
     row: {
         flexDirection: 'row',
         marginTop: 4,
+        justifyContent:'center'
     },
 
     forgot: {
@@ -271,11 +266,13 @@ const styles = StyleSheet.create({
         marginTop:30
     },
 
+
     subtitle: {
         color: Colors.text,
         fontSize: 14,
         marginTop: 0
     }
+
 
 });
 

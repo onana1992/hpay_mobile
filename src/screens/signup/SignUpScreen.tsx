@@ -45,10 +45,10 @@ function SignUpScreen({ navigation}: {navigation:any, route: any}) {
     const { country, city } = route.params;
     const [modalVisible, setModalVisible] = React.useState(false);
     const [telephone, setTelephone] = React.useState({ value: '', error: '' });
-    const [password, setPassword] = React.useState({ value: '', error: '' })
-    const [confirmPassword, setConfirmPassword] = React.useState({ value: '', error: '' })
-    const [passwordShow, setPasswordShow] = React.useState(false)
-    const [confirmPasswordShow, setConfirmPasswordShow] = React.useState(false)
+    const [password, setPassword] = React.useState({ value: '', error: '' });
+    const [confirmPassword, setConfirmPassword] = React.useState({ value: '', error: '' });
+    const [passwordShow, setPasswordShow] = React.useState(false);
+    const [confirmPasswordShow, setConfirmPasswordShow] = React.useState(false);
     const [checked, setChecked] = React.useState(false);
     const { t } = useTranslation();
 

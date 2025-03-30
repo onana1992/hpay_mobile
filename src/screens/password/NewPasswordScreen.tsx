@@ -46,13 +46,10 @@ function NewPasswordScreen({ navigation }: { navigation: any }) {
     const [confirmPasswordShow, setConfirmPasswordShow] = React.useState(false);
     const [modalVisible, setModalVisible] = React.useState(false);
     const { phone } = route.params;
-
-    // const phone = "14388833759";
     
 
     const submit = () => {
 
-        //navigation.navigate('TelVerification');
 
         const passwordError = passwordValidator(password.value);
         const passwordConfirmationError = confirmPasswordValidator(password.value, confirmPassword.value);
@@ -67,14 +64,15 @@ function NewPasswordScreen({ navigation }: { navigation: any }) {
             return
         }
 
+        setModalVisible(true);
+
+
 
         passforgotUpdatePasswordRequest(phone, password.value).then((response: any) => {
-
-            console.log(response.data)
-
+           
             if (response.data.statusCode === 201) {
+
                 setModalVisible(false);
-                
                 Toast.show({
                     type: 'error',
                     text1: t('passwordRecover.passwordchanged'),
@@ -86,19 +84,10 @@ function NewPasswordScreen({ navigation }: { navigation: any }) {
             }
 
 
-        }).catch((error: any) => {
+         }).catch((error: any) => {
 
-           // console.log(error.response.data)
-
+         
             if (error.response.data.statusCode) {
-
-               /* setModalVisible(false);
-                Toast.show({
-                    type: 'error',
-                    text1: t('passwordRecover.failure'),
-                    text2: t('passwordRecover.noaccoundfound'),
-                    position: 'top'
-                });*/
 
             }
 
@@ -106,6 +95,7 @@ function NewPasswordScreen({ navigation }: { navigation: any }) {
 
 
     };
+
 
 
 

@@ -25,7 +25,7 @@ import StepCompnent from '../../components/StepCompnent';
 import { TextInput as Input} from 'react-native-paper';
 import { Dropdown } from 'react-native-element-dropdown';
 import SponsorSearchModal from '../../components/SponsorSearchModal';
-import { searchClientByPhoneRequest } from '../../services/request';
+import { searchClientByPhoneRequest, searchClientBySponsorShipCodeRequest } from '../../services/request';
 import { telValidator } from '../../helpers/telValidator';
 import Toast from 'react-native-toast-message';
 import { useRoute } from '@react-navigation/native';
@@ -38,9 +38,11 @@ function ParrainageScreen({ navigation}: {navigation:any}) {
     const { t } = useTranslation();
     const [modalVisible, setModalVisible] = React.useState(false);
     const [telephone, setTelephone] = React.useState({ value: '', error: '' });
+    const [code, setCode] = React.useState({ value: '', error: '' });
     const [recipantCountry, setRecipantCountry] = React.useState({ label: '🇨🇦 Canada', value: 'ca', indicator: "1" });
     const [client, setClient] = React.useState(null);
-    const { phone, idclient } = route.params;
+    const { phone, idclient } = { phone: "14388833759", idclient: "84" } //route.params;
+    
 
     console.log(route.params);
 
@@ -83,23 +85,23 @@ function ParrainageScreen({ navigation}: {navigation:any}) {
 
 
     const indicator = ()=>{
-        return '+' + recipantCountry.indicator;
+        return 'HPAY_' ;
     }
 
 
     const lauchSponsorSearch = () => {
 
 
-        const telError = telValidator(telephone.value);
+        const codeError = code.value != '' ? '' : "requiredValue";
        
-        if (telError) {
-            setTelephone({ ...telephone, error: t(`${telError}`) })
+        if (codeError) {
+            setCode({ ...telephone, error: t(`${codeError}`) })
             return
         }
 
        
         setModalVisible(true);
-        searchClientByPhoneRequest(recipantCountry.indicator + telephone.value).then((response: any) => {
+        searchClientBySponsorShipCodeRequest("HPAY_"+code.value).then((response: any) => {
 
             setModalVisible(false);
             setClient(response.data.response.data);
@@ -143,14 +145,14 @@ function ParrainageScreen({ navigation}: {navigation:any}) {
                            
                     <StepCompnent step={7} />
 
-                    <View style={styles.pageheader}>
+                   <View style={styles.pageheader}>
                         <Text style={styles.title}>{t('sponsorship.title')}</Text>
                         <Text style={styles.subtitle}>
                             {t('sponsorship.titlemsg')}
                         </Text>
                     </View>
 
-                    <View style={{  alignContent: 'flex-end', justifyContent: 'flex-end',}}>
+                    {/*<View style={{  alignContent: 'flex-end', justifyContent: 'flex-end',}}>
                          <Text style={styles.inputTitleText}>{t('sponsorship.sponsorcountry')}*</Text>
                           <View style={{ flexDirection: 'row', width: '100%',  }}>
                           <Dropdown
@@ -172,13 +174,13 @@ function ParrainageScreen({ navigation}: {navigation:any}) {
                                     setRecipantCountry(item);
                                 }}
                             />
-                               
-                        
+
+
                         </View>
-                    </View>
+                    </View>*/}
 
 
-                    <View style={{  alignContent: 'flex-end', justifyContent: 'flex-end',  marginTop:20}}>
+                    {/*<View style={{  alignContent: 'flex-end', justifyContent: 'flex-end',  marginTop:20}}>
                          <Text style={styles.inputTitleText}>{t('sponsorship.sponsoryourphone')}*</Text>
                           <View style={{ flexDirection: 'row', width: '100%',  }}>
                                 <TextInput
@@ -195,6 +197,26 @@ function ParrainageScreen({ navigation}: {navigation:any}) {
                                 />
                                
                         
+                        </View>
+                    </View>*/}
+
+                    <View style={{ alignContent: 'flex-end', justifyContent: 'flex-end', marginTop: 20 }}>
+                        <Text style={styles.inputTitleText}>{t('sponsorship.code')}*</Text>
+                        <View style={{ flexDirection: 'row', width: '100%', }}>
+                            <TextInput
+                                label={t('sponsorship.entrersponsorcode')}
+                                returnKeyType="done"
+                                value={code.value}
+                                //inputMode="numeric"
+                                error={!!code.error}
+                                errorText={code.error}
+                                onChangeText={(text: string) => setCode({ value: text, error: '' })}
+                                description={undefined}
+                                left={<Input.Affix textStyle={{ color: Colors.text }} text={indicator()} />}
+
+                            />
+
+
                         </View>
                     </View>
 

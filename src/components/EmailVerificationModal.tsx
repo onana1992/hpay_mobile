@@ -119,7 +119,7 @@ export default function EmailVerificationModal({ isVisible, onClose, phone, idcl
                         />
                     </View>
 
-                    <View style={{ flexDirection: 'row', marginTop: 10, justifyContent: 'center', alignItems: 'center' }}>
+                   {/* <View style={{ flexDirection: 'row', marginTop: 10, justifyContent: 'center', alignItems: 'center' }}>
                         <View style={styles.row}>
                             <Text style={{ color: Colors.text }}>{t('telVerificationcreen.nocode')}</Text>
                         </View>
@@ -131,7 +131,7 @@ export default function EmailVerificationModal({ isVisible, onClose, phone, idcl
                                 <Text style={styles.link}>{t('telVerificationcreen.resendcode')}</Text>
                             </TouchableOpacity>
                         </View>
-                    </View>
+                    </View>*/}
 
                 </ScrollView>
 

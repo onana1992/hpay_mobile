@@ -8,7 +8,7 @@ import React, { useEffect } from 'react';
 import { SafeAreaView, StatusBar, useColorScheme, View, Text } from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 import { PaperProvider } from 'react-native-paper';
-import StackNavigation from './src/navigation/StackNavigator';
+
 import { MenuProvider } from 'react-native-popup-menu';
 import { enGB, fr, registerTranslation } from 'react-native-paper-dates';
 import store from './src/store/store';
@@ -20,6 +20,7 @@ import { PersistGate } from 'redux-persist/integration/react';
 import { LogBox } from 'react-native';
 import Toast from 'react-native-toast-message';
 import changeNavigationBarColor from 'react-native-navigation-bar-color';
+import StackNavigation from './src/navigation/StackNavigation';
 
 registerTranslation('en-GB', enGB);
 registerTranslation('fr', fr);

@@ -21,7 +21,7 @@ export default function StepCompnent(props: any) {
                 <View style={{ flex: 1 }}/>
                 <View style={styles.step}>
                     {
-                        [1, 2, 3, 4, 6, 7].map((item, index) =>
+                        [1, 2, 3, 4, 5, 6, 7].map((item, index) =>
 
                             <View
                                 key={index.toString()}

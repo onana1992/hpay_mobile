@@ -49,6 +49,7 @@
     "iaccept": "I accept",
     "termsandconditions": "terms and conditions",
     "youalreadyhaveanaccount": "You already have an account",
+    "passwordinvalidformat": "Invalid format: \nAt least 8 characters. \nAt least one uppercase letter. \nAt least one lowercase letter.\nAt least one special character.",
     "signin": "Sign in",
     "noemptytel": "The telephone number cannot be empty",
     "nomemtypassword": "Password cannot be empty",
@@ -97,7 +98,7 @@
 
   "emailscreen": {
     "title": "Submit your email address (2FA)",
-    "titlemsg": "Your email address is necessary to be used as a second authentication factor if necessary.",
+    "titlemsg": "Your email address is necessary. It may be used, if necessary, for communication and security purposes.",
     "email": "Email",
     "youremail": "Your email address",
     "submit": "Submit",
@@ -106,8 +107,8 @@
     "cancel": "Cancel",
     "verify": "Verify",
     "veriftitle": "Let's verify your email address",
-    "verifmsg": "We sended you an verification code by email. Please enter this code to verify your email adress"
-
+    "verifmsg": "We sended you an verification code by email. Please enter this code to verify your email adress",
+    "emailalreadyused": "Email address already used"
 
   },
 
@@ -120,11 +121,13 @@
     "addassponsor": "Add",
     "cancel": "Cancel",
     "confirm": "Confirm",
-    "clientnotfound": "No client holding this phone number found",
+    "clientnotfound": "No member with this referal code found",
     "failure": "Failure",
     "confirmaddingsponsor": "Confirm adding sponsor",
     "confirmmsg": "The member linked to the number entered has been found, please enter confirm to add him as a sponsor",
-    "sponsorshipalreadyaexist": "This sponsorship already exist"
+    "sponsorshipalreadyaexist": "This sponsorship already exist",
+    "code": "Referral code",
+    "entrersponsorcode": "Enter the code of your sponsor"
   },
 
   "countryScreen": {
@@ -225,6 +228,13 @@
     "language": "Language",
     "notificationparameters": "Notification parameters",
     "logout": "Log out"
+  },
+
+  "benef": {
+    "addsuccess": "Customer has been added to your beneficiaries.",
+    "alreadyinyourbeneficiaries": "Client already added to your beneficiaries.",
+    "addlistsuccess": "Customers list  has been added to your beneficiaries."
+
   },
 
 

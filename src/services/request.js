@@ -1,7 +1,7 @@
 import { client, client2 } from "./axiosClient";
 
 
-
+// sign in request
 export function signInRequest(login, password) {
     return client.post(`/auth/signin`,
 
@@ -14,6 +14,7 @@ export function signInRequest(login, password) {
 }
 
 
+//signup request
 export function signUpRequest(login, password) {
     return client.post(`/auth/signup`,
 
@@ -27,6 +28,8 @@ export function signUpRequest(login, password) {
     );
 }
 
+
+//verification of the phone number
 export function verifyTelRequest(idLogin, code) {
     return client.post(`/auth/validate`,
 
@@ -38,6 +41,7 @@ export function verifyTelRequest(idLogin, code) {
     );
 }
 
+
 //update activation code
 export function updateActivationCodeRequest(idLogin) {
     return client.post(`/auth/updateActivationCode/${idLogin}`,
@@ -48,6 +52,7 @@ export function updateActivationCodeRequest(idLogin) {
 
     );
 }
+
 
 
 // post client identity
@@ -77,6 +82,7 @@ export function postEmailRequest(idclient,email) {
     );
 }
 
+
 // verify email
 export function verifyEmailRequest(idLogin, code) {
     return client.post(`/auth/validate/email`,
@@ -90,9 +96,21 @@ export function verifyEmailRequest(idLogin, code) {
 }
 
 
+// Renew password request
+export function passforgotUpdatePasswordRequest(phone, password) {
+    return client.get(`/auth/passwordforgot/update/${phone}/${password}`);
+}
+
+
 //search client by phone
 export function searchClientByPhoneRequest(phone) {
     return client.get(`/auth/client/search/${phone}`);
+}
+
+
+//search client by sponsorShipCode
+export function searchClientBySponsorShipCodeRequest(code) {
+    return client.get(`/auth/client/parrain/${code}`);
 }
 
 
@@ -114,10 +132,23 @@ export function getPaysRequest() {
 }
 
 
+// fetch all the country with no cities
+export function getPaysRequest1() {
+    return client.get(`/pays/allwithnocity`);
+}
+
+
+// fetch all the cities
+export function getVilleRequest(idPays) {
+    return client.get(`/ville/pays/${idPays}`);
+}
+
+
 //password forgot code request
 export function passforgotCodeRequest(phone) {
     return client.get(`/auth/passwordforgot/requestcode/${phone}`);
 }
+
 
 
 //verify phone number for passord recover
@@ -126,10 +157,21 @@ export function passforgotVerifyPhoneRequest(phone,code) {
 }
 
 
-//update  the  password
-export function passforgotUpdatePasswordRequest(phone, newPassword) {
-    return client.get(`/auth/passwordforgot/update/${phone}/${newPassword}`);
+
+
+//add sponsorship to a new client
+export function removeClientRequest(idClient, idBenef) {
+    return client.post(`/benef/remove`,
+
+        {
+            "idclient": idClient, 
+            "idbenef": idBenef
+        }
+
+    );
 }
+
+
 
 
 //Save kyc
@@ -146,6 +188,72 @@ export function saveKyc(formData) {
     );
 
 }
+
+
+// fetch list of beneficiaries
+export function fetchBeficiariesRequest(IdLoginClient) {
+    return client.get(`/benef/list/${IdLoginClient}`);
+}
+
+
+
+//add beneficiaire
+export function addBenefRequest(idLoginClient, idLoginBeneficiaire) {
+    return client.post(`/benef/add`,
+
+        {
+            "idclient": idLoginClient,
+            "idbenef": idLoginBeneficiaire
+        }
+
+    );
+}
+
+
+// fetch list of beneficiaries
+
+export function fetchBeficiariesInMyContactRequest(IdLoginClient, PhoneList) {
+    return client.post(`/benef/incontact/list`,
+
+        {
+            "idclient": IdLoginClient, //idloginClient
+            "list": PhoneList
+        }
+
+    );
+}
+
+
+
+
+// add a list of beneficiarres
+export function addBenefListRequest(idLoginClient,listIdClients) {
+    return client.post(`/benef/incontact/list/add/${idLoginClient}`,
+
+        {
+            "beneficiaireIds": listIdClients,
+        }
+
+    );
+}
+
+
+
+// fetch currency rate 
+export function currencyRateRequest(currencyFrom, currencyTo) {
+    return client.post(`https://taux.hpaytest.cash/calculate_rate/calculate_rate.php`,
+
+        {
+            
+            "currencyFrom": currencyFrom,
+            "currencyTo": currencyTo
+        
+        }
+
+    );
+}
+
+
 
 
 

@@ -46,7 +46,6 @@ function IdentityScreen({ navigation}: {navigation:any}) {
     const { phone, idclient } = route.params;
 
 
-    console.log(phone);
 
     function formatDate(val:any) {
 
@@ -90,8 +89,9 @@ function IdentityScreen({ navigation}: {navigation:any}) {
         })
 
 
-
     }
+
+
 
     return (
 

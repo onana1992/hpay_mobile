@@ -44,7 +44,11 @@ function PhotoProfilScreen({ navigation }: { navigation: any }) {
     const [fileName, setFileName] = React.useState<string>('');
     const [filePath, setFilePath] = React.useState<string>('');
     const [visible, setVisible] = React.useState(false);
-    const {phone, idclient } = route.params;
+    const { phone, idclient } = route.params;
+
+    // { phone: "14388833759", idclient: "105s" }
+
+           
     const BASE_URL = 'http://10.0.0.133:5000/api';
     const [modalVisible, setModalVisible] = React.useState(false);
    
@@ -205,23 +209,26 @@ function PhotoProfilScreen({ navigation }: { navigation: any }) {
 
     }
 
-    const sendpicture = async () => {
 
-      
+
+    const sendpicture = async () => {
 
         let form_data = new FormData();
         let filename = filePath?.split('/').pop();
         let match = /\.(\w+)$/.exec(filename);
         let type = match ? `image/${match[1]}` : 'image';
 
-        console.log(type);
-        console.log(idclient);
-        console.log(fileName);
 
-        form_data.append('photo', { uri: filePath, name: filename, type: type });
+        form_data.append('photo',
+            {
+                uri: filePath,
+                name: filename,
+                type: type
+            }
+        );
+
         setModalVisible(true);
 
-        console.log(`${BASE_URL}/auth/upload-photo/${idclient}`);
 
         axios.post(`${BASE_URL}/auth/upload-photo/${idclient}`, form_data, {
             headers: {
@@ -229,11 +236,9 @@ function PhotoProfilScreen({ navigation }: { navigation: any }) {
             },
         }).then(response => {
 
-           // console.log(response.data);
             setModalVisible(false);
             navigation.navigate('ParrainageScreen', { phone: phone, idclient: idclient })
         
-
         }).catch(function (error) {
             setModalVisible(false);
             console.log(error.response)
@@ -263,7 +268,7 @@ function PhotoProfilScreen({ navigation }: { navigation: any }) {
 
                         <View style={styles.avatar}>
                             <Image
-                                source={filePath ? { uri: filePath } : require('../../assets/avatar.jpg')}
+                            source={filePath!='' ? { uri: filePath } : require('../../assets/avatar.jpg')}
                                 style={styles.avatarImage}
                             />
                             <TouchableOpacity style={styles.addButton} onPress={() => setVisible(true)} >

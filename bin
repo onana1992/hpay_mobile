@@ -1,0 +1,184 @@
+
+    /*const DATA = [
+        {
+            jour: '15/03/2024',
+            data: [
+                {
+                    nom: 'Kasavubu',
+                    prenom: 'Henry Xavy',
+                    numCompte: '12457924798',
+                    type: 'Virement interne entrant',
+                    montant: +500,
+                    time: '10:30 AM',
+                },
+                {
+                    nom: 'Mastadi',
+                    prenom: 'Roland Joel',
+                    numCompte: '3454574798',
+                    type: 'Virement externe sortant',
+                    montant: -500,
+                    time: '11:45 AM',
+                },
+            ],
+        },
+
+        {
+            jour: '16/03/2024',
+            data: [
+                {
+                    nom: 'Deschamps',
+                    prenom: 'Jean charle',
+                    numCompte: '3724574788',
+                    type: 'Transfert Sortant',
+                    montant: -1000,
+                    time: '09:30 AM',
+                },
+                {
+                    nom: 'Benze',
+                    prenom: 'Olivier Chamberlin',
+                    numCompte: '37235774788',
+                    type: 'Recharge',
+                    montant: +3000,
+                    time: '12:30 AM',
+                },
+            ],
+        },
+
+        {
+            jour: '17/03/2024',
+            data: [
+                {
+                    nom: 'Abene',
+                    prenom: 'Lous De paul',
+                    type: 'Virement interne entrant',
+                    montant: +3000,
+                    numCompte: '372357747848',
+                    time: '09:30 AM',
+                },
+                {
+                    nom: 'Deschamps',
+                    prenom: 'Jean charle',
+                    type: 'Virement externe  entrant',
+                    numCompte: '372357747848',
+                    montant: +3000,
+                    time: '10:30 PM',
+                },
+            ],
+        },
+
+        {
+            jour: '18/03/2024',
+            data: [
+                {
+                    nom: 'Sage',
+                    prenom: 'Paul Alain',
+                    type: 'Virement interne entrant',
+                    numCompte: '372937747888',
+                    montant: +700,
+                    time: '10:30 PM',
+                },
+                {
+                    nom: 'Montana',
+                    prenom: 'Alexia Ciara',
+                    type: 'Transfert sortant',
+                    numCompte: '37293445747888',
+                    montant: -300,
+                    time: '10:30 PM',
+                },
+            ],
+        },
+    ];*/
+
+    /*const RECIPENTS = [
+
+        {
+            id: '0',
+            prenom: 'Henry Xavy',
+        },
+
+        {
+            id: '1',
+            prenom: 'Jean charle',
+        },
+
+        {
+            id: '3',
+            prenom: 'Lous De paul',
+        },
+
+        {
+            id: '4',
+            prenom: 'Jean charle',
+        },
+
+    ];*/
+
+    /* const AmountView = ({ amount }) => {
+         return (
+             <Currency
+                 quantity={amount}          // Required
+                 //currency=""            // Optional (USD by default)
+                 //locale="en_EN"            // Optional
+                 pattern="##,### !"        // Optional
+                 decimal=","               // Optional
+                 group=" "                 // Optional
+             />
+         );
+     };*/
+
+
+    /* const RenderRow = ({ item }) => {
+ 
+         return (
+ 
+             <View style={{ flexDirection: 'row', minHeight: 80, padding: 10, borderBottomColor: 'gray', borderBottomWidth: 0.5 }}>
+ 
+                 <View style={{ flex: 2, }}>
+                     <Image
+                         source={require('../../assets/avatar.jpg')}
+                         style={{
+                             height: 40,
+                             width: 40,
+                             overflow: 'hidden',
+                             borderColor: 'gray',
+                             borderWidth: 1,
+                             borderRadius: 20,
+                         }}
+                     />
+                 </View>
+ 
+                 <View style={{ flex: 7.5, paddingLeft: 8 }}>
+                     <Text style={{ color: "black", fontSize: 14, fontWeight: 'bold' }} numberOfLines={1}>
+                         {item.prenom} {item.nom}
+                     </Text>
+                     {*//*<Text style={{ color: "black", fontSize: 13 }}>{item.numCompte} </Text>*//*}
+    <Text style={{ color: "black", fontSize: 13 }}>{item.type}</Text>
+    <Text style={{ color: "gray", fontSize: 12 }}>{item.time} </Text>
+</View>
+
+<View style={{ flex: 3.5, justifyContent: 'center', alignItems: 'flex-end' }}>
+    <Text style={item.montant > 0 ? styles.entrant : styles.sortant}> {item.montant} HTC   </Text>
+</View>
+</View>
+);
+};*/
+
+    /*const RecipientItem = ({ item }) => {
+
+        return (
+            <View style={{ marginHorizontal: 20, justifyContent: 'center', alignItems: 'center' }} >
+                <Image
+                    source={require('../../assets/avatar.jpg')}
+                    style={{
+                        height: 40,
+                        width: 40,
+                        overflow: 'hidden',
+                        borderColor: 'gray',
+                        borderWidth: 1,
+                        borderRadius: 20,
+                    }}
+                />
+                <Text style={{ color: Colors.text, paddingTop: 5, fontWeight: 500 }}>{item.prenom}</Text>
+            </View>
+        );
+    };*/
