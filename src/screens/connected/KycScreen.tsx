@@ -45,7 +45,7 @@ function KycScreen({ navigation, user }: { navigation: any, user: any }) {
     const { height } = Dimensions.get('window');
     const [step, setStep] = React.useState(1);
     const { t } = useTranslation();
-    const [pays, setPays] = React.useState([]);
+    //const [pays, setPays] = React.useState([]);
     const [isLoading, setIsloading] = React.useState(false);
     var date = new Date(user.client.dateNaissance);
     const [modalVisible, setModalVisible] = React.useState(false);
@@ -76,33 +76,13 @@ function KycScreen({ navigation, user }: { navigation: any, user: any }) {
 
 
 
-    /*const paysRequest = () => {
-
-        setIsloading(true);
-        getPaysRequest().then((response: any) => {
-
-            if (response.data.success === true) {
-                setPays(response.data.data);
-            } else {
-
-            }
-
-            setIsloading(false);
-
-        }).catch((_error: any) => {
-
-             setIsloading(false);
-            // console.log(error);
-            
-        })
-    }*/
 
     const kycSaveRequest = () => {
 
 
         let form_data = new FormData();
 
-       /* console.log('id', data.idclient);
+        /*console.log('id', data.idclient);
         console.log('nom', data.nom);
         console.log('prenom', data.prenoms);
         console.log('genre', data.sexe);
@@ -118,7 +98,7 @@ function KycScreen({ navigation, user }: { navigation: any, user: any }) {
         console.log('recto', data.photo_piece_recto);
         console.log('verso', data.photo_piece_verso);
         console.log('address', data.adresse);
-        console.log('lieu_naiss', data.idclient);*/
+        console.log('expire_piece', data.expire_piece);*/
 
         form_data.append('id', data.idclient);
         form_data.append('nom', data.nom);
@@ -128,13 +108,14 @@ function KycScreen({ navigation, user }: { navigation: any, user: any }) {
         form_data.append('date_naiss', data.date_naissance);
         form_data.append('nationalite', data.nationalite);
         form_data.append('pays_id', data.pays);
-        form_data.append('ville _id', data.idclient);
+        form_data.append('ville _id', data.ville);
         form_data.append('telephone1', data.telephone);
         form_data.append('telephone2', data.telephone2);
         form_data.append('id_type', data.idtype_piece);
         form_data.append('numero_id', data.num_piece);
         form_data.append('address', data.adresse);
         form_data.append('lieu_naiss', data.lieu_naissane);
+        form_data.append('expire_piece', data.expire_piece);
         
 
      
@@ -155,9 +136,9 @@ function KycScreen({ navigation, user }: { navigation: any, user: any }) {
         
        
 
-        setModalVisible(true);
+       // setModalVisible(true);
 
-        saveKyc(form_data).then((response: any) => {
+       saveKyc(form_data).then((response: any) => {
 
             if (response.data.statusCode === 200) {
                 setModalVisible(false);
@@ -209,7 +190,8 @@ function KycScreen({ navigation, user }: { navigation: any, user: any }) {
             <ScrollView>
 
                 {
-                    user.kycStatus === 'EN_ATTENTE' &&
+                    // user.kycStatus === 'EN_ATTENTE' &&
+                    user.client.valider === '0' &&
                     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'flex-start', marginTop: 70 }}>
                         <Image
                             source={require('../../assets/synergy.png')}
@@ -224,7 +206,8 @@ function KycScreen({ navigation, user }: { navigation: any, user: any }) {
 
 
                 {
-                    user.kycStatus === 'VALIDE' &&
+                    //user.kycStatus === 'VALIDE' &&
+                    user.client.valider === '1' &&
                     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'flex-start', marginTop: 70 }}>
                         <Image
                             source={require('../../assets/check-mark.png')}
@@ -239,7 +222,8 @@ function KycScreen({ navigation, user }: { navigation: any, user: any }) {
 
 
                 {
-                    (user.kycStatus === 'NON_SOUMIS' || user.kycStatus === 'NON_VALIDE')  &&
+                    // (user.kycStatus === 'NON_SOUMIS' || user.kycStatus === 'NON_VALIDE')  &&
+                    user.client.valider !== '0' && user.client.valider !== '1' && 
                     <ScrollView>
                         
                             {

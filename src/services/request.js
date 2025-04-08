@@ -15,14 +15,14 @@ export function signInRequest(login, password) {
 
 
 //signup request
-export function signUpRequest(login, password) {
+export function signUpRequest(login, password, idPays, idCountry) {
     return client.post(`/auth/signup`,
 
         {
             "login": login,
             "password": password,
-            "idPays": 9,
-            "idVille": 560
+            "idPays": idPays,
+            "idVille": idCountry
         }
 
     );
@@ -71,6 +71,7 @@ export function PostIdentityRequest(idclient, name, firstName, sex, dateNaiss) {
 }
 
 
+
 // add email to a client
 export function postEmailRequest(idclient,email) {
     return client.post(`/auth/2faemail/${idclient}/${email}`,
@@ -108,10 +109,12 @@ export function searchClientByPhoneRequest(phone) {
 }
 
 
+
 //search client by sponsorShipCode
 export function searchClientBySponsorShipCodeRequest(code) {
     return client.get(`/auth/client/parrain/${code}`);
 }
+
 
 
 //add sponsorship to a new client
@@ -157,8 +160,6 @@ export function passforgotVerifyPhoneRequest(phone,code) {
 }
 
 
-
-
 //add sponsorship to a new client
 export function removeClientRequest(idClient, idBenef) {
     return client.post(`/benef/remove`,
@@ -170,7 +171,6 @@ export function removeClientRequest(idClient, idBenef) {
 
     );
 }
-
 
 
 
@@ -188,6 +188,7 @@ export function saveKyc(formData) {
     );
 
 }
+
 
 
 // fetch list of beneficiaries
@@ -224,8 +225,6 @@ export function fetchBeficiariesInMyContactRequest(IdLoginClient, PhoneList) {
 }
 
 
-
-
 // add a list of beneficiarres
 export function addBenefListRequest(idLoginClient,listIdClients) {
     return client.post(`/benef/incontact/list/add/${idLoginClient}`,
@@ -236,6 +235,81 @@ export function addBenefListRequest(idLoginClient,listIdClients) {
 
     );
 }
+
+export function addCardRequest(idCompte, idLoginClient, numCarte, dateCreation, dateExpire, pin, idClients, ip ) {
+    return client.post(`/compte/addCarte/${idCompte}/${idLoginClient}`,
+
+        {   
+            "numCarte": numCarte,
+            "frais": 0,
+            "dateCreation": dateCreation,
+            "dateExpire": dateExpire,
+            "pin": pin,
+            "typeCarte": "CARTE_HPAY",
+            "idAgence": 2,
+            "idCommercial": 0,
+            "idGestionnaire": 0,
+            "idClients": idClients,
+            "ip": ip
+        }
+
+    );
+}
+
+
+export function modifyCardRequest(idCompte, numCarte, dateCreation, dateExpire, pin) {
+    return client.post(`/compte/modifyCarte/${idCompte}`,
+
+        {
+            "numCarte": numCarte,
+            "frais": 0,
+            "dateCreation": dateCreation,
+            "dateExpire": dateExpire,
+            "pin": pin,
+            "typeCarte": "CARTE_HPAY"
+        }
+
+    );
+}
+
+
+
+
+
+export function modifyPinRequest(idCompte, idLoginClient, pin, ip) {
+    return client.post(`/compte/modifyPin/${idCompte}/${idLoginClient}`,
+
+        {
+            "pin": pin,
+            "ip": ip
+        }
+
+    );
+}
+
+
+
+
+export function deleteCardRequest(idCard, idloginClient, ipAdress) {
+    return client.post(`/compte/deleteCarte/${idCard}/${idloginClient}`,
+        {
+            "ip": ipAdress,
+        }
+    );
+}
+
+
+
+export function toogleActivationRequest(idCard, idloginClient, ipAdress) {
+    
+    return client.post(`/compte/toggleActive/${idCard}/${idloginClient}`,
+        {
+            "ip": ipAdress,
+
+        }
+    );
+}
+
 
 
 
@@ -252,8 +326,6 @@ export function currencyRateRequest(currencyFrom, currencyTo) {
 
     );
 }
-
-
 
 
 

@@ -1,4 +1,6 @@
-﻿/* eslint-disable quotes */
+﻿/* eslint-disable @typescript-eslint/no-shadow */
+/* eslint-disable eqeqeq */
+/* eslint-disable quotes */
 /* eslint-disable curly */
 /* eslint-disable no-alert */
 /* eslint-disable react/no-unstable-nested-components */
@@ -20,28 +22,20 @@ import {
     Platform,
     Keyboard,
     ScrollView,
+    Alert,
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Colors } from '../../themes';
 import { useSelector, useDispatch } from 'react-redux';
-import Button from '../../components/Button';
-import TextInput from '../../components/TextInput';
-import { TextInput as Input } from 'react-native-paper';
 import { useRoute } from '@react-navigation/native';
-import { modifyCardRequest, searchClientByPhoneRequest } from '../../services/request';
+import { modifyPinRequest, toogleActivationRequest } from '../../services/request';
+import { searchClientByPhoneRequest } from '../../services/request';
 import Toast from 'react-native-toast-message';
 import LoadingModal from '../../components/LoadingModal';
 import { saveAccount, signIn } from '../../store/profilSlice';
+import { useTranslation } from 'react-i18next';
+import { Switch } from 'react-native-paper';
 import { NetworkInfo } from 'react-native-network-info';
-
-
-
-function numeroValidator(numero: string) {
-    if (!numero) return "signupscreen.requiredvalue";
-    if (numero.length < 16) return "account.numerolessthan16";
-    if (numero.slice(0, 2) !== "57") return "account.mustStartwith57";
-    return '';
-}
 
 
 function pinValidator(pin: string) {
@@ -51,7 +45,7 @@ function pinValidator(pin: string) {
 }
 
 
-function ModifierCardScreen({ navigation }: { navigation: any }) {
+function ActivationCarteScreen({ navigation }: { navigation: any }) {
 
 
     const route = useRoute<any>();
@@ -64,16 +58,19 @@ function ModifierCardScreen({ navigation }: { navigation: any }) {
     const [modalVisible, setModalVisible] = React.useState(false);
     const dispatch = useDispatch();
     var newAccount: any = null;
-    const [ipAdress, setIpAddress] = React.useState<string|null>("");
+    const { t } = useTranslation();
+    const [isSwitchOn, setIsSwitchOn] = React.useState(account.compte.carteClientQr.actif == '1');
+    const [ipAdress, setIpAddress] = React.useState<string | null>("");
 
-    //console.log(account.compte.carteClientQr);
+    console.log(account.compte.idCompte);
+
 
     React.useEffect(() => {
+
         NetworkInfo.getIPAddress()
             .then(ip => setIpAddress(ip))
             .catch(error => console.error(error));
     }, []);
-
 
 
     const cancel = () => {
@@ -82,71 +79,41 @@ function ModifierCardScreen({ navigation }: { navigation: any }) {
 
 
 
-    function getCurrentDate() {
-        const today = new Date();
-        const year = today.getFullYear();
-        const month = String(today.getMonth() + 1).padStart(2, '0'); // Get month and pad it with leading zero if necessary
-        const day = String(today.getDate()).padStart(2, '0'); // Get day and pad it with leading zero if necessary
-        return `${year}-${month}-${day}`;
-    }
+    const disableCard = () => {
+        Alert.alert('', t('account.areyousureyouwanttodisablethiscard'), [
+            {
+                text: t('no'),
+                onPress: () => console.log('Cancel Pressed'),
+                style: 'cancel',
+            },
+            { text: t('yes'), onPress: () => toggleCardPin() },
+        ]);
+    };
 
 
+    const onToggleSwitch = () => {
 
-    function getDatePlusTwoYears() {
-        const today = new Date();
-        today.setFullYear(today.getFullYear() + 2); // Add 2 years
-        const year = today.getFullYear();
-        const month = String(today.getMonth() + 1).padStart(2, '0'); // Get month and pad it with leading zero if necessary
-        const day = String(today.getDate()).padStart(2, '0'); // Get day and pad it with leading zero if necessary
-        return `${year}-${month}-${day}`;
-    }
-
-
-
-    const onSubmitPressed = () => {
-
-        const numeroError = numeroValidator(numero.value);
-        const pinError = pinValidator(pin.value);
-
-
-        if (numeroError || pinError) {
-            setNumero({ ...numero, error: numeroError });
-            setPin({ ...pin, error: pinError });
-            return;
-        }
-
-        if (numero.value.length !== 16) {
-
-            return;
-
-        } else if (numero.value.slice(0, 2) !== "57") {
-
-            return;
-
-        }
-        else {
-
-            saveCard();
+        if (account.compte.carteClientQr.actif == '1') {
+            disableCard();
+        } else {
+            toggleCardPin();
 
         }
 
     };
 
 
-
-    const saveCard = () => {
+    const toggleCardPin = () => {
 
         setModalVisible(true);
-        modifyCardRequest(
+        toogleActivationRequest(
             account.compte.idCompte,
-            numero.value, getCurrentDate(),
-            getDatePlusTwoYears(),
+            user.idLoginClient,
             pin.value,
         ).then((response: any) => {
 
-            console.log(response.data);
-            //dispatch(signIn(response.data.response.data));
             getClient();
+            setIsSwitchOn(!isSwitchOn);
 
         }).catch((error: any) => {
 
@@ -157,7 +124,7 @@ function ModifierCardScreen({ navigation }: { navigation: any }) {
                 position: 'top',
             });
             setModalVisible(false);
-            console.log(error);
+            console.log(error.response.data);
         });
 
     };
@@ -171,9 +138,7 @@ function ModifierCardScreen({ navigation }: { navigation: any }) {
         }).catch((error: any) => {
 
         });
-
     };
-
 
 
     const fetchAccount = (parmUser: any) => {
@@ -241,6 +206,7 @@ function ModifierCardScreen({ navigation }: { navigation: any }) {
         });
 
 
+
         let newCompte = newAccountsList.find((acc: any) => {
             if (account.id == acc.id) {
                 return acc;
@@ -268,17 +234,28 @@ function ModifierCardScreen({ navigation }: { navigation: any }) {
             return "Dollard Americain";
         }
 
-
         else if (account.compte.devise == 'EUR') {
             return "Euro";
         }
-
 
         else if (account.compte.devise == 'GBP') {
             return "Livre Sterling";
         }
 
     };
+
+
+
+    const EmptyCard = () => {
+        return (
+            <View style={styles.emptycard}>
+                <Text style={{ color: Colors.text }}> Aucune carte enregistré </Text>
+            </View>
+        );
+    };
+
+
+
 
 
     return (
@@ -302,7 +279,7 @@ function ModifierCardScreen({ navigation }: { navigation: any }) {
             <ScrollView>
 
                 <View style={{}}>
-                    <Text style={styles.title}>Modifier la carte associée votre compte</Text>
+                    <Text style={styles.title}>{t('account.enabledisable')}</Text>
                 </View>
 
 
@@ -333,59 +310,26 @@ function ModifierCardScreen({ navigation }: { navigation: any }) {
                         </View>
 
 
-                        <View style={{ flex: 1, alignContent: 'flex-start', justifyContent: 'flex-start' }}>
-                            <Text style={styles.inputTitleText}>Numéro de la carte*</Text>
-                            <View style={{ flexDirection: 'row', width: '100%', }}>
-                                <TextInput
-                                    label={'Entrez le numéro de la carte'}
-                                    //returnKeyType="next"
-                                    value={numero.value}
-                                    inputMode="numeric"
-                                    onChangeText={(text: string) => setNumero({ value: text, error: '' })}
-                                    error={!!numero.error}
-                                    errorText={numero.error}
-                                    autoCapitalize="none"
-                                    description={undefined}
-                                />
-                            </View>
-                        </View>
 
                         <View style={{ flex: 1, alignContent: 'flex-start', justifyContent: 'flex-start', marginTop: 20 }}>
-                            <Text style={styles.inputTitleText}>Code pin*</Text>
-                            <View style={{ flexDirection: 'row', width: '100%', }}>
-                                <TextInput
-                                    label={'entrez le code pin'}
-                                    //returnKeyType="done"
-                                    inputMode="numeric"
-                                    value={pin.value}
-                                    onChangeText={(text: string) => setPin({ value: text, error: '' })}
-                                    error={!!pin.error}
-                                    errorText={pin.error}
-                                    secureTextEntry={!pinShow}
-                                    maxLength={4}
-                                    right={<Input.Icon icon={!pinShow ? 'eye-off' : 'eye'} onPress={() => { setPinShow(!pinShow) }} />}
-                                    description={undefined}
+                            <Text style={styles.inputTitleText}>Activer/Désactiver*</Text>
+                            <View style={{ flexDirection: 'row', width: '100%', marginTop:10 }}>
+                                <Switch
+                                    value={isSwitchOn}
+                                    onValueChange={onToggleSwitch}
+                                    color={isSwitchOn ? Colors.primary : '#9e9e9e'}
+                                    style={styles.switch}
                                 />
                             </View>
                         </View>
 
-
-
-                        <View style={{ width: '100%', marginTop: 20 }}>
-                            <Button
-                                mode="contained"
-                                onPress={() => { onSubmitPressed() }}
-                            >
-                                Enregistrer
-                            </Button>
-                        </View>
 
                     </Pressable>
 
-
+                    <LoadingModal setModalVisible={setModalVisible} modalVisible={modalVisible} />
                 </KeyboardAvoidingView>
 
-                <LoadingModal setModalVisible={setModalVisible} modalVisible={modalVisible} />
+
             </ScrollView>
 
 
@@ -477,7 +421,11 @@ const styles = StyleSheet.create({
         borderRadius: 20,
     },
 
+    switch: {
+        transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }], // Custom scale for size
+    },
+
 });
 
 
-export default ModifierCardScreen;
+export default ActivationCarteScreen;

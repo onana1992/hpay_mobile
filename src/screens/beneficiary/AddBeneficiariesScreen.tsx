@@ -147,7 +147,7 @@ function AddBeneficiariesScreen({ navigation }: { navigation: any }) {
 
         // Retourne les initiales des deux premiers mots en majuscule
         return words[0][0].toUpperCase() + words[1][0].toUpperCase();
-    }
+    };
 
 
 
@@ -174,7 +174,6 @@ function AddBeneficiariesScreen({ navigation }: { navigation: any }) {
                     </TouchableOpacity>
 
                     <View>
-                        
                     </View>
                 </View>
             </View>
@@ -211,8 +210,8 @@ function AddBeneficiariesScreen({ navigation }: { navigation: any }) {
                             <TouchableOpacity onPress={() => { setmessageVisible(false) }}>
                                 <Ionicons name="close-outline" color={Colors.text} size={22} />
                             </TouchableOpacity>
-                            <View style={{ marginLeft:5, paddingHorizontal:5 }}>
-                                <Text style={{ color: Colors.text }}>Entrez le numéro de télephone avec l'indicatif du pays. Ex: 14388833759</Text>
+                            <View style={{paddingHorizontal:5 }}>
+                                <Text style={{ color: Colors.text, paddingHorizontal:5 }}>Entrez le numéro de télephone avec l'indicatif du pays. Ex: 14388833759</Text>
                             </View>
                         </View>
                     }
@@ -253,7 +252,7 @@ function AddBeneficiariesScreen({ navigation }: { navigation: any }) {
                         {
                             !client &&
                             <View style={{ alignItems: 'center', marginTop: 20, width: "100%", }}>
-                                    <EmptySearch/>
+                                    {/*<EmptySearch/>*/}
                             </View>
                         }
                     </View>

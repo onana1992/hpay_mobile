@@ -1,3 +1,5 @@
+ï»¿/* eslint-disable eqeqeq */
+/* eslint-disable quotes */
 /* eslint-disable curly */
 /* eslint-disable no-alert */
 /* eslint-disable react/no-unstable-nested-components */
@@ -14,44 +16,56 @@ import {
     TouchableOpacity,
     Image,
     Text,
-    Alert,
     KeyboardAvoidingView,
     Pressable,
     Platform,
     Keyboard,
-    ScrollView
+    ScrollView,
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import MaterialIcons from 'react-native-vector-icons/Ionicons';
 import { Colors } from '../../themes';
 import { useSelector, useDispatch } from 'react-redux';
 import Button from '../../components/Button';
 import TextInput from '../../components/TextInput';
 import { TextInput as Input } from 'react-native-paper';
 import { useRoute } from '@react-navigation/native';
-
-
-function numeroValidator(numero: string) {
-    if (numero) return "signupscreen.requiredvalue"
-    /*if (tel.length < 5) return 'Le numero de telephone doit avoir au moins 5 caracteres'*/
-    return ''
-}
+import { modifyPinRequest } from '../../services/request';
+import { searchClientByPhoneRequest } from '../../services/request';
+import Toast from 'react-native-toast-message';
+import LoadingModal from '../../components/LoadingModal';
+import { saveAccount, signIn } from '../../store/profilSlice';
+import { NetworkInfo } from 'react-native-network-info';
 
 
 function pinValidator(pin: string) {
-    if (pin) return "signupscreen.requiredvalue"
-    /*if (tel.length < 5) return 'Le numero de telephone doit avoir au moins 5 caracteres'*/
-    return ''
+    if (!pin) return "signupscreen.requiredvalue";
+    if (pin.length < 4) return "account.pinlessthan4";
+    return '';
 }
 
 
 function ModifyCardPinScreen({ navigation }: { navigation: any }) {
 
+
     const route = useRoute<any>();
-    const [numero, setNumero] = React.useState({ value: '', error: '' });
-    const [pin, setPin] = React.useState({ value: '', error: '' });
-    const [pinShow, setPinShow] = React.useState(false);
     const { account } = route.params;
+    const accounts = useSelector((state: any) => state.profil.accounts);
+    const [numero, setNumero] = React.useState({ value: account.compte.carteClientQr.numCarte, error: '' });
+    const [pin, setPin] = React.useState({ value: account.compte.carteClientQr.pin, error: '' });
+    const [pinShow, setPinShow] = React.useState(false);
+    const user = useSelector((state: any) => state.profil.user);
+    const [modalVisible, setModalVisible] = React.useState(false);
+    const dispatch = useDispatch();
+    const [ipAdress, setIpAddress] = React.useState<string|null>("");
+    var newAccount: any = null;
+
+
+
+    React.useEffect(() => {
+        NetworkInfo.getIPAddress()
+            .then(ip => setIpAddress(ip))
+            .catch(error => console.error(error));
+    }, []);
 
 
     const cancel = () => {
@@ -61,41 +75,179 @@ function ModifyCardPinScreen({ navigation }: { navigation: any }) {
 
 
     const onSubmitPressed = () => {
+
         const pinError = pinValidator(pin.value);
 
         if ( pinError) {
-            setNumero({ ...numero, error: numeroError });
-            return
+            setPin({ ...pin, error: pinError });
+            return;
         }
-    }
+
+        else {
+
+            modifyPin();
+
+        }
+
+    };
+
+
+    const modifyPin = () => {
+
+        setModalVisible(true);
+        modifyPinRequest(
+            account.compte.idCompte,
+            user.idLoginClient,
+            pin.value,
+            ipAdress
+        ).then((response: any) => {
+
+            getClient();
+
+        }).catch((error: any) => {
+
+            Toast.show({
+                type: 'error',
+                text1: 'EChec',
+                text2: "Card non enregistrÃ©e",
+                position: 'top',
+            });
+            setModalVisible(false);
+            //console.log(error);
+        });
+
+    };
+
+
+
+    const getClient = () => {
+
+        searchClientByPhoneRequest(user.login).then((response: any) => {
+            dispatch(signIn(response.data.response.data));
+            fetchAccount(response.data.response.data);
+            Toast.show({
+                type: 'success',
+                text1: 'SuccÃ¨s',
+                text2: "Code pin modifiÃ©",
+                position: 'top',
+            });
+        }).catch((error: any) => {
+
+        });
+    };
+
+
+
+    const fetchAccount = (parmUser: any) => {
+
+        const mainAccount = parmUser.client.comptes.find((account: any) => {
+            if (account.typeCompte.idTypeCompte === 6) {
+                return true;
+            }
+        });
+
+        const otherAccounts = parmUser.client.comptes.filter((account: any) => {
+
+            if (account.typeCompte.idTypeCompte !== 6 && account.typeCompte.idTypeCompte !== 2) {
+
+                return account;
+            }
+
+        });
+
+
+        let allAccount = [];
+        allAccount.push(mainAccount);
+
+        for (const acc of otherAccounts) {
+            allAccount.push(acc);
+        }
+
+
+        const newAccountsList = allAccount.map((account: any) => {
+
+
+            if (account.typeCompte.idTypeCompte == 6) {
+                return {
+                    id: account.typeCompte.idTypeCompte,
+                    icon: require('../../assets/cad.png'),
+                    compte: account,
+                };
+            }
+
+            else if (account.typeCompte.idTypeCompte == 1) {
+                return {
+                    id: account.typeCompte.idTypeCompte,
+                    icon: require('../../assets/us.png'),
+                    compte: account,
+                };
+            }
+
+            else if (account.typeCompte.idTypeCompte == 4) {
+                return {
+                    id: account.typeCompte.idTypeCompte,
+                    icon: require('../../assets/ue.png'),
+                    compte: account,
+                };
+            }
+
+            else if (account.typeCompte.idTypeCompte == 5) {
+                return {
+                    id: account.typeCompte.idTypeCompte,
+                    icon: require('../../assets/gb.png'),
+                    compte: account,
+                };
+            }
+
+
+        });
+
+
+
+        let newCompte = newAccountsList.find((acc: any) => {
+            if (account.id == acc.id) {
+                return acc;
+            }
+        });
+
+        dispatch(saveAccount(newAccountsList));
+        setTimeout(() => {
+            setModalVisible(false);
+            navigation.navigate("CardDetail", { account: newCompte });
+        }, 1000);
+
+    };
+
+
+
 
     const accountName = (account: any) => {
 
         if (account.compte.devise == "CAD") {
-            return "Dollard Canadien"
+            return "Dollard Canadien";
         }
 
 
         else if (account.compte.devise == "USD") {
-            return "Dollard Americain"
+            return "Dollard Americain";
         }
 
         else if (account.compte.devise == 'EUR') {
-            return "Euro"
+            return "Euro";
         }
 
         else if (account.compte.devise == 'GBP') {
-            return "Livre Sterling"
+            return "Livre Sterling";
         }
 
-    }
+    };
 
 
 
     const EmptyCard = () => {
         return (
             <View style={styles.emptycard}>
-                <Text style={{ color: Colors.text }}> Aucune carte enregistré </Text>
+                <Text style={{ color: Colors.text }}> Aucune carte enregistrÃ© </Text>
             </View>
         );
     };
@@ -125,7 +277,7 @@ function ModifyCardPinScreen({ navigation }: { navigation: any }) {
             <ScrollView>
 
                 <View style={{}}>
-                    <Text style={styles.title}>Modifier la carte associée votre compte</Text>
+                    <Text style={styles.title}>Modifier le code pin de votre carte</Text>
                 </View>
 
 
@@ -136,6 +288,7 @@ function ModifyCardPinScreen({ navigation }: { navigation: any }) {
                 >
                     <Pressable onPress={Keyboard.dismiss}>
 
+                        <Text style={[styles.inputTitleText, { marginBottom: 0 }]}>Compte</Text>
                         <View style={styles.account} >
                             <View style={{ width: '60%', padding: 5 }} >
                                 <View style={{ flex: 1, flexDirection: 'row', height: 40, alignItems: 'center', justifyContent: 'flex-start' }}>
@@ -155,23 +308,6 @@ function ModifyCardPinScreen({ navigation }: { navigation: any }) {
                         </View>
 
 
-                        {/*<View style={{ flex: 1, alignContent: 'flex-start', justifyContent: 'flex-start' }}>
-                            <Text style={styles.inputTitleText}>Numéro de la carte*</Text>
-                            <View style={{ flexDirection: 'row', width: '100%', }}>
-                                <TextInput
-                                    label={'Entrez le numéro de la carte'}
-                                    //returnKeyType="next"
-                                    value={numero.value}
-                                    inputMode="numeric"
-                                    onChangeText={(text: string) => setNumero({ value: text, error: '' })}
-                                    error={!!numero.error}
-                                    errorText={numero.error}
-                                    autoCapitalize="none"
-                                    description={undefined}
-                                />
-                            </View>
-                        </View>*/}
-
                         <View style={{ flex: 1, alignContent: 'flex-start', justifyContent: 'flex-start', marginTop: 20 }}>
                             <Text style={styles.inputTitleText}>Code pin*</Text>
                             <View style={{ flexDirection: 'row', width: '100%', }}>
@@ -184,6 +320,7 @@ function ModifyCardPinScreen({ navigation }: { navigation: any }) {
                                     error={!!pin.error}
                                     errorText={pin.error}
                                     secureTextEntry={!pinShow}
+                                    maxLength={4}
                                     right={<Input.Icon icon={!pinShow ? 'eye-off' : 'eye'} onPress={() => { setPinShow(!pinShow) }} />}
                                     description={undefined}
                                 />
@@ -203,7 +340,7 @@ function ModifyCardPinScreen({ navigation }: { navigation: any }) {
 
                     </Pressable>
 
-
+                    <LoadingModal setModalVisible={setModalVisible} modalVisible={modalVisible} />
                 </KeyboardAvoidingView>
 
 

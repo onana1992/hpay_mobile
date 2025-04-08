@@ -51,35 +51,6 @@ const Step4 = ({ data, setData, step, setStep, kycSaveRequest }: { data: any, se
         if (checked) {
 
             kycSaveRequest();
-            /*setModalVisible(true);
-            console.log(data)
-            kycSaveRequest(data).then((response: any) => {
-
-                console.log(response.data);
-
-                if (response.data.success === true) {
-
-                    setModalVisible(false);
-                    navigation.goBack();
-                    Toast.show({
-                        type: 'success',
-                        text1: t('kyc.success'),
-                        text2: t('kyc.successmsg'),
-                        position: 'top'
-                    });
-
-                } else {
-
-                    setModalVisible(false);
-
-                }
-
-
-            }).catch((error: any) => {
-
-                console.log(error);
-                // setModalVisible(false);
-            })*/
 
         }
 

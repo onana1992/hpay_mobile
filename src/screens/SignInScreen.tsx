@@ -13,9 +13,7 @@ import {
     Text,
     StyleSheet,
     TouchableOpacity,
-    KeyboardAvoidingView,
     Pressable ,
-    Platform,
     Keyboard,
     ScrollView,
 } from 'react-native';
@@ -26,7 +24,7 @@ import TextInput from '../components/TextInput';
 import { Colors } from '../themes';
 import { telValidator1 } from '../helpers/telValidator';
 import { passwordValidator1 } from '../helpers/passwordValidator';
-import { TextInput as Input, Snackbar } from 'react-native-paper';
+import { TextInput as Input } from 'react-native-paper';
 import { useTranslation } from 'react-i18next';
 import NoConnectedHeader from '../components/NoConnectedHeader';
 import { useDispatch } from 'react-redux';
@@ -34,7 +32,7 @@ import { signIn, saveToken } from '../store/profilSlice';
 import { signInRequest } from '../services/request';
 import LoadingModal from '../components/LoadingModal';
 import Toast from 'react-native-toast-message';
-//import Logo from '../components/Logo';
+
 
 function SignInScreen({ navigation }: {navigation:any}){
 
@@ -63,33 +61,60 @@ function SignInScreen({ navigation }: {navigation:any}){
         signInRequest(telephone.value, password.value).then((response: any) => {
 
 
-            console.log(response.data.response.token)
+            console.log(response.data)
 
             if (response.data.statusCode === 200) {
-               
-                setModalVisible(false);
-                dispatch(signIn(response.data.response.data));
-                dispatch(saveToken(response.data.response.token));
 
-            } 
+
+                if (response.data.response.data.actif !== '1') {
+
+                    setModalVisible(false);
+                    navigation.navigate('TelVerification', { phone: telephone.value, idclient: response.data.response.data.idLoginClient });
+
+                }
+
+                else if (response.data.response.data.client.nom == null) {
+                    setModalVisible(false);
+                    navigation.navigate('Identity', { phone: telephone.value, idclient: response.data.response.data.idLoginClient });
+                }
+
+                else if (response.data.response.data.emailvalidate === '0') {
+                    setModalVisible(false);
+                    navigation.navigate('Email', { phone: telephone.value, idclient: response.data.response.data.idLoginClient });
+                }
+
+                else {
+                   
+                    setModalVisible(false);
+                    dispatch(signIn(response.data.response.data));
+                    dispatch(saveToken(response.data.response.token));
+                }
+
+            }
 
             setModalVisible(false);
               
             
         }).catch((error: any) => {
 
-            //console.log(error)
+            if (error.response.data.statusCode === '401') {
 
-            if (error.response.data.statusCode) {
+                if (error.response.data.statusCode.message === 'Account not activated') {
 
-                Toast.show({
-                    type: 'error',
-                    text1: t('signinscreen.connexionfailure'),
-                    text2: t('signinscreen.loginorpasswordinvalid'),
-                    position: 'top'
-                });
+
+                } else {
+
+                    Toast.show({
+                        type: 'error',
+                        text1: t('signinscreen.connexionfailure'),
+                        text2: t('signinscreen.loginorpasswordinvalid'),
+                        position: 'top'
+                    });
+                }
 
             }
+
+            //console.log(error.response.data)
             setModalVisible(false);
         })
 

@@ -4896,6 +4896,11 @@
     "object.assign" "^4.1.4"
     "object.values" "^1.1.6"
 
+"jwt-decode@^4.0.0":
+  "integrity" "sha512-+KJGIyHgkGuIq3IEBNftfhW/LfWhXUIY6OmyVWjliu5KH1y0fw7VQ8YndE2O4qZdMSd9SqbnC8GOcZEy0Om7sA=="
+  "resolved" "https://registry.npmjs.org/jwt-decode/-/jwt-decode-4.0.0.tgz"
+  "version" "4.0.0"
+
 "keyv@^4.5.3":
   "integrity" "sha512-oxVHkHR/EJf2CNXnWxRLW6mg7JyCCUcG0DtEGmL2ctUo1PNTin1PUil+r/+4r5MpVgC/fn1kjsx7mjSujKqIpw=="
   "resolved" "https://registry.npmjs.org/keyv/-/keyv-4.5.4.tgz"
@@ -6085,6 +6090,11 @@
   "resolved" "https://registry.npmjs.org/react-native-navigation-bar-color/-/react-native-navigation-bar-color-2.0.2.tgz"
   "version" "2.0.2"
 
+"react-native-network-info@^5.2.1":
+  "integrity" "sha512-iam74xXtrSqqZurCl1/bSjZ9jXcsJY84g7brx1/4uVGCY26c6m+4CArHNSHOsz5ATg2NQT+81sjNy0KlCPyK4g=="
+  "resolved" "https://registry.npmjs.org/react-native-network-info/-/react-native-network-info-5.2.1.tgz"
+  "version" "5.2.1"
+
 "react-native-paper-dates@^0.22.3":
   "integrity" "sha512-3zmhN09Z06SnYzHKEui7NRzwpxA/CkzlEo57pKiLZIg5TbfqtGu6WPTQZ17CpymfIhhyWZgPWcRTPasBr0XyJA=="
   "resolved" "https://registry.npmjs.org/react-native-paper-dates/-/react-native-paper-dates-0.22.3.tgz"
@@ -6151,6 +6161,11 @@
   "integrity" "sha512-9xK1z4tYpwMxp3hsM0y1+xfqq/JoMh+l7sBsJ81b2eikFwT6ZbndFBqupQXrsQ1akce9hgC/10Nkzj0LjVjeXQ=="
   "resolved" "https://registry.npmjs.org/react-native-select-dropdown/-/react-native-select-dropdown-3.4.0.tgz"
   "version" "3.4.0"
+
+"react-native-share@^12.0.9":
+  "integrity" "sha512-vSuz/9aF+/AZS3I5NC19MrB56h1Yivk2Yz8lf2d8Szv3KuRw2BnDI/AfCTjMWByJLVYr6xgzfkTkAfvbDGzxLQ=="
+  "resolved" "https://registry.npmjs.org/react-native-share/-/react-native-share-12.0.9.tgz"
+  "version" "12.0.9"
 
 "react-native-size-matters@^0.4.0":
   "integrity" "sha512-DKE3f/sdcozd24oASgkP1iGg+YU3HoajRa5k3a4wkRzpiqREq8SGX12Y5zBgAt/8IivLQoTMYkyQu1/Giuy+zQ=="

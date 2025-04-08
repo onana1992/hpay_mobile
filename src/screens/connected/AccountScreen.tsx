@@ -14,7 +14,7 @@ import {
     TouchableOpacity,
     Image,
     Text,
-    ScrollView
+    ScrollView,
 } from 'react-native';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -36,16 +36,13 @@ function AccountScreen({ navigation }: { navigation: any }) {
     const [langageModalvisible, setLangageModalvisible] = React.useState(false);
     const { account } = route.params;
 
-     console.log(account)
 
     const EmptyCard = () => {
-
         return (
             <View style={styles.emptycard}>
                 <Text style={{ color: Colors.text, }}>Aucune transaction effectué</Text>
             </View>
         );
-
     };
 
 
@@ -81,10 +78,14 @@ function AccountScreen({ navigation }: { navigation: any }) {
                         }}
                     />
 
-                    <View>
+                    <View style={{ alignItems:'center' }}>
                         <Text style={{ fontWeight: 'bold', fontSize: 17, color: Colors.text, marginTop: 10 }}>
-                            Compte en dévise {account.compte.devise}
+                            {t('account.currencyaccount')} {account.compte.devise}
                         </Text>
+                        <Text style={{ textAlign: 'center', fontSize: 14, color: Colors.gray, marginTop: 0 }}>
+                            {t('account.accountnumber')} : {account.compte.numCompte}
+                        </Text>
+
                     </View>
 
                     <View>
@@ -110,7 +111,7 @@ function AccountScreen({ navigation }: { navigation: any }) {
                                 <AntDesign name="pluscircleo" size={26} color={Colors.text} />
                             </TouchableOpacity>
                             <View style={{ height: 50 }}>
-                                <Text style={{ color: 'black', fontWeight: 'bold', marginTop: 5, textAlign: 'center' }}>Ajouter</Text>
+                                <Text style={{ color: 'black', fontWeight: 'bold', marginTop: 5, textAlign: 'center' }}>{t('account.add')}</Text>
                             </View>
                         </View>
 
@@ -128,7 +129,7 @@ function AccountScreen({ navigation }: { navigation: any }) {
                                 <Feather name="send" size={26} color={Colors.text} />
                             </TouchableOpacity>
                             <View style={{ height: 50 }}>
-                                <Text style={{ color: 'black', fontWeight: 'bold', marginTop: 5, textAlign: 'center' }}>Envoyer</Text>
+                                <Text style={{ color: 'black', fontWeight: 'bold', marginTop: 5, textAlign: 'center' }}>{t('account.send')}</Text>
                             </View>
                         </View>
 
@@ -146,7 +147,7 @@ function AccountScreen({ navigation }: { navigation: any }) {
                                 <AntDesign name="qrcode" size={26} color={Colors.text} />
                             </TouchableOpacity>
                             <View style={{ height: 50 }}>
-                                <Text style={{ color: 'black', fontWeight: 'bold', marginTop: 5, textAlign: 'center' }}>Payer</Text>
+                                <Text style={{ color: 'black', fontWeight: 'bold', marginTop: 5, textAlign: 'center' }}>{t('account.pay')}</Text>
                             </View>
                         </View>
 
@@ -164,18 +165,18 @@ function AccountScreen({ navigation }: { navigation: any }) {
                                 <AntDesign name="creditcard" size={26} color={Colors.text} />
                             </TouchableOpacity>
                             <View style={{ height: 50 }}>
-                                <Text style={{ color: 'black', fontWeight: 'bold', marginTop: 5, textAlign: 'center' }}>Carte</Text>
+                                <Text style={{ color: 'black', fontWeight: 'bold', marginTop: 5, textAlign: 'center' }}>{t('account.card')}</Text>
                             </View>
                         </View>
 
 
                     </View>
-                   
+
                 </View>
 
                 <View style={{ marginTop: 30 }}>
                     <Text style={{ fontSize: 22, fontWeight: 'bold', color: Colors.text }}>
-                        Historiques des transactions
+                        {t('account.transactionhistory')}
                     </Text>
                     <EmptyCard/>
                 </View>

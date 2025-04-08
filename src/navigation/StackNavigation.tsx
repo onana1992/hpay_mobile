@@ -1,4 +1,5 @@
-﻿import * as React from 'react';
+﻿/* eslint-disable prettier/prettier */
+import * as React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
 import SignInScreen from '../screens/SignInScreen';
@@ -40,11 +41,12 @@ import ModifyCardPinScreen from '../screens/card/ModifyCardPinScreen';
 import MyInfoPersoScreen from '../screens/connected/MyInfoPersoScreen';
 import MyHistoriesScreen from '../screens/connected/MyHistoriesScreen';
 import ChangePasswordScreen from '../screens/connected/ChangePasswordScreen';
+import ActivationCarteScreen from '../screens/card/ActivationCarteScreen';
 
 const Stack = createNativeStackNavigator();
 
 export default function StackNavigation() {
-    
+
     const user = useSelector((state: any) => state.profil.user);
     const dispatch = useDispatch();
     dispatch(saveBenef(null));
@@ -201,7 +203,12 @@ export default function StackNavigation() {
                         component={ChangePasswordScreen}
                         options={{ headerShown: false }} />
 
-              
+                    <Stack.Screen
+                        name="ActivationCarteScreen"
+                        component={ActivationCarteScreen}
+                        options={{ headerShown: false }} />
+
+
 
                 </Stack.Navigator>
 

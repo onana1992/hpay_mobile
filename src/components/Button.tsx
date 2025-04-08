@@ -18,7 +18,7 @@ const Button = ({ ...props})=> {
             children={undefined}
             style={[
                 styles.button,
-                props.mode === 'contained' && { backgroundColor: '#ef5924', color:"white"}             
+                props.mode === 'contained' && { backgroundColor: '#ef5924'}             
             ]}
             labelStyle={props.mode === 'contained' ? styles.text : styles.text_outline}
             {...props}
@@ -48,6 +48,7 @@ const styles = StyleSheet.create({
         //fontWeight: 'bold',
         fontSize: 16,
         color: 'black',
+        lineHeight: 26,
 
     },
 

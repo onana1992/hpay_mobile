@@ -169,8 +169,8 @@
 
   "photoProfilScreen": {
     "title": "Ajoutez une photo de profil",
-    "titlemsg": "Veuillez choisir une photo de profil afin de permettre à vos correspondants de vous identifier",
-    
+    "titlemsg": "Veuillez choisir une photo de profil afin de permettre à vos correspondants de vous identifier"
+
   },
 
 
@@ -220,7 +220,9 @@
     "completeyourregistration": "Completez votre inscription",
     "completeyourregistrationmsg": "Afin de s'assurer de la conformité de votre compte, vous devez completer la procedure KYC (Know your Client).",
     "accountvalidated": "Compte validé",
-    "accountvalidatedmsg": "Nous avons validé vos informations KYC. Vous avez maintenant  accès à toute les fonctionnalités de l'application."
+    "accountvalidatedmsg": "Nous avons validé vos informations KYC. Vous avez maintenant  accès à toute les fonctionnalités de l'application.",
+    "drivenlicence": "Permis de conduire",
+    "consularcard": "Carte consulaire/Carte de séjour"
   },
 
 
@@ -241,11 +243,52 @@
     "logout": "Se déconnecter"
   },
 
+
   "benef": {
     "addsuccess": "Le client été ajouté à vos beneficiaire.",
     "alreadyinyourbeneficiaries": "Client dejà ajouté dans les beneficiaires",
     "addlistsuccess": "Liste de clients ajouté dans les beneficiaires"
   },
+
+
+  "account": {
+    "pinlessthan4": "4 chiffres réquis",
+    "numerolessthan16": "16 chiffres réquis",
+    "mustStartwith57": "Le numéro de la carte doit commencer avec 57",
+    "currencyaccount": "Compte en dévise",
+    "accountnumber": "Numéro de compte",
+    "add": "Ajouter",
+    "send": "Envoyer",
+    "pay": "Payer",
+    "card": "Carte",
+    "transactionhistory": "Historique des transactions",
+    "notransactionmade": "Aucune transaction effectué",
+    "nocardregistered": "Aucune carte enregistrée",
+    "Cardmanagement": "Gestion de la  carte",
+    "Addacardtoyouraccount": "Ajouter une carte à votre compte",
+    "Changethecardlinkedtoyouraccount": "Changer la carte liée à votre compte",
+    "Deletethecard": "Supprimer la carte",
+    "ChangePINcode": "Changer le code PIN",
+    "Areyousureyouwanttoremovethiscard": "Êtes-vous sûr de vouloir supprimer cette carte ?",
+    "Addthecardtoyouraccount": "Ajoutez la carte à votre compte",
+    "account": "Compte",
+    "Cardnumber": "Numéro de carte",
+    "pincode": "Code PIN",
+    "save": "Enregistrer",
+    "enterthepincode": "Entrez le code PIN",
+    "Enterthecardnumber": "Entrez le numéro de carte",
+    "enabledisable": "Activer/Désactiver la carte",
+    "areyousureyouwanttodisablethiscard": "Voulez-vous vraiment désactiver cette carte ?",
+
+    "CardAlreadyUsed": "Carte déjà utlisée",
+    "Cardnotregistered": "Carte non enregistrée",
+    "invalidcodepin": "Code pin invalide",
+    "cardaddedsucceffuly": "Carte ajoutée avec succès",
+    "deletionfailed" :  "Échec de la supression"
+
+
+  },
+ 
 
 
   "loading": "Veuillez patienter ...",
@@ -266,7 +309,8 @@
   "failure": "Échec",
   "myorders": "Mes commmandes",
   "addprofilpicture": "Ajoutez un photo de profil à votre compte",
-  "changethelangage": "Changez de langue"
+  "changethelangage": "Changez de langue",
+  "requiredDocument": "Document requis"
 
 
 }

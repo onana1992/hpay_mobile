@@ -213,23 +213,32 @@ const Step2 = ({ data, setData, step, setStep, }: { data: any, setData: any, ste
 
         const addressError = addressValidator(address.value);
         const countryError = countryValidator(country.value);
-        const townError = townValidator(town.value);
-        const emailError = emailValidator(email.value);
+        const townError = townValidator(city);
+       
         
-        if (addressError || countryError || emailError) {
+        if (addressError || countryError || townError) {
 
+          //  alert()
             setAddress({ ...address, error: t(`${addressError}`) });
             setCountry({ ...country, error: t(`${countryError}`) });
             setTown({ ...town, error: t(`${townError}`) });
-            setEmail({ ...email, error: t(`${emailError}`) });
+            
             return;
         }
 
 
+        /*console.log({
+            ...data,
+            email: email.value,
+            pays: selectedCountry.id,
+            ville: city.id,
+            adresse: address.value,
+            telephone2: telephone2.value
+        });*/
+
         setData(
             {
                 ...data,
-                email: email.value,
                 pays: selectedCountry.id,
                 ville: city.id,
                 adresse: address.value,
@@ -237,15 +246,8 @@ const Step2 = ({ data, setData, step, setStep, }: { data: any, setData: any, ste
             }
         );
         
-            /*console.log({
-                ...data,
-                email: email.value,
-                pays: selectedCountry.id,
-                ville: city.id,
-                adresse: address.value,
-                telephone2: telephone2.value
-            });*/
-            setStep(3);
+           
+         setStep(3);
 
     }
 
@@ -300,7 +302,7 @@ const Step2 = ({ data, setData, step, setStep, }: { data: any, setData: any, ste
                                 placeholderStyle={styles.placeholderStyle}
                                 selectedTextStyle={styles.selectedTextStyle}
                                 inputSearchStyle={styles.inputSearchStyle}
-                                searchPlaceholderTextColor='gray'
+                                //searchPlaceholderTextColor='gray'
                                 itemTextStyle={{ color: 'black' }}
                                 iconStyle={styles.iconStyle}
                                 data={COUNTRIES}
@@ -328,7 +330,7 @@ const Step2 = ({ data, setData, step, setStep, }: { data: any, setData: any, ste
                                 placeholderStyle={styles.placeholderStyle}
                                 selectedTextStyle={styles.selectedTextStyle}
                                 inputSearchStyle={styles.inputSearchStyle}
-                                searchPlaceholderTextColor='gray'
+                               // searchPlaceholderTextColor='gray'
                                 itemTextStyle={{ color: 'black' }}
                                 iconStyle={styles.iconStyle}
                                 data={cities}
@@ -339,7 +341,7 @@ const Step2 = ({ data, setData, step, setStep, }: { data: any, setData: any, ste
                                 placeholder="Selectionez un pays"
                                 searchPlaceholder={t('rechercher')}
                                 value={city}
-                                onChange={(item) => {
+                                    onChange={(item) => {
                                     setCity(item);
                                 }}
                             />
@@ -402,7 +404,7 @@ const Step2 = ({ data, setData, step, setStep, }: { data: any, setData: any, ste
                     </View>
 
 
-                    <View style={{ flex: 1, alignContent: 'flex-start', justifyContent: 'flex-start', marginTop: 10}}>
+                   {/* <View style={{ flex: 1, alignContent: 'flex-start', justifyContent: 'flex-start', marginTop: 10}}>
                         <View style={styles.inputTitle}>
                             <Text style={styles.inputTitleText}>{t('kyc.email')}*</Text>
                         </View>
@@ -417,7 +419,7 @@ const Step2 = ({ data, setData, step, setStep, }: { data: any, setData: any, ste
                             textContentType="emailAddress"
                             description={undefined}
                         />
-                    </View>
+                    </View>*/}
 
 
                     <View style={{ flex: 1, alignContent: 'flex-start', justifyContent: 'flex-start', marginTop: 20}}>

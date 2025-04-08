@@ -15,7 +15,7 @@ import {
     Image,
     Text,
     ScrollView,
-    Clipboard,
+    Clipboard, Linking,
 
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -26,7 +26,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import QrCodeModal from '../../components/QrCodeModal';
 import AvartarButton from '../../components/connected/AvartarButton';
-
+import Share from 'react-native-share';
 
 
 function ParrainageScreen({ navigation }: { navigation: any }) {
@@ -42,6 +42,36 @@ function ParrainageScreen({ navigation }: { navigation: any }) {
     const handleCopy = () => {
         Clipboard.setString(code); // Copy the text to clipboard
     };
+
+
+    const whatsappShare = async () => {
+
+        const message = encodeURIComponent(
+            `Telécharger l'application HPay https://play.google.com/store/apps/details?id=com.hpay.cash&hl=fr_CA&pli=1 et utilisé mon code de parrainage HPAY_45453 et beneficier d'un bonus de 10$`
+        );
+
+        const url = `whatsapp://send?text=${message}`;
+        Linking.openURL(url);
+
+
+
+        /*const shareOptions = {
+            title: 'Share via',
+            message: 'some message',
+            url: 'some share url',
+            social: Share.Social.WHATSAPP,
+            whatsAppNumber: "9199999999",  // country code + phone number
+            filename: 'test', // only for base64 file in Android
+        };
+
+        try {
+            const result = await Share.shareSingle(shareOptions);
+            console.log('Share success:', result);
+        } catch (error) {
+            console.log('Error =>', error);
+        }*/
+    };
+
 
 
 
@@ -95,7 +125,7 @@ function ParrainageScreen({ navigation }: { navigation: any }) {
 
                     <View style={{ flexDirection: 'row', marginTop: 20, justifyContent:'center' }}>
 
-                        <TouchableOpacity style={[styles.shareButton, { backgroundColor:'#25d366' }]}>
+                        <TouchableOpacity style={[styles.shareButton, { backgroundColor: '#25d366' }]} onPress={() => { whatsappShare(); } }>
                             <Ionicons name="logo-whatsapp" size={25} color="#ffffff" />
                         </TouchableOpacity>
 
@@ -167,7 +197,7 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#ffffff',
         padding: 20,
-        paddingVertical: 10 
+        paddingVertical: 10,
     },
 
     title: {

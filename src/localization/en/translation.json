@@ -209,8 +209,9 @@
     "completeyourregistration": "Complete your registration",
     "completeyourregistrationmsg": "To ensure the compliance of your account, you must complete the KYC (Know your Client) procedure.",
     "accountvalidated": "Account validated",
-    "accountvalidatedmsg": "We have validated your KYC information. You now have access to all the features of the application."
-
+    "accountvalidatedmsg": "We have validated your KYC information. You now have access to all the features of the application.",
+    "drivenlicence": "Driven licence",
+    "consularcard": "Consular card"
   },
 
   "profil": {
@@ -237,6 +238,43 @@
 
   },
 
+  "account": {
+    "pinlessthan4": "4 digits required",
+    "numerolessthan16": "16 digits required",
+    "mustStartwith57": "The card number must start with 57",
+    "currencyaccount": "Currency account",
+    "accountnumber": "Account number",
+    "add": "Add",
+    "send": "Send",
+    "pay": "Pay",
+    "card": "Card",
+    "transactionhistory": "Transaction history",
+    "notransactionmade": "No transaction made",
+    "nocardregistered": "No card registered",
+    "Cardmanagement": "Card management",
+    "Addacardtoyouraccount": "Add a card to your account",
+    "Changethecardlinkedtoyouraccount": "Change the card linked to your account",
+    "Deletethecard": "Delete the card",
+    "ChangePINcode": "Change PIN code",
+    "Areyousureyouwanttoremovethiscard": "Are you sure you want to remove this card ?",
+    "Addthecardtoyouraccount": "Add the card to your account",
+    "account": "Account",
+    "Cardnumber": "Card number",
+    "pincode": "Pin Code",
+    "save": "Save",
+    "enterthepincode": "Enter the pin code",
+    "Enterthecardnumber": "Enter the card number",
+    "enabledisable": "Enable/Desable the card",
+    "areyousureyouwanttodisablethiscard": "are you sure you want to disable this card ?",
+
+    "CardAlreadyUsed": "Card already used",
+    "Cardnotregistered": "Card not registered",
+    "invalidcodepin": "Invalid Code Pin",
+    "cardaddedsucceffuly": "Card added succeffuly",
+    "deletionfailed": "Deletion failed"
+
+  },
+
 
   "loading": "Please wait ...",
   "settings": "Settings",
@@ -258,7 +296,8 @@
   "back": "verso",
   "clicktoaddthefront": "click to add the front",
   "addprofilpicture": "Add a profile picture to your account",
-  "changethelangage": "Change language"
+  "changethelangage": "Change language",
+  "requiredDocument": "Required Document"
 
 
 }

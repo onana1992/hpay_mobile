@@ -62,11 +62,13 @@ const Step3 = ({ data, setData, step, setStep }: { data: any, setData: any, step
     const [documentBackUri, setDocumentBackUri] = React.useState < string | null | undefined>(null);
 
 
-
     const identityTypes = [
-        { label: t('kyc.idcard'), value: 1 },
-        { label: t('kyc.passport'), value: 2 },
+        { label: t('kyc.idcard'), value: 2 },
+        { label: t('kyc.passport'), value: 1 },
+        { label: t('kyc.drivenlicence'), value: 3 },
+        { label: t('kyc.consularcard'), value: 4 }
     ];
+
 
     const onBack = () => {
         setStep((PrevStep: number) => {
@@ -87,47 +89,33 @@ const Step3 = ({ data, setData, step, setStep }: { data: any, setData: any, step
 
     const onValid = () => {
 
-      
+
         const documentNumberError = DocumentNumberValidator(documentNumber.value);
         const dateExpError = DateExpValidator(date_exp.value);
-        const typeIdError = typeId.value === null;
+        const typeIdError = typeId.value == null ? 'requiredValue' : '';
         const versoError = documentFrontUri == null;
-
-       // data.photo_piece_recto == null
+        
 
         if (documentNumberError || dateExpError || typeIdError || versoError) {
             setDocumentNumber({ ...documentNumber, error: t(`${documentNumberError}`) });
             setDate_exp({ ...date_exp, error: t(`${documentNumberError}`) });
-            setTypeId({ ...typeId, error: t('requiredValue') });
+            setTypeId({ ...typeId, error: t(`${typeIdError}`) });
             return;
         }
+       
 
+        const dataExpString = date_exp.value?.getFullYear() + '-' + formatDate(date_exp.value?.getMonth() + 1) + '-' + formatDate(date_exp.value?.getDate());
 
-        const dataExpString = date_exp.value?.getFullYear() + '-' + formatDate(date_exp.value?.getMonth()) + '-' + formatDate(date_exp.value?.getDate());
-
-        //console.log(typeId);
- 
         setData(
             {
                 ...data,
                 idtype_piece: typeId.value,
                 num_piece: documentNumber.value,
                 expire_piece: dataExpString, 
-                //photo_piece_recto: documentFrontUri,
-                // photo_piece_verso: documentBackUri,
             }
         );
 
-
-
         setStep(4);
-
-       /* setTimeout(() => {
-
-            console.log(data);
-
-        }, 2000);*/
-
     }
 
 
@@ -336,48 +324,6 @@ const Step3 = ({ data, setData, step, setStep }: { data: any, setData: any, step
 
 
 
-    /*const sendpicture = async (fileName:string, filePath:string ) => {
-
-        let form_data = new FormData();
-        let filename = fileName?.split('/').pop();
-        let match = /\.(\w+)$/.exec(filename);
-        let type = match ? `image/${match[1]}` : 'image';
-
-        form_data.append('img', { uri: filePath, name: fileName, type: type });
-        
-
-        axios.post(`${BASE_URL}upload_image`, form_data, {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-            },
-        }).then(response => {
-
-            console.log(response.data.url);
-
-            if (doc === 1) {
-
-                setData({
-                    ...data,
-                    photo_piece_recto: response.data.url
-                })
-
-            } else {
-
-                setData({
-                    ...data,
-                    photo_piece_verso: response.data.url
-                })
-
-            }
-            
-        }).catch(function (error) {
-
-            console.log(error)
-            // setIsloading(false);
-
-        });
-
-    };*/
 
     
 
@@ -407,10 +353,8 @@ const Step3 = ({ data, setData, step, setStep }: { data: any, setData: any, step
                     </View>
 
                     <View style={{ justifyContent:'center'}}>
-                       <Ionicons name="checkmark-done-outline" size={20} color={step > 3 ? Colors.primary :'gray'}/>
+                       <Ionicons name="checkmark-done-outline" size={20} color={step > 3 ? Colors.primary : 'gray'}/>
                     </View>
-
-                    
 
                 </View>
 
@@ -495,7 +439,7 @@ const Step3 = ({ data, setData, step, setStep }: { data: any, setData: any, step
                                 
                                 </TouchableOpacity>
                                 </View>
-                                {/*{documentFrontUri === null ? <Text style={styles.error}>{t('requiredValue')}</Text> : null}*/}
+                                {documentFrontUri === null ? <Text style={styles.error}>{t('requiredDocument')}</Text> : null}
                                 
                         </View>
 

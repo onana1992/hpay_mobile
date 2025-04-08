@@ -8,15 +8,13 @@
 /* eslint-disable react-native/no-inline-styles */
 
 
-import React, { useRef, useState } from "react";
+import React from 'react';
 import {
     View,
     Text,
     StyleSheet,
     TouchableOpacity,
-    KeyboardAvoidingView,
     Pressable,
-    Platform,
     Keyboard,
     ScrollView
 } from 'react-native';
@@ -30,12 +28,12 @@ import { TextInput as Input } from 'react-native-paper';
 import { Checkbox } from 'react-native-paper';
 import { useTranslation } from 'react-i18next';
 import NoConnectedHeader from '../../components/NoConnectedHeader';
-import PhoneInput from 'react-native-phone-number-input';
 import { signUpRequest } from '../../services/request';
 import Toast from 'react-native-toast-message';
 import LoadingModal from '../../components/LoadingModal';
 import StepCompnent from '../../components/StepCompnent';
 import { useRoute } from '@react-navigation/native';
+
 
 
 function SignUpScreen({ navigation}: {navigation:any, route: any}) {
@@ -57,8 +55,6 @@ function SignUpScreen({ navigation}: {navigation:any, route: any}) {
         return '+' + val; 
     }
 
-   
-
 
     const onLoginPressed = () => {
 
@@ -77,15 +73,14 @@ function SignUpScreen({ navigation}: {navigation:any, route: any}) {
 
         if (checked) {
 
-            
-            const formatTel = country.indicatif + telephone.value
 
             setModalVisible(true);
-            signUpRequest(formatTel, password.value).then((response: any) => {
-                setModalVisible(false);
-                console.log(response.data.response.data);
-                setModalVisible(false);
-                navigation.navigate('TelVerification', { phone: formatTel, idclient: response.data.response.data.idLoginClient });
+            signUpRequest(telephone.value, password.value, country.id, city.id).then((response: any) => {
+
+                console.log(response);
+
+               // setModalVisible(false);
+               // navigation.navigate('TelVerification', { phone: telephone.value, idclient: response.data.response.data.idLoginClient });
 
             }).catch((_error: any) => {
                
@@ -108,7 +103,8 @@ function SignUpScreen({ navigation}: {navigation:any, route: any}) {
         }
 
     }
-    
+
+
     return (
         <ScrollView style={styles.main}>
         
@@ -199,6 +195,7 @@ function SignUpScreen({ navigation}: {navigation:any, route: any}) {
 
                         </View>
 
+
                         <View style={{ marginTop: 20, flex: 1, flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center' }}>
                             <Button
                                 mode="contained"
@@ -210,8 +207,6 @@ function SignUpScreen({ navigation}: {navigation:any, route: any}) {
                         </View>
                         
 
-
-
                         <View style={{ marginTop: 20, flex: 1, width:'100%', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
                             <Text style={{ color: Colors.text }}>{t('signupscreen.youalreadyhaveanaccount')}</Text>
                             <TouchableOpacity onPress={() => navigation.navigate('SignIn')}>
@@ -219,13 +214,6 @@ function SignUpScreen({ navigation}: {navigation:any, route: any}) {
                             </TouchableOpacity>
                         </View>
 
-                        {/*<Snackbar
-                            visible={snackVisible}
-                            onDismiss={onDismissSnackBar}
-                            style={{ marginTop: 150, width: "100%" }}
-                        >
-                            <Text style={{ color: 'red' }}> Echec, un compte existe deja avec ce numero</Text>
-                        </Snackbar>*/}
 
                     </View>
                 </Pressable>
