@@ -7,7 +7,7 @@ import React, { useEffect } from 'react';
 
 import { SafeAreaView, StatusBar, useColorScheme, View, Text } from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
-import { PaperProvider } from 'react-native-paper';
+import {  Provider as PaperProvider, DefaultTheme } from 'react-native-paper';
 
 import { MenuProvider } from 'react-native-popup-menu';
 import { enGB, fr, registerTranslation } from 'react-native-paper-dates';
@@ -21,6 +21,8 @@ import { LogBox } from 'react-native';
 import Toast from 'react-native-toast-message';
 import changeNavigationBarColor from 'react-native-navigation-bar-color';
 import StackNavigation from './src/navigation/StackNavigation';
+import messaging from '@react-native-firebase/messaging';
+import { navigate } from './NavigationService';
 
 registerTranslation('en-GB', enGB);
 registerTranslation('fr', fr);
@@ -57,26 +59,67 @@ registerTranslation('fr', fr);
 
 function App(): JSX.Element {
 
+    const persistor = persistStore(store);
+
+    // Register background handler
+    messaging().setBackgroundMessageHandler(async remoteMessage => {
+        console.log('Message handled in the background!', remoteMessage);
+    });
+
 
     React.useEffect(() => {
         changeNavigationBarColor('#ffffff', true);
     }, []);
 
-    const persistor = persistStore(store);
 
-  /*const isDarkMode = useColorScheme() === 'dark';*/
-  /*const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };*/
+    LogBox.ignoreLogs(['ERROR:VirtualizedLists should never be nested inside plain ScrollViews with the same orientation because it can break windowing and other functionality - use another VirtualizedList-backed container instead.']);
 
-  LogBox.ignoreLogs(['ERROR:VirtualizedLists should never be nested inside plain ScrollViews with the same orientation because it can break windowing and other functionality - use another VirtualizedList-backed container instead.']);
-  useEffect(() => {
-      SplashScreen.hide();
-      LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
-  }, []);
+    useEffect(() => {
+          SplashScreen.hide();
+          LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
+    }, []);
+
+
+    /*const isDarkMode = useColorScheme() === 'dark';*/
+    /*const backgroundStyle = {
+      backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+    };*/
+
+
+    messaging().onNotificationOpenedApp(remoteMessage => {
+
+        if (remoteMessage) {
+            navigate('MyMessageScreen');
+        }
+        /*const screen = remoteMessage?.data?.screen;
+        if (screen) {
+            navigate(screen, remoteMessage.data);
+        }*/
+    });
+
+
+    // Quand l'app est complètement fermée
+    messaging()
+        .getInitialNotification()
+        .then(remoteMessage => {
+
+
+            if (remoteMessage) {
+                navigate('MyMessageScreen');
+            }
+
+             /*  navigate('MyMessageScreen');
+            if (remoteMessage) {
+                const screen = remoteMessage?.data?.screen;
+                if (screen) {
+                    navigate(screen, remoteMessage.data);
+                }
+            }*/
+    });
+
 
     return (
-        
+
         <PortalProvider>
             <Provider store={store}>
                 <PersistGate  persistor={persistor}>
@@ -86,7 +129,15 @@ function App(): JSX.Element {
                         barStyle="dark-content"
                         translucent={false}
                     />
-                    <PaperProvider>
+                    <PaperProvider
+                        theme={{
+                            ...DefaultTheme,
+                            colors: {
+                              ...DefaultTheme.colors,
+                              text: Colors.text,  // Change the text color globally
+                            },
+                        }}
+                    >
                         <SafeAreaView style={{ flex: 1 }}>
                             <MenuProvider>
                                 <StackNavigation />
@@ -101,24 +152,5 @@ function App(): JSX.Element {
   );
 }
 
-
-/*const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-});*/
 
 export default App;

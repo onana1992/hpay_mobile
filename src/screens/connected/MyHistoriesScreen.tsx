@@ -12,27 +12,20 @@ import {
     StyleSheet,
     View,
     TouchableOpacity,
-    Image,
     Text,
-    FlatList,
-    RefreshControl,
-    Platform,
-    PermissionsAndroid,
-    ScrollView,
-    Dimensions
+    SectionList,
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import AntDesign from 'react-native-vector-icons/AntDesign';
 import { Colors } from '../../themes';
 import { useSelector, useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
-import { Searchbar } from 'react-native-paper';
-import Feather from 'react-native-vector-icons/Feather';
-import { useFocusEffect } from '@react-navigation/native';
-import { fetchBeficiariesRequest, fetchBeficiariesInMyContactRequest } from '../../services/request';
+import Fontisto from 'react-native-vector-icons/Fontisto';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { getHistory } from '../../services/request';
 import { saveBenefs, saveNewClients } from '../../store/profilSlice';
-import Contacts from 'react-native-contacts';
-import AvartarButton from '../../components/connected/AvartarButton';
+import { formatDate, formatHeure } from '../../helpers/functions';
+import HistoryItem from '../../components/HistoryItem';
+import { ActivityIndicator } from 'react-native';
 
 
 function MyHistoriesScreen({ navigation }: { navigation: any }) {
@@ -41,21 +34,192 @@ function MyHistoriesScreen({ navigation }: { navigation: any }) {
     const dispatch = useDispatch();
     const [visible, setVisible] = React.useState(false);
     const user = useSelector((state: any) => state.profil.user);
-    const newClients = useSelector((state: any) => state.profil.newClients);
-    const benefs = useSelector((state: any) => state.profil.benefs);
-    const [filePath, setFilePath] = React.useState(null);
-    const [searchQuery, setSearchQuery] = React.useState('');
-    const [isRefreshing, setIsRefreshing] = React.useState(false);
-    const [hasPermission, setHasPermission] = React.useState(false);
-    const [contacts, setContacts] = React.useState<number[]>([]);
-    const { height } = Dimensions.get('window');
+    const [content, setContent] = React.useState<any[]>([]);
+    const [loading, setLoading] = React.useState(true);
+    const [page, setPage] = React.useState<number>(0);
+    const [totalPages, setTotalPages] = React.useState<number>(0);
+    const [size, setSize] = React.useState<number>(8);
+    const [totalElement, setTotalElement] = React.useState<number>(0);
+    const [histories, setHistories] = React.useState<any[]>([]);
+
+    React.useEffect(() => {
+
+        fetchHistory(user?.client?.id,'','desc',page,size);
+
+    }, []);
+
+
+    const fetchHistory = (
+        idClient: string,
+        idCompte: string,
+        sortDirection: string,
+        pageN: number,
+        sizeN:number) => {
+
+        getHistory(
+            idClient,
+            idCompte,
+            sortDirection,
+            pageN,
+            sizeN
+        ).then((response) => {
+
+            //console.log(response.data.content);
+            const grouped: any = {};
+            setSize(response.data.numberOfElements);
+            setTotalElement(response.data.totalElements);
+            setTotalPages(response.data.totalPages);
+
+            setContent([...content, ...response.data.content]);
+            const newContent = [...content, ...response.data.content];
+
+            newContent.forEach(item => {
+                const date = formatDate(item.dateInitiale);
+                const heure = formatHeure(item.dateInitiale);
+
+                if (!grouped[date]) {
+                    grouped[date] = [];
+                }
+
+                grouped[date].push({
+                    id: item.idVirementInterne,
+                    montant: item.montant,
+                    total: item.total,
+                    devise: item.deviseFrom,
+                    raison: item.virementRaison,
+                    clientFrom: item.clientFrom,
+                    clientTo: item.clientTo,
+                    compteFrom: item.compteFrom,
+                    compteTo: item.compteTo,
+                    numVirement: item.virementNum,
+                    heure: heure,
+                });
+            });
+
+            const DATA = Object.keys(grouped).map(date => ({
+                title: date,
+                data: grouped[date],
+            }));
+
+
+            setHistories(DATA);
+            setLoading(false);
+
+
+        }).catch((error) => {
+
+            console.log(error.response);
+            setLoading(false);
+        });
+
+    };
+
+
+    const fetchMore = () => {
+        setPage((prev) => prev + 1);
+        fetchHistory(user?.client?.id, '', 'desc', page + 1, size);
+    };
+
 
 
     const EmptyCard = () => {
 
         return (
             <View style={styles.emptycard}>
-                <Text style={{ color: Colors.text }}>Aucun transaction effectué</Text>
+                {
+                    loading ?
+                    <View>
+                            <ActivityIndicator size="small" color={Colors.primary} />
+                            <Text style={{ color: Colors.text }}>Chargement en cours ...</Text>
+                    </View>
+                    :
+                    <Text style={{ color: Colors.text }}>Aucune transaction effectué</Text>
+                }
+            </View>
+        );
+
+    };
+
+
+    const Footer = () => {
+
+        return (
+            <View>
+                {
+                    totalPages > page + 1 &&
+                    < View style={{ flexDirection: 'row', width: '100%', marginTop: 20 }}>
+                        <View style={{ flex: 1 }}>
+                                <TouchableOpacity style={styles.morebutton} onPress={() => { fetchMore(); }}>
+                                <Text style={styles.morebuttonText}> Voir plus </Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                }
+            </View>
+        );
+
+    };
+
+
+
+    const Header = () => {
+
+        return (
+            <View style={{}}>
+                <Text style={styles.title}>Historiques des transactions </Text>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 10, marginTop:10 }}>
+                    <View>
+                        <TouchableOpacity
+                            style={{
+                                flexDirection: 'row',
+                                justifyContent: 'space-evenly',
+                                borderWidth: 2,
+                                borderColor: Colors.primary,
+                                padding:10,
+                                width: 120,
+                                borderRadius: 10,
+
+
+                            }}
+                        >
+                            <View>
+                                <Fontisto name="equalizer" size={18} color={Colors.primary}/>
+                            </View>
+
+                            <View>
+                                <Text style={{ color: Colors.primary, fontWeight: 600, fontSize:18 }}>Filtre</Text>
+                            </View>
+                        </TouchableOpacity>
+                    </View>
+
+                    <View>
+                        <TouchableOpacity
+                            style={{
+                                flexDirection: 'row',
+                                justifyContent: 'space-evenly',
+                                borderWidth: 2,
+                                borderColor: Colors.primary,
+                                padding: 10,
+                                width: 120,
+                                borderRadius: 10,
+
+
+                            }}
+                        >
+                            <View>
+                                <FontAwesome name="sort-amount-asc" size={18} color={Colors.primary} />
+                            </View>
+
+                            <View>
+                                <Text style={{
+                                    color: Colors.primary,
+                                    fontWeight: 600,
+                                    fontSize: 18,
+                                }}>DESC</Text>
+                            </View>
+                        </TouchableOpacity>
+                    </View>
+                </View>
             </View>
         );
 
@@ -81,16 +245,32 @@ function MyHistoriesScreen({ navigation }: { navigation: any }) {
                 </TouchableOpacity>
             </View>
 
-            <ScrollView>
+            <SectionList
+                sections={histories}
+                keyExtractor={(item) => item.id.toString()}
+                renderItem={({ item, index }) => (
 
-                <View style={{}}>
-                    <Text style={styles.title}>Historiques des transactions </Text>
-                </View>
+                    <HistoryItem
+                        user={user}
+                        clientFrom={item.clientFrom}
+                        clientTo={item.clientTo}
+                        compteFrom={item.compteFrom}
+                        compteTo={item.compteTo}
+                        montant={item.montant}
+                        devise={item.devise}
+                        heure={item.heure}
+                        index={index}
+                        size={size}
+                    />
+                )}
+                renderSectionHeader={({ section: { title } }) => (
+                    <Text style={{ fontWeight: 'bold', fontSize: 16, color: Colors.text, marginTop: 20 }}>{title}</Text>
+                )}
 
-                <View style={{}}>
-                    <EmptyCard />
-                </View>
-            </ScrollView>
+                ListEmptyComponent={EmptyCard}
+                ListFooterComponent={Footer}
+                ListHeaderComponent={Header}
+            />
 
         </View>
     );
@@ -104,7 +284,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#ffffff',
         padding: 20,
         paddingBottom: 0,
-        paddingVertical: 10
+        paddingVertical: 10,
     },
 
     title: {
@@ -127,6 +307,19 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
 
+    morebutton: {
+        height: 50,
+        backgroundColor: Colors.primary,
+        borderRadius: 10,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+
+    morebuttonText: {
+        fontWeight: 'bold',
+        color: '#ffffff',
+        fontSize: 16,
+    },
 
 });
 

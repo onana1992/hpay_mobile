@@ -1,3 +1,7 @@
+/* eslint-disable eqeqeq */
+/* eslint-disable react-native/no-inline-styles */
+/* eslint-disable semi */
+/* eslint-disable prettier/prettier */
 
 
 import React from 'react';
@@ -8,7 +12,7 @@ import {
     Image,
     Text,
     TextInput,
-    FlatList
+    FlatList,
 } from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
 import { Colors } from '../../themes';
@@ -29,6 +33,19 @@ interface MyComponentProps {
 const AmountCurrencyInput: React.FC<MyComponentProps> = ({ amount, setAmount, account, setAccount, accounts,title }) => {
 
     const [visible, setVisible] = React.useState<boolean>(false);
+    const [borderColor, setBorderColor] = React.useState(Colors.primary);
+    const [borderWidth, setBorderWidth] = React.useState(1);
+
+    const handleFocus = () => {
+        setBorderColor(Colors.primary);
+        setBorderWidth (2);
+    };
+
+    const handleBlur = () => {
+        setBorderColor(Colors.text);
+        formatAmount(amount);
+        setBorderWidth(1);
+    };
 
 
     const formatAmount = () => {
@@ -49,6 +66,7 @@ const AmountCurrencyInput: React.FC<MyComponentProps> = ({ amount, setAmount, ac
     const accountName = (account:any) => {
 
         if (account.compte.devise== "CAD") {
+           // eslint-disable-next-line quotes
            return "Dollard Canadien"
         }
 
@@ -88,17 +106,18 @@ const AmountCurrencyInput: React.FC<MyComponentProps> = ({ amount, setAmount, ac
 
 
     return (
-        <View style={styles.main}>
+        <View style={[styles.main,{borderColor:borderColor, borderWidth:borderWidth}]}>
 
             <View style={{ width: '60%', padding: 5 }} >
                 <View style={{ flex: 1, flexDirection: 'row', height: 40, alignItems: 'center', justifyContent: 'flex-start' }}>
                     <TextInput
                         style={styles.input}
-                        inputMode='decimal'
-                        keyboardType='decimal-pad'
+                        inputMode="decimal"
+                        keyboardType="decimal-pad"
                         onChangeText={(val: string) => { setAmount(val) }}
                         value={amount}
-                        onBlur={() => { formatAmount(amount) }}
+                        onFocus={handleFocus}
+                        onBlur={handleBlur}
                     />
 
                 </View>
@@ -134,14 +153,12 @@ const AmountCurrencyInput: React.FC<MyComponentProps> = ({ amount, setAmount, ac
             >
 
                 <View style={styles.content}>
-                    
                     <Text style={styles.modalTitle}>{title}</Text>
                     <FlatList
                         data={accounts}
                         renderItem={renderItem}
                         keyExtractor={item => item.id}
                     />
-                    
                 </View>
 
             </Modal>
@@ -149,7 +166,6 @@ const AmountCurrencyInput: React.FC<MyComponentProps> = ({ amount, setAmount, ac
 
         </View>
 
-               
     );
 };
 
@@ -158,15 +174,15 @@ export default AmountCurrencyInput;
 const styles = StyleSheet.create({
 
     main: {
-        flexDirection: "row",
+        flexDirection: 'row',
         borderWidth: 1,
         borderColor: Colors.text,
         height: 70,
         padding: 0,
         marginVertical: 10,
         borderRadius: 5,
-        justifyContent: "space-between",
-        flexWrap: 'nowrap'
+        justifyContent: 'space-between',
+        flexWrap: 'nowrap',
     },
 
     modal: {
@@ -175,18 +191,18 @@ const styles = StyleSheet.create({
     },
 
     input: {
-        height: "100%",
+        height: '100%',
         width: '100%',
         padding: 0,
         fontSize: 26,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        color:Colors.text,
     },
 
     inputButton: {
         borderLeftWidth: 1,
         paddingHorizontal: 5,
-        paddingVertical: 0 
-
+        paddingVertical: 0,
     },
 
     currency: {
@@ -208,9 +224,8 @@ const styles = StyleSheet.create({
         color: Colors.text,
         fontSize: 26,
         fontWeight: 'bold',
-        paddingVertical: 10
+        paddingVertical: 10,
     },
-
 
     itemContainer: {
         flexDirection: 'row',
@@ -218,18 +233,15 @@ const styles = StyleSheet.create({
         marginBottom: 15,
         padding: 10,
         borderRadius: 5,
-        
     },
 
 
     textContainer: {
         flex: 1,
     },
-   
     amount: {
         fontSize: 14,
         color: '#555',
     },
-
 
 });

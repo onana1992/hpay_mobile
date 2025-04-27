@@ -30,6 +30,7 @@ import { saveAccount, signIn } from '../../store/profilSlice';
 import LoadingModal from '../../components/LoadingModal';
 import { useTranslation } from 'react-i18next';
 import { NetworkInfo } from 'react-native-network-info';
+import CardQrCode from '../../components/CardQrCode';
 
 
 function CardDetail({ navigation }: { navigation: any }) {
@@ -39,11 +40,11 @@ function CardDetail({ navigation }: { navigation: any }) {
     const route = useRoute<any>();
     const { account } = route.params;
     const [modalVisible, setModalVisible] = React.useState(false);
+    const [qrmodalVisible, setQrModalVisible] = React.useState(false);
     const dispatch = useDispatch();
     const { t } = useTranslation();
     const [ipAdress, setIpAddress] = React.useState<string | null>("");
 
-    console.log(user.client.valider);
 
     React.useEffect(() => {
         NetworkInfo.getIPAddress()
@@ -230,7 +231,7 @@ function CardDetail({ navigation }: { navigation: any }) {
         return (
             <View style={styles.emptycard}>
 
-                <View style={{ flex: 1, flexDirection:'row' }}>
+                <View style={{ flex: 1, flexDirection: 'row' }}>
                     <View style={{ flex: 1, flexDirection: 'row', height: 40, alignItems: 'flex-start' }}>
                         <Image
                             source={account.icon}
@@ -242,6 +243,20 @@ function CardDetail({ navigation }: { navigation: any }) {
                                 borderRadius: 20,
                             }}
                         />
+                        <View>
+                            {
+
+
+                            }
+                            <Text style={{ marginLeft: 5, fontWeight: 'bold', fontSize: 17, color: Colors.text }}>
+                                {
+                                    account.compte.carteClientQr.typeCarte == "CARTE_HPAY" && t('account.hpaycard')
+                                }
+                            </Text>
+                            <Text style={{ marginLeft: 5,  fontSize: 14, color: Colors.text }}>
+                                {t('account.currencycard') } {account.compte.devise}
+                            </Text>
+                        </View>
 
                      </View>
                 </View>
@@ -509,11 +524,62 @@ function CardDetail({ navigation }: { navigation: any }) {
                         </View>
                     </TouchableOpacity>
 
+
+                    <TouchableOpacity
+                        disabled={account.compte.carteClientQr == null}
+                        style={styles.addrow}
+                        onPress={() => {
+                            setQrModalVisible(true);
+                        }} >
+
+                        <View style={{
+                            flex: 1,
+                            alignItems: 'flex-start',
+                            justifyContent: 'center',
+                        }}>
+                            <View style={{
+                                borderColor: Colors.background,
+                                borderWidth: 1,
+                                height: 40,
+                                width: 40,
+                                borderRadius: 20,
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                            }}>
+                                <AntDesign name="qrcode" size={22} color={Colors.text} />
+                            </View>
+
+                        </View>
+
+                        <View style={{
+                            flex: 3,
+                            alignItems: 'flex-start',
+                            justifyContent: 'center',
+                        }}>
+                            <Text style={account.compte.carteClientQr != null ? styles.addrowText : styles.addrowTextdesable}>{t('account.displaytheqrcode')}</Text>
+                        </View>
+
+                        <View style={{
+                            flex: 1,
+                            alignItems: 'flex-end',
+                            justifyContent: 'center',
+                        }}>
+                            <Ionicons name="chevron-forward-outline" size={16} color={Colors.gray} />
+                        </View>
+                    </TouchableOpacity>
+
                 </View>
 
                 <LoadingModal setModalVisible={setModalVisible} modalVisible={modalVisible} />
-            </ScrollView>
 
+                <CardQrCode
+                    isVisible={qrmodalVisible}
+                    onClose={() => setQrModalVisible(false)}
+                    cardNum={account.compte.carteClientQr?.numCarte}
+                />
+
+
+            </ScrollView>
 
         </View>
     );
@@ -545,7 +611,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#e6e4e0',
         padding: 20,
         borderRadius: 10,
-        height: 160,
+        height: 180,
         width: '100%',
         alignItems: 'center',
         justifyContent: 'center',

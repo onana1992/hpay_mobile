@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1089287999563",
+    "project_id": "wechrist-e3e52",
+    "storage_bucket": "wechrist-e3e52.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1089287999563:android:93f4adcda9a1bc90d33dce",
+        "android_client_info": {
+          "package_name": "com.hpay"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCpL79J8lvRhXkobAVKV-vXYE4kyvTnuac"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,10 +1,9 @@
-ï»¿/* eslint-disable react/self-closing-comp */
+/* eslint-disable react/self-closing-comp */
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable eol-last */
 /* eslint-disable prettier/prettier */
 import React from 'react';
-import { SafeAreaView, Text, TouchableOpacity, StyleSheet, View, Image } from 'react-native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import { SafeAreaView, Text, StyleSheet, View, Image } from 'react-native';;
 import Modal from 'react-native-modal';
 import { Colors } from '../themes';
 import { useTranslation } from 'react-i18next';
@@ -18,11 +17,10 @@ type PropType = {
 }
 
 
-export default function QrCodeModal({ isVisible, onClose, qrcode }: PropType) {
+export default function CardQrCode({ isVisible, onClose, qrcode }: PropType) {
 
     const { t, i18n } = useTranslation();
 
-    console.log(qrcode);
 
 
     return (
@@ -58,7 +56,7 @@ export default function QrCodeModal({ isVisible, onClose, qrcode }: PropType) {
                     <Text style={styles.title}>Votre code QR de parrainnage</Text>
                 </View>
 
-                <View style={{ alignContent: 'center', alignItems: 'center', marginTop:20 }}>
+                <View style={{ alignContent: 'center', alignItems: 'center', marginTop: 20 }}>
                     <Image
                         source={{ uri: qrcode }}
                         style={styles.QRImage}
@@ -66,8 +64,9 @@ export default function QrCodeModal({ isVisible, onClose, qrcode }: PropType) {
                 </View>
 
                 <View style={{ marginTop: 10, alignItems: 'center' }}>
-                    <Text style={{ textAlign: 'center', fontSize: 16, color: Colors.text }}>Invitez vos amis Ã  scanner votre code QR pour tÃ©lÃ©charger l'application Hpay et beneficiez des points Ã  chacune de leur recharges.</Text>
+                    <Text style={{ textAlign: 'center', fontSize: 16, color: Colors.text }}>Invitez vos amis à scanner votre code QR pour télécharger l'application Hpay et beneficiez des points à chacune de leur recharges.</Text>
                 </View>
+
 
 
             </SafeAreaView>

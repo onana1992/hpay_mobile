@@ -9,6 +9,7 @@
 import React from 'react'
 import { StyleSheet } from 'react-native'
 import { Button as PaperButton } from 'react-native-paper'
+import { Colors } from '../themes'
 
 
 
@@ -18,7 +19,7 @@ const Button = ({ ...props})=> {
             children={undefined}
             style={[
                 styles.button,
-                props.mode === 'contained' && { backgroundColor: '#ef5924'}             
+                props.mode === 'contained' && { backgroundColor: Colors.primary}             
             ]}
             labelStyle={props.mode === 'contained' ? styles.text : styles.text_outline}
             {...props}

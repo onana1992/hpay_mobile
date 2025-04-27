@@ -3,12 +3,23 @@
   "french": "French",
   "english": "English",
 
-
   "startscreen": {
     "welcome": "Welcome to HPay",
     "connectionmsg": "Your adventure begins here, please log in or register.",
     "signin": "Sign In",
     "signup": "Sign up"
+  },
+
+
+  "homescreen": {
+    "notransactionmade": "No transaction made",
+    "loadinginprogress": "Chagement en cour ...",
+    "seealltransactions": "Voir toutes les transactions",
+    "all": "All",
+    "pay": "Pay",
+    "send": "Send",
+    "add": "Add",
+    "recenttransactions": "Recent transactions"
   },
 
 
@@ -234,9 +245,27 @@
   "benef": {
     "addsuccess": "Customer has been added to your beneficiaries.",
     "alreadyinyourbeneficiaries": "Client already added to your beneficiaries.",
-    "addlistsuccess": "Customers list  has been added to your beneficiaries."
-
+    "addlistsuccess": "Customers list  has been added to your beneficiaries.",
+    "nobeneficiaryregistered": "No beneficiary registered",
+    "mybeneficiaries": "My Beneficiaries",
+    "manuallyaddabeneficiary": "Manually add a beneficiary",
+    "registeredbeneficiaries": "Registered beneficiaries",
+    "otherpeopleinyourdirectoryuseHPay": "other people(s) in your directory use HPay",
+    "fromyourdirectoryuseHPay": "de votre repertoire utilisent  HPay",
+    "and": "and",
+    "displayall": "display all",
+    "searchresult": "Search result",
+    "search": "search",
+    "Firstnamelastnamenumber": "First name, last name or number",
+    "Doyoureallywanttodeletethisbeneficiary": "Do you really want to delete this beneficiary",
+    "delete": "Delete",
+    "send": "Send",
+    "Addthebeneficiariespresentinyourcontacts": "Add the beneficiaries present in your contacts",
+    "contactsinyourdirectoryuseHpay": "contacts in your directory use Hpay",
+    "add": "Add",
+    "cancel" : "Cancel"
   },
+
 
   "account": {
     "pinlessthan4": "4 digits required",
@@ -266,12 +295,46 @@
     "Enterthecardnumber": "Enter the card number",
     "enabledisable": "Enable/Desable the card",
     "areyousureyouwanttodisablethiscard": "are you sure you want to disable this card ?",
-
     "CardAlreadyUsed": "Card already used",
     "Cardnotregistered": "Card not registered",
     "invalidcodepin": "Invalid Code Pin",
     "cardaddedsucceffuly": "Card added succeffuly",
-    "deletionfailed": "Deletion failed"
+    "deletionfailed": "Deletion failed",
+    "hpaycard": "CARTE HPAY",
+    "currencycard": "Currency Card",
+    "principalAccount": "MAIN ACCOUNT",
+    "displaytheqrcode": "Display the Qr code of the Card",
+    "cardqrcode": "QR code of your card",
+    "seemore": "Voir plus",
+    "loadinginprogress": "Loading in progress...",
+   
+  },
+
+
+  "transaction": {
+    "insufficientbalance": "Insufficient balance",
+    "transfercompletedsuccessfully": "Transfer completed successfully",
+    "Summaryofyourtransfer": "Summary of your transfer",
+    "Confirmthetransfer": "Confirm the transfer",
+    "doyoureallywanttocancelthistransaction": "Do you really want to cancel this transaction ?",
+    "sendmoney": "Send money",
+    "howmuchdoyouwanttosend": "How much do you want to send ?",
+    "whichaccountdoyouwanttosendfrom": "Which account do you want to send from ?",
+    "whichaccountwouldyouliketosendto": "Which account would you like to send to?",
+    "willreceive": "will receive",
+    "chooseabeneficiary": "Choose a beneficiary",
+    "confirmmsg": "By confirming this transaction, you agree to the amount being sent without the possibility of return or modification. Please check the details carefully before confirming.",
+    "customeraccountisnotvalidated": "Your beneficiary's customer account is not validated",
+    "benefclosedaccount": "The chosen beneficiary's account is suspended or closed",
+    "issueraccoundclosed": "Your selected issuer account is suspended or closed",
+    "transfermoneybetweenyouraccounts": "Transfer money between your accounts",
+    "theamounttransferredwillbe": "The amount transferred will be",
+    "validate": "Validate",
+    "amounttransferred": "amounttransferred",
+    "in": "In",
+    "transfersentto": "Transfer sent to",
+    "Transferreceivedfrom": "Transfer received from",
+    "transferbetweenaccounts": "Transfer between accounts"
 
   },
 
@@ -297,7 +360,9 @@
   "clicktoaddthefront": "click to add the front",
   "addprofilpicture": "Add a profile picture to your account",
   "changethelangage": "Change language",
-  "requiredDocument": "Required Document"
+  "requiredDocument": "Required Document",
+  "send": "Send",
+  "delete": "Delete"
 
 
 }

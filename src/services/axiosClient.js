@@ -5,6 +5,8 @@ import { useSelector, useDispatch } from 'react-redux';
 //const BASE_URL = 'http://192.168.2.38:5000/api';
 
 const BASE_URL = 'http://10.0.0.133:5000/api';
+
+//const BASE_URL = "https://api-hpay-mobile.hpaytest.cash/api"
 //const token = useSelector((state: any) => state.profil.token);
 
 
@@ -20,7 +22,7 @@ export const client = createAxiosClient({
             'Content-Type': 'application/json',
         }
     },
-
+    
 });
 
 

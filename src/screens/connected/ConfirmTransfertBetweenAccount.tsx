@@ -14,6 +14,7 @@ import {
     TouchableOpacity,
     Text,
     ScrollView,
+    Alert,
 } from 'react-native';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -25,20 +26,101 @@ import { useSelector } from 'react-redux';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import TransactionFee from '../../components/transaction/TransactionFee';
 import TotalToPay from '../../components/transaction/TotalToPay';
+import { sendTransfertRequest } from '../../services/request';
+import LoadingModal from '../../components/LoadingModal';
+import Toast from 'react-native-toast-message';
 
 
 function ConfirmTransfertBetweenAccount({ navigation }: { navigation: any }) {
 
     const route = useRoute<any>();
-    
 
-    console.log(route.params)
-    const { benef, amount, account, benefAccount, rate } = route.params;
+    // console.log(route.params);
+    // const { benef, amount, account, benefAccount, rate } = route.params;
+    const { benef, amount, account, benefAccount, rate, data } = route.params;
+    const [modalVisible, setModalVisible] = React.useState(false);
+    const { t } = useTranslation();
 
 
     const send = () => {
-      //  console.log("envois")
-    }
+        Alert.alert(t('transaction.Confirmthetransfer'), t('transaction.confirmmsg'), [
+            {
+                text: t('cancel'),
+                onPress: () => console.log('Cancel Pressed'),
+                style: 'cancel',
+            },
+            { text: t('send'), onPress: () => confirmSend() },
+        ]);
+    };
+
+
+    const confirmSend = () => {
+
+        console.log(data);
+        //setModalVisible(true);
+
+        sendTransfertRequest(data).then((response) => {
+
+            console.log(response.data);
+            setModalVisible(false);
+            Toast.show({
+                type: 'error',
+                text1: t('success'),
+                text2: t('transaction.transfercompletedsuccessfully'),
+                position: 'top',
+            });
+
+            navigation.navigate('Home');
+
+        }).catch((error) => {
+
+            console.log(error.response.data);
+            setModalVisible(false);
+
+            if (error.response.data.statusCode === 401) {
+
+                if (error.response.data.message === 'insufficient balance') {
+                    Toast.show({
+                        type: 'error',
+                        text1: t('Error'),
+                        text2: t('transaction.transfercompletedsuccessfully'),
+                        position: 'top',
+                    });
+                }
+
+                else if (error.response.data.message === 'client to not found') {
+                    Toast.show({
+                        type: 'error',
+                        text1: t('Error'),
+                        text2: t('transaction.customeraccountisnotvalidated'),
+                        position: 'top',
+                    });
+                }
+
+                else if (error.response.data.message === 'compte from not found') {
+                    Toast.show({
+                        type: 'error',
+                        text1: t('Error'),
+                        text2: t('transaction.issueraccoundclosed'),
+                        position: 'top',
+                    });
+                }
+
+                else if (error.response.data.message === 'compte to not found') {
+                    Toast.show({
+                        type: 'error',
+                        text1: t('Error'),
+                        text2: t('transaction.benefclosedaccount'),
+                        position: 'top',
+                    });
+                }
+
+            }
+
+
+        });
+    };
+
 
 
     return (
@@ -61,7 +143,7 @@ function ConfirmTransfertBetweenAccount({ navigation }: { navigation: any }) {
 
             <ScrollView style={{ marginBottom: 10 }}>
 
-                <Text style={styles.title}>Récapitulatif de votre transfert</Text>
+                <Text style={styles.title}>{t('transaction.Summaryofyourtransfer')}</Text>
 
 
 
@@ -88,8 +170,8 @@ function ConfirmTransfertBetweenAccount({ navigation }: { navigation: any }) {
                                     </View>
                                 </View>
                                 <View>
-                                    <Text style={{ color: Colors.text, fontWeight: 'bold' }}>Montant transféré </Text>
-                                    <Text style={{ color: Colors.text, fontWeight: 'bold' }}>En {benefAccount.compte.devise}</Text>
+                                    <Text style={{ color: Colors.text, fontWeight: 'bold' }}>{t('transaction.amounttransferred')} </Text>
+                                    <Text style={{ color: Colors.text, fontWeight: 'bold' }}>{t('transaction.in')} {benefAccount.compte.devise}</Text>
                                 </View>
                             </View>
                         </View>
@@ -104,7 +186,7 @@ function ConfirmTransfertBetweenAccount({ navigation }: { navigation: any }) {
 
                 <View style={{ marginTop: 0, borderBottomColor: Colors.background, borderBottomWidth: 1, paddingVertical: 20 }}>
                     <TransactionFee
-                        amount={(Number(amount) * 0.5 / 10).toFixed(2).toString()}
+                        amount={(Number(amount) * 0 / 100).toFixed(2).toString()}
                         currency={account.compte.devise}
                     />
                 </View>
@@ -112,11 +194,10 @@ function ConfirmTransfertBetweenAccount({ navigation }: { navigation: any }) {
 
                 <View style={{ marginTop: 0, borderBottomColor: Colors.background, borderBottomWidth: 1, paddingVertical: 20 }}>
                     <TotalToPay
-                        amount={(Number(amount) + Number(amount) * 0.5 / 10).toFixed(2).toString()}
+                        amount={(Number(amount) + Number(amount) * 0 / 100).toFixed(2).toString()}
                         currency={account.compte.devise}
                     />
                 </View>
-
 
 
             </ScrollView>
@@ -127,13 +208,18 @@ function ConfirmTransfertBetweenAccount({ navigation }: { navigation: any }) {
                 <View style={{ flexDirection: 'row', width: '100%' }}>
                     <View style={{ flex: 1 }}>
                         <TouchableOpacity style={styles.addbutton} onPress={() => { send() }}>
-                            <Text style={styles.addbuttonText}>Confirmer le transfert</Text>
+                            <Text style={styles.addbuttonText}>{t('transaction.Confirmthetransfer')}</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
 
 
             </View>
+
+            <LoadingModal
+                setModalVisible={setModalVisible}
+                modalVisible={modalVisible}
+            />
 
         </View>
     );

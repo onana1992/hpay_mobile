@@ -130,6 +130,7 @@ function PayScreen({ navigation }: { navigation: any }) {
                 devise={account.compte.devise}
                 qrcode={user.client.parrainCode.qrcode}
             />
+
         </View>
 
 

@@ -33,7 +33,7 @@ import Toast from 'react-native-toast-message';
 import LoadingModal from '../../components/LoadingModal';
 import StepCompnent from '../../components/StepCompnent';
 import { useRoute } from '@react-navigation/native';
-
+import messaging from '@react-native-firebase/messaging';
 
 
 function SignUpScreen({ navigation}: {navigation:any, route: any}) {
@@ -77,10 +77,8 @@ function SignUpScreen({ navigation}: {navigation:any, route: any}) {
             setModalVisible(true);
             signUpRequest(telephone.value, password.value, country.id, city.id).then((response: any) => {
 
-                console.log(response);
-
-               // setModalVisible(false);
-               // navigation.navigate('TelVerification', { phone: telephone.value, idclient: response.data.response.data.idLoginClient });
+                setModalVisible(false);
+                navigation.navigate('TelVerification', { phone: telephone.value, idclient: response.data.response.data.idLoginClient });
 
             }).catch((_error: any) => {
                
@@ -103,6 +101,14 @@ function SignUpScreen({ navigation}: {navigation:any, route: any}) {
         }
 
     }
+
+
+    // effacement du token
+    React.useEffect(() => {
+        messaging().deleteToken();
+
+    }, []);
+
 
 
     return (

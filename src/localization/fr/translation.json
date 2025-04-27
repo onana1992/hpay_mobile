@@ -1,13 +1,25 @@
 {
+
   "french": "Français",
   "english": "Anglais",
-
 
   "startscreen": {
     "welcome": "Bienvenue sur HPay",
     "connectionmsg": "Votre aventure commence ici, Veuillez-vous connectez ou vous inscrire.",
     "signin": "Se connecter",
     "signup": "S'inscrire"
+  },
+
+
+  "homescreen": {
+    "notransactionmade": "No transaction made",
+    "loadinginprogress": "Loading in progress ...",
+    "seealltransactions": "Voir toutes les transactions",
+    "all": "Tout",
+    "pay": "Payer",
+    "send": "Envoyer",
+    "add": "Ajouter",
+    "recenttransactions": "Transaction récentes"
   },
 
 
@@ -54,9 +66,7 @@
     "accountalreadyexist": "un compte existe déjà avec ce numéro de télephone",
     "registrationfailure": "Échec d'inscription",
     "submit": "Soumettre"
-
   },
-
 
 
 
@@ -114,6 +124,7 @@
     "verifmsg": "Nous vous avons avons envoyé un code par email. Veuillez saisir ce code pour vérifier votre email",
     "emailalreadyused": "Adresse email déjà utilisé"
   },
+
 
   "sponsorship": {
     "title": "Faite vous parrainer par un membre",
@@ -247,7 +258,24 @@
   "benef": {
     "addsuccess": "Le client été ajouté à vos beneficiaire.",
     "alreadyinyourbeneficiaries": "Client dejà ajouté dans les beneficiaires",
-    "addlistsuccess": "Liste de clients ajouté dans les beneficiaires"
+    "addlistsuccess": "Liste de clients ajouté dans les beneficiaires",
+    "nobeneficiaryregistered": "Aucun bénéficiaire enregistré",
+    "mybeneficiaries": "Mes Bénéficiaires",
+    "manuallyaddabeneficiary": "Ajouter manuellement un bénéficiaire",
+    "registeredbeneficiaries": "Bénéficiaires enregistrés",
+    "otherpeopleinyourdirectoryuseHPay": "autre personne(s) de votre repertoire utilisent  HPay",
+    "fromyourdirectoryuseHPay": "de votre repertoire utilisent  HPay",
+    "and": "et",
+    "displayall": "Afficher tout",
+    "searchresult": "Résultat de la recherche",
+    "search": "Recherche",
+    "Firstnamelastnamenumber": "Prénom, nom ou numéro",
+    "delete": "Suprimer",
+    "send": "Envoyer",
+    "Addthebeneficiariespresentinyourcontacts": "Ajouter les bénéficiaires présents dans vos contacts",
+    "contactsinyourdirectoryuseHpay": "contacts de votre répertoire utilisent Hpay",
+    "add": "Ajouter",
+    "cancel": "Annuler"
   },
 
 
@@ -279,16 +307,48 @@
     "Enterthecardnumber": "Entrez le numéro de carte",
     "enabledisable": "Activer/Désactiver la carte",
     "areyousureyouwanttodisablethiscard": "Voulez-vous vraiment désactiver cette carte ?",
-
     "CardAlreadyUsed": "Carte déjà utlisée",
     "Cardnotregistered": "Carte non enregistrée",
     "invalidcodepin": "Code pin invalide",
     "cardaddedsucceffuly": "Carte ajoutée avec succès",
-    "deletionfailed" :  "Échec de la supression"
-
+    "deletionfailed": "Échec de la supression",
+    "hpaycard": "CARTE HPAY",
+    "currencycard": "Carte en devise",
+    "principalAccount": "COMPTE PRINCIPAL",
+    "displaytheqrcode": "Afficher le code QR de la carte",
+    "cardqrcode": "Code QR de votre carte",
+    "seemore": "Voir plus",
+    "loadinginprogress": "Chargement en cours..."
 
   },
- 
+
+
+  "transaction": {
+    "insufficientbalance": "Solde insuffisant",
+    "transfercompletedsuccessfully": "Transfert effectuer avec succès",
+    "Summaryofyourtransfer": "Récapitulatif de votre transfert",
+    "Confirmthetransfer": "Confirmer le transfert",
+    "doyoureallywanttocancelthistransaction": "Voulez-vous vraiment annuler cette transaction ?",
+    "sendmoney": "Envoyez de l'argent",
+    "howmuchdoyouwanttosend": "Combien souhaitez-vous envoyer ?",
+    "whichaccountdoyouwanttosendfrom": "Avec quel compte souhaitez-vous envoyer ?",
+    "whichaccountwouldyouliketosendto": "Dans quel compte souhaitez vous envoyez ?",
+    "willreceive": "recevra",
+    "chooseabeneficiary": "Choisir un beneficiaire",
+    "confirmmsg": "En confirmant cette opération, vous acceptez que le montant soit envoyé sans possibilité de retour ou de modification. Vérifiez bien les détails avant de confirmer.",
+    "customeraccountisnotvalidated": "Le compte client de votre beneficiaire n'est pas validé",
+    "benefclosedaccount": "le compte du bénéficiaire choisi est suspendu ou fermé",
+    "issueraccoundclosed": "Votre compte émetteur sélectionné est suspendu ou fermé",
+    "transfermoneybetweenyouraccounts": "Transférer de l'argent entre vos comptes",
+    "theamounttransferredwillbe": "Le montant transféré sera",
+    "validate": "Valider",
+    "amounttransferred": "Montant transferé",
+    "in ": "en",
+    "transfersentto": "Transfert envoyé à",
+    "Transferreceivedfrom": "Transfert reçu de ",
+    "transferbetweenaccounts": "Transfert entre comptes"
+  },
+
 
 
   "loading": "Veuillez patienter ...",
@@ -310,7 +370,9 @@
   "myorders": "Mes commmandes",
   "addprofilpicture": "Ajoutez un photo de profil à votre compte",
   "changethelangage": "Changez de langue",
-  "requiredDocument": "Document requis"
-
+  "requiredDocument": "Document requis",
+  "send": "Envoyer",
+  "delete": "Supprimer",
+  
 
 }

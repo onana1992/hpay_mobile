@@ -1,3 +1,6 @@
+/* eslint-disable react-native/no-inline-styles */
+/* eslint-disable quotes */
+/* eslint-disable prettier/prettier */
 import React from 'react';
 import {
     StyleSheet,
@@ -30,11 +33,11 @@ const AvartarButton: React.FC<MyComponentProps> = ({ profilUrl, prenom }) => {
 
         // Retourne les initiales des deux premiers mots en majuscule
         return words[0][0].toUpperCase() + words[1][0].toUpperCase();
-    }
+    };
 
 
     return (
-        <TouchableOpacity style={{ justifyContent: "flex-start" }} onPress={() => { navigation.navigate("ProfilScreen"); }} >
+        <TouchableOpacity style={{justifyContent: 'flex-start' }} onPress={() => { navigation.navigate('ProfilScreen'); }} >
             <View style={styles.avatar} >
                 {profilUrl != null ?
                     <Image
@@ -61,8 +64,8 @@ const styles = StyleSheet.create({
 
     main: {
         flexDirection: 'row',
-        justifyContent: "space-between",
-        marginTop: 10
+        justifyContent: 'space-between',
+        marginTop: 10,
     },
 
 

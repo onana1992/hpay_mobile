@@ -97,6 +97,7 @@ export function verifyEmailRequest(idLogin, code) {
 }
 
 
+
 // Renew password request
 export function passforgotUpdatePasswordRequest(phone, password) {
     return client.get(`/auth/passwordforgot/update/${phone}/${password}`);
@@ -273,17 +274,13 @@ export function modifyCardRequest(idCompte, numCarte, dateCreation, dateExpire, 
 }
 
 
-
-
-
+// modify pin of the card
 export function modifyPinRequest(idCompte, idLoginClient, pin, ip) {
     return client.post(`/compte/modifyPin/${idCompte}/${idLoginClient}`,
-
         {
             "pin": pin,
             "ip": ip
         }
-
     );
 }
 
@@ -318,7 +315,7 @@ export function currencyRateRequest(currencyFrom, currencyTo) {
     return client.post(`https://taux.hpaytest.cash/calculate_rate/calculate_rate.php`,
 
         {
-            
+            "api_key": "MaSuperCleSecrete123",
             "currencyFrom": currencyFrom,
             "currencyTo": currencyTo
         
@@ -329,10 +326,8 @@ export function currencyRateRequest(currencyFrom, currencyTo) {
 
 
 
-
+// post kyc
 export function postKycRequest(data) {
-
-    console.log(data.idtype_piece);
 
     return client.post(`/kyc_submit`,
 
@@ -369,7 +364,77 @@ export function postKycRequest(data) {
         }
         
     );
-}
+};
+
+
+
+export function sendTransfertRequest(data) {
+
+    return client.post(`/virement/enregistrer`,
+
+        {
+            "montant": data.montant,
+            "frais": data.frais,
+            "fraisMontant": data.fraisMontant,
+            "idClientFrom": data.idClientFrom,
+            "idClientTo": data.idClientTo,
+            "idCompteFrom": data.idCompteFrom,
+            "idCompteTo": data.idCompteTo,
+            "idPaysFrom": data.idPaysFrom,
+            "virementRaison": data.virementRaison,
+            "programmer": data.programmer,
+            "deviseFrom": data.deviseFrom,
+            "deviseTo": data.deviseTo,
+            "total": data.total ,
+            "tauxConversion": data.tauxConversion,
+            "gainHpayCAD": data.gainHpayCAD ,
+            "gainHpay": data.gainHpay,
+            "ip": data.ip,
+            "agent": data.agent,
+
+        }
+
+    );
+};
+
+
+export function getHistory(idClient, idCompte, sortDirection, page, size) {
+
+    return client.get(`/virement/historique?idClient=${idClient}&idCompte=${idCompte}&sortDirection=${sortDirection}&page=${page}&size=${size}`);
+
+};
+
+
+
+export function fetchRatesRequest(deviseFrom, devisesTo) {
+
+    return client.post(`https://rate.hpay.cash/calculate_multi_rate.php`,
+
+        {
+            "api_key": "MaSuperCleSecrete123",
+            "currencyFrom": deviseFrom,
+            "currenciesTo": devisesTo
+        }
+
+    );
+};
+
+
+export function saveFCMTokenRequest(idClient,token) {
+
+    return client.post(`/client/save/token`,
+
+        {
+            "idClient": idClient,
+            "token": token
+        }
+
+    );
+};
+
+
+
+
 
 
 

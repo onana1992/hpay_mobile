@@ -12,12 +12,9 @@ import {
     StyleSheet,
     View,
     TouchableOpacity,
-    Image,
     Text,
     ScrollView,
-    Platform,
-    PermissionsAndroid,
-    Rationale, Alert, Touchable, TextInput
+    Alert,
 } from 'react-native';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -25,40 +22,112 @@ import { Colors } from '../../themes';
 import { useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { useRoute } from '@react-navigation/native';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import Feather from 'react-native-vector-icons/Feather';
-import EvilIcons from 'react-native-vector-icons/EvilIcons';
-import AmountCurrencyInput from '../../components/transaction/AmountCurrencyInput';
-import { saveBenef } from '../../store/profilSlice';
 import { useSelector } from 'react-redux';
-import ChangeRate from '../../components/transaction/ChangeRate';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import TransactionFee from '../../components/transaction/TransactionFee';
 import TotalToPay from '../../components/transaction/TotalToPay';
-import { currencyRateRequest } from '../../services/request';
+import {sendTransfertRequest } from '../../services/request';
 import RecipiantAmount from '../../components/transaction/RecipiantAmount';
+import LoadingModal from '../../components/LoadingModal';
+import Toast from 'react-native-toast-message';
+import { Checkbox } from 'react-native-paper';
 
 
 function ConfirmTransfert({ navigation }: { navigation: any }) {
 
     const route = useRoute<any>();
+    const [modalVisible, setModalVisible] = React.useState(false);
     const { t } = useTranslation();
     const dispatch = useDispatch();
     const [visible, setVisible] = React.useState(false);
     const [langageModalvisible, setLangageModalvisible] = React.useState(false);
     const accounts = useSelector((state: any) => state.profil.accounts);
     const [benefaccounts, setBenefAccounts] = React.useState<any[]>([]);
-    const [benefAmount, setBenefAmount] = React.useState<string>("0.00");
+    const [benefAmount, setBenefAmount] = React.useState<string>('0.00');
+    const { benef, amount, account, benefAccount, rate, data } = route.params;
+    const [checked, setChecked] = React.useState(false);
 
-    console.log(route.params)
-    const {benef, amount, account, benefAccount, rate } = route.params;
 
 
     const send = () => {
-        console.log("envois")
-    }
-   
+        Alert.alert(t('transaction.Confirmthetransfer'), t('transaction.confirmmsg'), [
+            {
+                text: t('cancel'),
+                onPress: () => console.log('Cancel Pressed'),
+                style: 'cancel',
+            },
+            { text: t('send'), onPress: () => confirmSend() },
+        ]);
+    };
+
+
+
+    const confirmSend = () => {
+
+        //console.log(data);
+        setModalVisible(true);
+
+        sendTransfertRequest(data).then((response) => {
+
+            setModalVisible(false);
+            Toast.show({
+                type: 'error',
+                text1: t('success'),
+                text2: t('transaction.transfercompletedsuccessfully'),
+                position: 'top',
+            });
+
+            navigation.navigate('Home');
+
+        }).catch((error) => {
+
+            console.log(error);
+            setModalVisible(false);
+
+            if (error.response.data.statusCode === 401) {
+
+                if (error.response.data.message === 'insufficient balance') {
+                    Toast.show({
+                        type: 'error',
+                        text1: t('Error'),
+                        text2: t('transaction.transfercompletedsuccessfully'),
+                        position: 'top',
+                    });
+                }
+
+                else if (error.response.data.message === 'client to not found') {
+                    Toast.show({
+                        type: 'error',
+                        text1: t('Error'),
+                        text2: t('transaction.customeraccountisnotvalidated'),
+                        position: 'top',
+                    });
+                }
+
+                else if (error.response.data.message === 'compte from not found') {
+                    Toast.show({
+                        type: 'error',
+                        text1: t('Error'),
+                        text2: t('transaction.issueraccoundclosed'),
+                        position: 'top',
+                    });
+                }
+
+                else if (error.response.data.message === 'compte to not found') {
+                    Toast.show({
+                        type: 'error',
+                        text1: t('Error'),
+                        text2: t('transaction.benefclosedaccount'),
+                        position: 'top',
+                    });
+                }
+
+            }
+
+
+        });
+    };
+
+
 
     return (
         <View style={styles.main}>
@@ -80,11 +149,9 @@ function ConfirmTransfert({ navigation }: { navigation: any }) {
 
             <ScrollView style={{ marginBottom: 10 }}>
 
-                <Text style={styles.title}>Récapitulatif de votre transfert</Text>
+                <Text style={styles.title}>{t('transaction.Summaryofyourtransfer')}</Text>
 
-                
 
-                
 
                     <View style={{ marginTop: 30, borderBottomColor: Colors.background, borderBottomWidth: 1, paddingVertical: 20 }}>
                         <RecipiantAmount
@@ -96,37 +163,52 @@ function ConfirmTransfert({ navigation }: { navigation: any }) {
 
                     <View style={{ marginTop: 0, borderBottomColor: Colors.background, borderBottomWidth: 1, paddingVertical: 20 }}>
                         <TransactionFee
-                            amount={(Number(amount) * 0.5 / 10).toFixed(2).toString()}
+                            amount={(Number(amount) * 0 / 100).toFixed(2).toString()}
                             currency={account.compte.devise}
                         />
                     </View>
-                
 
 
                     <View style={{ marginTop: 0, borderBottomColor: Colors.background, borderBottomWidth: 1, paddingVertical: 20 }}>
                         <TotalToPay
-                            amount={(Number(amount) + Number(amount) * 0.5 / 10).toFixed(2).toString()}
+                            amount={(Number(amount) + Number(amount) * 0 / 100).toFixed(2).toString()}
                             currency={account.compte.devise}
                         />
                     </View>
-                
+
+                    {/*<View style={{ marginTop: 30, flex: 1, flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'flex-start' }}>
+                            <Checkbox
+                                status={checked ? 'checked' : 'unchecked'}
+                                onPress={() => {
+                                    setChecked(!checked);
+                                }}
+                                color={Colors.primary}
+                            />
+
+                        <Text style={{ color: Colors.text }}>{t('transaction.confirmmsg')} </Text>
+
+                    </View>*/}
 
 
             </ScrollView>
 
 
             <View style={{ justifyContent: 'flex-end', marginBottom: 0, }}>
-                
-                    <View style={{ flexDirection: 'row', width: '100%' }}>
-                        <View style={{ flex: 1 }}>
-                            <TouchableOpacity style={styles.addbutton} onPress={() => { send() }}>
-                                <Text style={styles.addbuttonText}>Confirmer le transfert</Text>
-                            </TouchableOpacity>
-                        </View>
+                <View style={{ flexDirection: 'row', width: '100%' }}>
+                    <View style={{ flex: 1 }}>
+                    <TouchableOpacity style={styles.addbutton} onPress={() => { send(); }}>
+                        <Text style={styles.addbuttonText}>{t('transaction.Confirmthetransfer')}</Text>
+                        </TouchableOpacity>
                     </View>
-                
+                </View>
 
             </View>
+
+
+            <LoadingModal
+                setModalVisible={setModalVisible}
+                modalVisible={modalVisible}
+            />
 
         </View>
     );
@@ -168,10 +250,10 @@ const styles = StyleSheet.create({
     },
 
     input: {
-        height: "100%",
+        height: '100%',
         width: '100%',
         padding: 0,
-        fontSize: 26
+        fontSize: 26,
     },
 
     addbutton: {

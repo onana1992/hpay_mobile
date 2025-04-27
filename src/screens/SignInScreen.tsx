@@ -32,6 +32,7 @@ import { signIn, saveToken } from '../store/profilSlice';
 import { signInRequest } from '../services/request';
 import LoadingModal from '../components/LoadingModal';
 import Toast from 'react-native-toast-message';
+import messaging from '@react-native-firebase/messaging';
 
 
 function SignInScreen({ navigation }: {navigation:any}){
@@ -44,6 +45,7 @@ function SignInScreen({ navigation }: {navigation:any}){
     const { t } = useTranslation();
     const dispatch = useDispatch();
     const onDismissSnackBar = () => setSnackVisible(false);
+
 
 
     const onLoginPressed = () => {
@@ -120,6 +122,11 @@ function SignInScreen({ navigation }: {navigation:any}){
 
  
     }
+
+    // effacement du token
+    React.useEffect(() => {
+        messaging().deleteToken();
+    }, []);
 
 
     return (

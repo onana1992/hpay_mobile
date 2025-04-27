@@ -16,6 +16,7 @@ import {
     Image,
     Text,
     FlatList,
+    KeyboardAvoidingView,
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Colors } from '../../themes';
@@ -39,14 +40,27 @@ function AddDirectoryBenefScreen({ navigation }: { navigation: any }) {
     const [searchQuery, setSearchQuery] = React.useState('');
     const [list, setList] = React.useState<any>([]);
     const [allChecked, setAllChecked] = React.useState<boolean>(false);
+    const benefs = useSelector((state: any) => state.profil.benefs);
+    const [filteredData, setFilteredData] = React.useState(benefs);
 
 
-    const users = [
-        { id: '1', name: 'John Doe', phone: '4165551234', checked: false },
-        { id: '2', name: 'Jane Smith', phone: '4165555678', checked: false },
-        { id: '3', name: 'Alice Johnson', phone: '5145559876', checked: false },
-        { id: '4', name: 'Bob Brown', phone: '6135554321', checked: false },
-    ];
+    const filterBenef = (query:string) => {
+        setSearchQuery(query);
+        console.log(searchQuery);
+
+        if (query) {
+            let newFilteredData = benefs.filter((item:any) =>
+                item.prenoms.toLowerCase().includes(query.toLowerCase()) ||
+                item.nom.toLowerCase().includes(query.toLowerCase()) ||
+                item.telephone.toLowerCase().includes(query.toLowerCase()) 
+            );
+
+            setFilteredData(newFilteredData);
+        } else {
+            setFilteredData(benefs); // Reset the list when search is cleared
+        }
+    };
+
 
 
 
@@ -137,7 +151,10 @@ function AddDirectoryBenefScreen({ navigation }: { navigation: any }) {
     const addContact = () => {
 
         //console.log(getListId());
-        addBenefListRequest(user.idLoginClient, getListId()).then((response: any) => {
+
+        if(getListId().length > 0){
+
+             addBenefListRequest(user.idLoginClient, getListId()).then((response: any) => {
 
            console.log(response.data);
            Toast.show({
@@ -149,38 +166,24 @@ function AddDirectoryBenefScreen({ navigation }: { navigation: any }) {
 
            navigation.goBack();
 
-           /* setModalVisible(false);
-            setClient(null);
-            setSearchQuery('');*/
-
         }).catch((_error: any) => {
 
 
             console.log(_error);
 
-            /*setModalVisible(false);
-            if (_error.response.status === 404) {
-                Toast.show({
-                    type: 'error',
-                    text1: t('Error'),
-                    text2: t('benef.alreadyinyourbeneficiaries'),
-                    position: 'top',
-                });
-            } else {
-
-            }*/
-
 
         });
 
+        }
 
     };
+
+
 
 
     React.useEffect(() => {
 
         const result =  newClients.map((item:any) => {
-
             return {
                 id: item.id.toString(),
                 nom: item.nom,
@@ -205,14 +208,18 @@ function AddDirectoryBenefScreen({ navigation }: { navigation: any }) {
         return (
             <View>
                 <View style={{ marginTop: 10 }}>
-                    <Text style={styles.title}>Ajoutez des bénéficiaires présents dans vos contacts </Text>
+                    <Text style={styles.title}>{t('benef.Addthebeneficiariespresentinyourcontacts')}</Text>
                 </View>
 
                 <View style={{ marginTop: 10, flexDirection: 'row', width: '100%' }}>
                     <Searchbar
-                        placeholder="Nom du béneficiaire"
-                        onChangeText={setSearchQuery}
+                        placeholder={t('benef.Firstnamelastnamenumber')}
+                        iconColor={Colors.text}
+                        placeholderTextColor="gray"
                         value={searchQuery}
+                        onChangeText={filterBenef}
+                        onIconPress={() => { console.log('')}}
+                        onSubmitEditing={() => { console.log('') }}
                         style={{ flex: 1, backgroundColor: '#ffffff', borderColor: 'gray', borderWidth: 1 }}
                     />
                 </View>
@@ -220,7 +227,7 @@ function AddDirectoryBenefScreen({ navigation }: { navigation: any }) {
                 <View style={{ marginBottom: 30, marginTop: 20, flexDirection: 'row', width:'100%' }}>
 
                     <View style={{ marginTop: 20, flex:2 }}>
-                        <Text style={{ fontWeight: 'bold', color: Colors.text, fontSize: 16 }}>{newClients.length} contacts de votre repertoires utilisent Hpay</Text>
+                        <Text style={{ fontWeight: 'bold', color: Colors.text, fontSize: 16 }}>{newClients.length} {t('benef.contactsinyourdirectoryuseHpay')}</Text>
                     </View>
 
                     <View style={{ marginTop: 20, flex: 1, alignItems:'flex-end' }}>
@@ -245,9 +252,13 @@ function AddDirectoryBenefScreen({ navigation }: { navigation: any }) {
 
 
     return (
-        <View style={styles.main}>
+        <KeyboardAvoidingView
+            enabled={true}
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            style={styles.main}
+        >
 
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', }} >
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }} >
                 <TouchableOpacity style={{
                     justifyContent: 'center',
                     backgroundColor: '#e6e4e0',
@@ -260,8 +271,6 @@ function AddDirectoryBenefScreen({ navigation }: { navigation: any }) {
                         <Ionicons name="close-outline" color={Colors.text} size={24} />
                     </View>
                 </TouchableOpacity>
-
-                
             </View>
 
 
@@ -322,21 +331,21 @@ function AddDirectoryBenefScreen({ navigation }: { navigation: any }) {
                 <View style={{ flexDirection: 'row', width: '100%' }}>
 
                     <View style={{ flex: 1, marginRight: 20 }}>
-                        <TouchableOpacity style={styles.cancelbutton}>
-                            <Text style={styles.cancelbuttonText}>Annuler</Text>
+                        <TouchableOpacity style={styles.cancelbutton} onPress={() => { navigation.goBack(); }} >
+                            <Text style={styles.cancelbuttonText}>{t('benef.cancel')}</Text>
                         </TouchableOpacity>
                     </View>
 
                     <View style={{ flex: 1 }}>
-                        <TouchableOpacity style={styles.addbutton} onPress={() => { addContact(); } }>
-                            <Text style={styles.addbuttonText}>Ajouter</Text>
+                        <TouchableOpacity disabled={getListId().length === 0} style={styles.addbutton} onPress={() => { addContact(); } }>
+                            <Text style={styles.addbuttonText}>{t('benef.add')}</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
             </View>
 
 
-        </View>
+        </KeyboardAvoidingView>
     );
 
 }

@@ -15,7 +15,8 @@ import {
     Image,
     Text,
     ScrollView,
-    Clipboard, Linking,
+    Clipboard,
+    Linking,
 
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';

@@ -42,6 +42,7 @@ import MyInfoPersoScreen from '../screens/connected/MyInfoPersoScreen';
 import MyHistoriesScreen from '../screens/connected/MyHistoriesScreen';
 import ChangePasswordScreen from '../screens/connected/ChangePasswordScreen';
 import ActivationCarteScreen from '../screens/card/ActivationCarteScreen';
+import { navigationRef } from '../../NavigationService';
 
 const Stack = createNativeStackNavigator();
 
@@ -53,7 +54,7 @@ export default function StackNavigation() {
 
     //console.log(user);
     return (
-        <NavigationContainer>
+        <NavigationContainer ref={navigationRef}>
             {user !== null ?
                 <Stack.Navigator>
 

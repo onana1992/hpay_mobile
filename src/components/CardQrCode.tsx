@@ -1,4 +1,4 @@
-﻿/* eslint-disable react/self-closing-comp */
+/* eslint-disable react/self-closing-comp */
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable eol-last */
 /* eslint-disable prettier/prettier */
@@ -8,21 +8,22 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import Modal from 'react-native-modal';
 import { Colors } from '../themes';
 import { useTranslation } from 'react-i18next';
+import QRCode from 'react-native-qrcode-svg';
 
 
 
 type PropType = {
     isVisible: boolean,
     onClose: () => void,
-    qrcode: string
+    cardNum: string
 }
 
 
-export default function QrCodeModal({ isVisible, onClose, qrcode }: PropType) {
+export default function CardQrCode({ isVisible, onClose, cardNum }: PropType) {
 
     const { t, i18n } = useTranslation();
 
-    console.log(qrcode);
+   // console.log(qrcode)
 
 
     return (
@@ -55,18 +56,16 @@ export default function QrCodeModal({ isVisible, onClose, qrcode }: PropType) {
                 </View>*/}
 
                 <View style={{ marginTop: 10 }}>
-                    <Text style={styles.title}>Votre code QR de parrainnage</Text>
+                    <Text style={styles.title}>{t('account.cardqrcode')}</Text>
                 </View>
 
-                <View style={{ alignContent: 'center', alignItems: 'center', marginTop:20 }}>
-                    <Image
-                        source={{ uri: qrcode }}
-                        style={styles.QRImage}
+                <View style={{ alignContent: 'center', alignItems: 'center', marginTop: 40 }}>
+                    <QRCode
+                        value={cardNum}
+                        size={200} // You can adjust the size of the QR code
+                        color="black" // The color of the QR code
+                        backgroundColor="white" // The background color
                     />
-                </View>
-
-                <View style={{ marginTop: 10, alignItems: 'center' }}>
-                    <Text style={{ textAlign: 'center', fontSize: 16, color: Colors.text }}>Invitez vos amis à scanner votre code QR pour télécharger l'application Hpay et beneficiez des points à chacune de leur recharges.</Text>
                 </View>
 
 
@@ -85,7 +84,7 @@ const styles = StyleSheet.create({
     content: {
         backgroundColor: '#ffffff',
         padding: 20,
-        height: 490,
+        height: 350,
     },
 
     QRImage: {

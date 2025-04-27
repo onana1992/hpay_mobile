@@ -25,7 +25,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { removeClientRequest } from '../../services/request';
 import { useRoute } from '@react-navigation/native';
 import { saveBenef} from '../../store/profilSlice';
-
+import { useTranslation } from 'react-i18next';
 
 function ProfilBenefScreen({ navigation }: { navigation: any }) {
 
@@ -33,6 +33,7 @@ function ProfilBenefScreen({ navigation }: { navigation: any }) {
     const {client} = route.params;
     const user = useSelector((state: any) => state.profil.user);
     const dispatch = useDispatch();
+    const { t } = useTranslation();
 
     console.log(client);
 
@@ -59,13 +60,13 @@ function ProfilBenefScreen({ navigation }: { navigation: any }) {
 
     const deleteClient = () => {
 
-        Alert.alert('', 'Voulez-vous vraiment vous supprimer ce beneficiaire', [
+        Alert.alert('', t('benef.Doyoureallywanttodeletethisbeneficiary'), [
             {
-                text: 'Annuler',
+                text: t('cancel'),
                 onPress: () => console.log('Cancel Pressed'),
                 style: 'cancel',
             },
-            { text: 'Supprimer', onPress: () => confirmDelete() },
+            { text: t('delete'), onPress: () => confirmDelete() },
         ]);
 
     };
@@ -85,8 +86,8 @@ function ProfilBenefScreen({ navigation }: { navigation: any }) {
 
     const send = () => {
         dispatch(saveBenef(client));
-        navigation.navigate("TransfertScreen");
-    }
+        navigation.navigate('TransfertScreen');
+    };
 
 
 
@@ -136,7 +137,7 @@ function ProfilBenefScreen({ navigation }: { navigation: any }) {
                                 <Feather name="send" size={26} color={Colors.text} />
                             </TouchableOpacity>
                             <View style={{ height: 50 }}>
-                                <Text style={{ color: 'black', fontWeight: 'bold', marginTop: 5, textAlign: 'center' }}>Envoyer</Text>
+                                <Text style={{ color: 'black', fontWeight: 'bold', marginTop: 5, textAlign: 'center' }}>{t('benef.send')}</Text>
                             </View>
                         </View>
 
@@ -154,16 +155,11 @@ function ProfilBenefScreen({ navigation }: { navigation: any }) {
                                 <AntDesign name="close" size={32} color={Colors.text} />
                             </TouchableOpacity>
                             <View style={{ height: 50 }}>
-                                <Text style={{ color: 'black', fontWeight: 'bold', marginTop: 5, textAlign: 'center' }}>Supprimez</Text>
+                                <Text style={{ color: 'black', fontWeight: 'bold', marginTop: 5, textAlign: 'center' }}>{t('benef.delete')}</Text>
                             </View>
                         </View>
-
                     </View>
                 </View>
-
-                {/*<View style={{ marginVertical: 15 }}>
-                    <Text style={{ fontWeight: 'bold', color: Colors.text, fontSize: 22 }}>Compte</Text>
-                </View>*/}
 
 
             </View>
@@ -240,7 +236,6 @@ function ProfilBenefScreen({ navigation }: { navigation: any }) {
                 </TouchableOpacity>
             </View>
 
-                
 
             <FlatList
                 data={client.compte.filter((item:any) => {
@@ -256,8 +251,6 @@ function ProfilBenefScreen({ navigation }: { navigation: any }) {
                     numColumns={2}
             />
 
-                
-
         </View>
     );
 }
@@ -267,7 +260,7 @@ const styles = StyleSheet.create({
     main: {
         flex: 1,
         backgroundColor: '#ffffff',
-        padding:20
+        padding:20,
     },
 
     header: {
@@ -299,7 +292,7 @@ const styles = StyleSheet.create({
         overflow: 'hidden',
         borderColor: Colors.primary,
         borderWidth: 1,
-        borderRadius: 30,
+        borderRadius: 50,
     },
 
     addButton: {

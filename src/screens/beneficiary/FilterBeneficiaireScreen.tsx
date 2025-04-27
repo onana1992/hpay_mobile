@@ -36,6 +36,7 @@ import AvartarButton from '../../components/connected/AvartarButton';
 
 function FilterBeneficiaireScreen({ navigation }: { navigation: any }) {
 
+    const inputRef = React.useRef(null);
     const { t } = useTranslation();
     const dispatch = useDispatch();
     const [visible, setVisible] = React.useState(false);
@@ -48,6 +49,19 @@ function FilterBeneficiaireScreen({ navigation }: { navigation: any }) {
     const [hasPermission, setHasPermission] = React.useState(false);
     const [contacts, setContacts] = React.useState<number[]>([]);
     const [searchQuery, setSearchQuery] = React.useState('');
+
+
+    React.useEffect(() => {
+        // Focus on the input when the screen is loaded
+
+        setTimeout(()=>{
+             if (inputRef.current) {
+                inputRef.current.focus();  // Focus on the TextInput
+             }
+        },500);
+
+    }, []);
+
 
 
    /* useFocusEffect(
@@ -86,8 +100,8 @@ function FilterBeneficiaireScreen({ navigation }: { navigation: any }) {
 
     };
 
-    const filterBenef = (query:string) => {
 
+    const filterBenef = (query:string) => {
         setSearchQuery(query);
         console.log(searchQuery);
 
@@ -102,21 +116,15 @@ function FilterBeneficiaireScreen({ navigation }: { navigation: any }) {
         } else {
             setFilteredData(benefs); // Reset the list when search is cleared
         }
-    }
-
+    };
 
 
     const Header = () => {
 
         return (
             <View style={{} }>
-             
-                
-
-
             </View>
         );
-
 
 
     };
@@ -128,7 +136,6 @@ function FilterBeneficiaireScreen({ navigation }: { navigation: any }) {
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             style={styles.main}
         >
-     
 
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', }} >
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }} >
@@ -157,17 +164,20 @@ function FilterBeneficiaireScreen({ navigation }: { navigation: any }) {
 
             <View>
                 <View>
-                    <Text style={styles.title}>Recherche</Text>
+                    <Text style={styles.title}>{t('benef.search')}</Text>
                 </View>
 
                 <View style={{ marginTop: 10, flexDirection: 'row', width: '100%' }}>
                     <Searchbar
-                        placeholder="Prenom, nom, numero"
+                        placeholder={t('benef.Firstnamelastnamenumber')}
+                        iconColor={Colors.text}
+                        placeholderTextColor="gray"
                         value={searchQuery}
+                        ref={inputRef}
                         onChangeText={filterBenef}
-                        onIconPress={() => { console.log("") }}
-                        onSubmitEditing={() => { console.log("") }}
-                        style={{ flex: 1, backgroundColor: '#ffffff', borderColor: 'gray', borderWidth: 1 }}
+                        onIconPress={() => { console.log('')}}
+                        onSubmitEditing={() => { console.log('') }}
+                        style={{ flex: 1, color:Colors.text, backgroundColor: '#ffffff', borderColor: 'gray', borderWidth: 1 }}
                     />
                 </View>
 
@@ -177,9 +187,9 @@ function FilterBeneficiaireScreen({ navigation }: { navigation: any }) {
                         <Text style={{
                             fontWeight: 'bold',
                             color: Colors.text,
-                            fontSize: 22
+                            fontSize: 22,
                         }}>
-                            Resultat de la recherche
+                            {t('benef.searchresult')}
                         </Text>
                     </View>
                 </View>
@@ -226,8 +236,6 @@ function FilterBeneficiaireScreen({ navigation }: { navigation: any }) {
                 )}
 
                 ListEmptyComponent={<EmptyCard />}
-
-                
             />
 
 
@@ -331,6 +339,11 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
+
+
+    inputText: {
+    color: 'blue',  // Set the input text color here
+  },
 
 
 

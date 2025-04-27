@@ -1,4 +1,5 @@
-﻿/* eslint-disable curly */
+﻿/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable curly */
 /* eslint-disable no-alert */
 /* eslint-disable react/no-unstable-nested-components */
 /* eslint-disable @typescript-eslint/no-unused-vars */
@@ -53,6 +54,7 @@ function BeneficiariesScreen({ navigation }: { navigation: any }) {
             checkPermissions();
             getBeneficiaries();
             fetchContacts();
+
             return () => {
 
             };
@@ -76,13 +78,15 @@ function BeneficiariesScreen({ navigation }: { navigation: any }) {
 
     const getBeneficiaries = () => {
 
+       // alert(user.idLoginClient); 
+
         fetchBeficiariesRequest(user.idLoginClient).then((response: any) => {
-            //console.log(response.data.response.data);
             dispatch(saveBenefs(response.data.response.data));
             setIsRefreshing(false);
 
         }).catch((error: any) => {
 
+            console.log(error.response.data);
 
         });
     };
@@ -102,7 +106,7 @@ function BeneficiariesScreen({ navigation }: { navigation: any }) {
             if (granted === PermissionsAndroid.RESULTS.GRANTED) {
                 setHasPermission(true);
             } else {
-                console.log('Permission denied');
+               // console.log('Permission denied');
             }
         } else {
             setHasPermission(true); // iOS automatically handles permissions
@@ -122,20 +126,22 @@ function BeneficiariesScreen({ navigation }: { navigation: any }) {
                             // Remove '+', '(', ')', '-', and white spaces and convert to Number
                             const cleanedNumber = phone.number.replace(/[+\s\(\)\-]/g, '');
                             return Number(cleanedNumber);  // Convert to Number
+                        })
+                        .filter((phone) => {
+                            return phone !== Number(user.login);
                         });
-                        
 
-                    //setPhoneNumbers(phoneNumbersArray);
+                   // console.log(phoneNumbersArray);
 
                     setContacts(phoneNumbersArray);
                     getClientInMyContact(phoneNumbersArray);
 
                 })
                 .catch(error => {
-                    console.log('Error fetching contacts:', error);
+                    //console.log('Error fetching contacts:', error);
                 });
         } else {
-            console.log('Permission not granted');
+           // console.log('Permission not granted');
         }
     };
 
@@ -143,14 +149,12 @@ function BeneficiariesScreen({ navigation }: { navigation: any }) {
 
     const getClientInMyContact = (contactList) => {
 
-        console.log(contactList);
-
-        fetchBeficiariesInMyContactRequest(Number(user.idLoginClient), contactList).then((response: any) => {
-            console.log(response.data.response.data);
-            dispatch(saveNewClients(response.data.response.data));
+        fetchBeficiariesInMyContactRequest(user.idLoginClient, contactList ).then((response: any) => {
+          //  console.log(response.data.response.data);
+           dispatch(saveNewClients(response.data.response.data));
         }).catch((error: any) => {
 
-            console.log(error);
+            console.log(error.response.data);
 
         });
 
@@ -161,7 +165,7 @@ function BeneficiariesScreen({ navigation }: { navigation: any }) {
 
         return (
             <View style={styles.emptycard}>
-                <Text style={{ color: Colors.text }}>Aucun beneficiaire enegistré</Text>
+                <Text style={{ color: Colors.text }}>{t('benef.nobeneficiaryregistered')}</Text>
             </View>
         );
 
@@ -174,15 +178,17 @@ function BeneficiariesScreen({ navigation }: { navigation: any }) {
         return (
             <View>
                 <View>
-                    <Text style={styles.title}> Mes Bénéficiaires </Text>
+                    <Text style={styles.title}>{t('benef.mybeneficiaries')}</Text>
                 </View>
 
                 <View style={{ marginTop: 10, flexDirection: 'row', width: '100%' }}>
                     <Searchbar
-                        placeholder="Prenom, nom, numero"
+                        placeholder={t('benef.Firstnamelastnamenumber')}
                         onChangeText={setSearchQuery}
                         value={searchQuery}
-                        style={{ flex: 1, backgroundColor: '#ffffff', borderColor: 'gray', borderWidth: 1 }}
+                        iconColor={Colors.text}
+                        placeholderTextColor="gray"
+                        style={{ flex: 1, color:Colors.text, backgroundColor: '#ffffff', borderColor: 'gray', borderWidth: 1 }}
                         onPressIn={() => { navigation.navigate('FilterBeneficiaireScreen')}}
                     />
                 </View>
@@ -215,7 +221,7 @@ function BeneficiariesScreen({ navigation }: { navigation: any }) {
                             alignItems: 'flex-start',
                             justifyContent: 'center',
                         }}>
-                            <Text style={styles.addrowText}>Ajouter manuellement un bénéficiaire</Text>
+                            <Text style={styles.addrowText}>{t('benef.manuallyaddabeneficiary')}</Text>
                         </View>
 
                         <View style={{
@@ -255,8 +261,12 @@ function BeneficiariesScreen({ navigation }: { navigation: any }) {
                                 alignItems: 'flex-start',
                                 justifyContent: 'center',
                             }}>
-                                    <Text style={styles.addrowText}>{newClients[0].prenoms} et  {newClients.length - 1 } autre personnes de votre repertoire utilisent  HPay</Text>
-
+                                {
+                                        newClients.length > 1 ?
+                                        <Text style={styles.addrowText}>{newClients[0].prenoms} {t('benef.and')}  {newClients.length - 1 } {t('benef.otherpeopleinyourdirectoryuseHPay')}</Text>
+                                        :
+                                        <Text style={styles.addrowText}>{newClients[0].prenoms} {t('benef.fromyourdirectoryuseHPay')}</Text>
+                                 }
                             </View>
 
                             <View style={{
@@ -265,7 +275,7 @@ function BeneficiariesScreen({ navigation }: { navigation: any }) {
                                 justifyContent: 'center',
                             }}>
                                 <View style={styles.display}>
-                                    <Text>Tout afficher</Text>
+                                    <Text style={{color:Colors.text}}>{t('benef.displayall')}</Text>
                                 </View>
                             </View>
                         </TouchableOpacity>
@@ -274,7 +284,7 @@ function BeneficiariesScreen({ navigation }: { navigation: any }) {
 
 
                     <View style={{ marginTop: 20 }}>
-                        <Text style={{ fontWeight: 'bold', color: Colors.text, fontSize: 22 }}>Bénéficiaires enregistrés</Text>
+                        <Text style={{ fontWeight: 'bold', color: Colors.text, fontSize: 22 }}>{t('benef.registeredbeneficiaries')}</Text>
                     </View>
 
 
