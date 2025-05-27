@@ -98,6 +98,7 @@ export function verifyEmailRequest(idLogin, code) {
 
 
 
+
 // Renew password request
 export function passforgotUpdatePasswordRequest(phone, password) {
     return client.get(`/auth/passwordforgot/update/${phone}/${password}`);
@@ -191,12 +192,10 @@ export function saveKyc(formData) {
 }
 
 
-
 // fetch list of beneficiaries
 export function fetchBeficiariesRequest(IdLoginClient) {
     return client.get(`/benef/list/${IdLoginClient}`);
 }
-
 
 
 //add beneficiaire
@@ -283,7 +282,6 @@ export function modifyPinRequest(idCompte, idLoginClient, pin, ip) {
         }
     );
 }
-
 
 
 
@@ -391,6 +389,8 @@ export function sendTransfertRequest(data) {
             "gainHpay": data.gainHpay,
             "ip": data.ip,
             "agent": data.agent,
+            "montantCompteTo": data.montantCompteTo,
+            "montantCompteFrom": data.montantCompteFrom
 
         }
 
@@ -433,8 +433,56 @@ export function saveFCMTokenRequest(idClient,token) {
 };
 
 
+export function getMessage(idClient, page, size) {
+    return client.get(`/messages?idclient=${idClient}&page=${page}&size=${size}`);
+};
 
 
 
+export function readMessage(idMessage) {
+    return client.get(`/messages/lire/${idMessage}`);
+};
 
+
+
+export function markAsReadRequest(idClient) {
+
+    return client.post(`/messages/lire-tous?idclient=${idClient}`,
+
+        {
+
+        }
+    );
+
+};
+
+
+export function getNumberMessageNonlu(idClient) {
+    return client.get(`/messages/nonlu/count?idclient=${idClient}`);
+};
+
+
+export function saveProfilImage(formData, idClient ) {
+
+    return client2.post(
+        `/auth/upload-photo/${idClient}`,
+        formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data', // Required for file uploads
+        },
+    });
+
+}
+
+
+export function sendCreationAccountConfirmEmail(idLoginClient) {
+
+    return client.post(`/auth/sendEmail/confirm/account`,
+
+        {
+            "idClient": idLoginClient,
+        }
+
+    );
+};
 

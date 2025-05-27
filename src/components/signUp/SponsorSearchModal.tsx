@@ -1,43 +1,44 @@
-﻿/* eslint-disable react-native/no-inline-styles */
+﻿/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable react-native/no-inline-styles */
 /* eslint-disable eol-last */
 /* eslint-disable prettier/prettier */
 import React from 'react';
 import { SafeAreaView, Text,  StyleSheet, View, Dimensions, ScrollView, Image } from 'react-native';
 import Modal from 'react-native-modal';
-import { Colors } from '../themes';
+import { Colors } from '../../themes';
 import { useTranslation } from 'react-i18next';
-import Button from '../components/Button';
+import Button from '../../components/Button';
 import { useNavigation } from '@react-navigation/native';
-import { addParrain } from '../services/request';
-import LoadingModal from './LoadingModal';
+import { addParrain } from '../../services/request';
+import LoadingModal from '../LoadingModal';
 import Toast from 'react-native-toast-message';
 
-
 //import I18n from 'react-native-i18n';
-
 
 type PropType = {
     isVisible: boolean,
     onClose: () => void,
     client: any,
     phone:string
+    setEndModalVisible: (boolean) => void,
 }
 
 
 
-export default function SponsorSearchModal({ isVisible, onClose, client, phone }: PropType) {
-
+export default function SponsorSearchModal({ isVisible, onClose, client, phone,setEndModalVisible }: PropType) {
 
     const { t } = useTranslation();
     const navigation = useNavigation();
-    const url = client?.client?.photoClient ? '' : client?.client?.photoClient;
+    const url = client?.photoClient === null ? '' : client?.photoClient;
     const [filePath, setFilePath] = React.useState<string>('');
     const [modalVisible, setModalVisible] = React.useState(false);
 
+    React.useEffect(() => {
+        setFilePath(client?.photoClient === null ? '' : client?.photoClient);
+    }, []);
 
     React.useEffect(() => {
-        
-
+        setFilePath(client?.photoClient === null ? '' : client?.photoClient);
     }, [isVisible]);
 
 
@@ -51,9 +52,21 @@ export default function SponsorSearchModal({ isVisible, onClose, client, phone }
         setModalVisible(true);
         addParrain(phone, client?.telephone).then((response: any) => {
 
-            // console.log(response)
-            setModalVisible(false);
-            navigation.popToTop();
+            onClose();
+
+            Toast.show({
+                type: 'success',
+                text1: t('sponsorship.success'),
+                text2: t('sponsorship.sponsoradded'),
+                position: 'top',
+            });
+
+            setEndModalVisible(true);
+
+           /*setTimeout(() => {
+                navigation.popToTop();
+            },10000);*/
+
 
         }).catch((_error: any) => {
 
@@ -61,15 +74,18 @@ export default function SponsorSearchModal({ isVisible, onClose, client, phone }
             setModalVisible(false);
 
             if (_error.response.data.statusCode === 404) {
+
+                onClose();
                 Toast.show({
                     type: 'error',
                     text1: t('sponsorship.failure'),
                     text2: t('sponsorship.sponsorshipalreadyaexist'),
                     position: 'top',
                 });
+
             } else {
 
-
+                onClose();
             }
 
         });
@@ -95,11 +111,14 @@ export default function SponsorSearchModal({ isVisible, onClose, client, phone }
                     </View>
 
                     <View style={styles.avatar}>
-                        <Image
-                            source={filePath ? { uri: filePath } : require('../assets/avatar.jpg')}
+                        {
+                          client &&
+                           <Image
+                            source={filePath !== '' ? { uri: filePath } : require('../../assets/avatar.jpg')}
                             style={styles.avatarImage}
-                        />
-                        <Text style={{ marginTop:10, fontSize: 16, color: Colors.text, fontWeight: 'bold' }} >{client?.client?.prenoms} {client?.client?.nom}</Text>
+                           />
+                        }
+                        <Text style={{ marginTop:10, fontSize: 16, color: Colors.text, fontWeight: 'bold' }} >{client?.prenoms} {client?.nom}</Text>
                         <Text style={{ fontSize: 14, color: Colors.gray }}>{client?.login}</Text>
                     </View>
 
@@ -129,7 +148,9 @@ export default function SponsorSearchModal({ isVisible, onClose, client, phone }
     );
 }
 
-const { width, height } = Dimensions.get('window');
+
+
+const { width} = Dimensions.get('window');
 
 const styles = StyleSheet.create({
 
@@ -213,7 +234,6 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 60,
     },
-
 
 
 });

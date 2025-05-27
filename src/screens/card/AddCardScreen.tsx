@@ -65,7 +65,7 @@ function AddCardScreen({ navigation }: { navigation: any }) {
     const [ipAdress, setIpAddress] = React.useState<string | null>("");
     const { t } = useTranslation();
 
-
+    console.log(account);
 
     React.useEffect(() => {
         NetworkInfo.getIPAddress()
@@ -335,7 +335,7 @@ function AddCardScreen({ navigation }: { navigation: any }) {
                     width: 40,
                     alignItems: 'center',
                     borderRadius: 20,
-                }} onPress={() => { cancel() }} >
+                }} onPress={() => { cancel(); }} >
                     <View>
                         <Ionicons name="close" color={Colors.text} size={24} />
                     </View>
@@ -351,76 +351,100 @@ function AddCardScreen({ navigation }: { navigation: any }) {
                 <Pressable onPress={Keyboard.dismiss} style={{marginTop:20} }>
 
                     <Text style={[styles.inputTitleText, { marginBottom: 0 }]}>{t('account.account')}</Text>
-                        <View style={styles.account} >
-                            <View style={{ width: '60%', padding: 5 }} >
-                                <View style={{ flex: 1, flexDirection: 'row', height: 40, alignItems: 'center', justifyContent: 'flex-start' }}>
-                                    <Image
-                                        source={account?.icon}
-                                        style={styles.currency}
-                                    />
-                                    <View>
-                                        <Text style={{ marginLeft: 5, fontWeight: 'bold', fontSize: 17, color: Colors.text }}>
-                                            {account?.compte?.devise}
-                                        </Text>
-                                        <Text style={{ marginLeft: 5, color: Colors.text, fontWeight: 'bold' }}>{accountName(account)}</Text>
-                                    </View>
 
+
+                    {/*<View style={styles.account} >
+                        <View style={{ width: '60%', padding: 5 }} >
+                            <View style={{ flex: 1, flexDirection: 'row', height: 40, alignItems: 'center', justifyContent: 'flex-start' }}>
+                                <Image
+                                    source={account?.icon}
+                                    style={styles.currency}
+                                />
+                                <View>
+                                    <Text style={{ marginLeft: 5, fontWeight: 'bold', fontSize: 17, color: Colors.text }}>
+                                        {account?.compte?.devise}
+                                    </Text>
+                                    <Text style={{ marginLeft: 5, color: Colors.text, fontWeight: 'bold' }}>{accountName(account)}</Text>
                                 </View>
+
                             </View>
                         </View>
+                    </View>*/}
 
+                    <View style={styles.account} >
+                            <View style={{ flex: 1, flexDirection: 'row',  alignItems: 'flex-start' }}>
 
-                        <View style={{ flex: 1, alignContent: 'flex-start', justifyContent: 'flex-start' }}>
+                                <View style={{
+                                    width: 40,
+                                    height: 40,
+                                    borderRadius: 20,
+                                    backgroundColor: 'white',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                }}>
+                                    <Text style={{ fontSize: 24, color: 'white' }}>
+                                        {account?.emoji}
+                                    </Text>
+                                </View>
+
+                                <Text style={{ marginTop: 10, marginLeft: 5, fontWeight: 'bold', fontSize: 17, color: Colors.text }}>
+                                    {account?.compte.devise}
+                                </Text>
+
+                            </View>
+                    </View>
+
+                    <View style={{ flex: 1, alignContent: 'flex-start', justifyContent: 'flex-start' }}>
                         <Text style={styles.inputTitleText}>{t('account.Cardnumber')}*</Text>
-                            <View style={{ flexDirection: 'row', width: '100%' }}>
-                                <TextInput
-                                    label={t('account.Enterthecardnumber')}
-                                    //returnKeyType="next"
-                                    value={numero.value}
-                                    inputMode="numeric"
-                                    onChangeText={(text: string) => setNumero({ value: text, error: '' })}
-                                    error={!!numero.error}
-                                    errorText={numero.error}
-                                    autoCapitalize="none"
-                                    maxLength={16}
-                                    description={undefined}
-                                />
-                            </View>
+                        <View style={{ flexDirection: 'row', width: '100%' }}>
+                            <TextInput
+                                label={t('account.Enterthecardnumber')}
+                                //returnKeyType="next"
+                                value={numero.value}
+                                inputMode="numeric"
+                                onChangeText={(text: string) => setNumero({ value: text, error: '' })}
+                                error={!!numero.error}
+                                errorText={numero.error}
+                                autoCapitalize="none"
+                                maxLength={16}
+                                description={undefined}
+                            />
                         </View>
+                    </View>
 
 
-                        <View style={{ flex: 1, alignContent: 'flex-start', justifyContent: 'flex-start', marginTop:20 }}>
-                        <Text style={styles.inputTitleText}>{t('account.pincode')}*</Text>
-                            <View style={{ flexDirection: 'row', width: '100%' }}>
-                                <TextInput
-                                    label={t('account.enterthepincode')}
-                                    //returnKeyType="done"
-                                    inputMode="numeric"
-                                    value={pin.value}
-                                    onChangeText={(text: string) => setPin({ value: text, error: '' })}
-                                    error={!!pin.error}
-                                    errorText={pin.error}
-                                    secureTextEntry={!pinShow}
-                                    maxLength={4}
-                                    right={<Input.Icon icon={!pinShow ? 'eye-off' : 'eye'} onPress={() => { setPinShow(!pinShow) }} />}
-                                    description={undefined}
-                                />
-                            </View>
+                    <View style={{ flex: 1, alignContent: 'flex-start', justifyContent: 'flex-start', marginTop:20 }}>
+                    <Text style={styles.inputTitleText}>{t('account.pincode')}*</Text>
+                        <View style={{ flexDirection: 'row', width: '100%' }}>
+                            <TextInput
+                                label={t('account.enterthepincode')}
+                                //returnKeyType="done"
+                                inputMode="numeric"
+                                value={pin.value}
+                                onChangeText={(text: string) => setPin({ value: text, error: '' })}
+                                error={!!pin.error}
+                                errorText={pin.error}
+                                secureTextEntry={!pinShow}
+                                maxLength={4}
+                                right={<Input.Icon icon={!pinShow ? 'eye-off' : 'eye'} onPress={() => { setPinShow(!pinShow) }} />}
+                                description={undefined}
+                            />
                         </View>
+                    </View>
 
 
-                        <View style={{ width: '100%', marginTop: 20 }}>
-                            <Button
-                                mode="contained"
-                            onPress={() => { onSubmitPressed(); }}
-                            >
-                            {t('account.save')}
-                            </Button>
-                        </View>
+                    <View style={{ width: '100%', marginTop: 20 }}>
+                        <Button
+                            mode="contained"
+                        onPress={() => { onSubmitPressed(); }}
+                        >
+                        {t('account.save')}
+                        </Button>
+                    </View>
 
-                        <LoadingModal setModalVisible={setModalVisible} modalVisible={modalVisible} />
+                    <LoadingModal setModalVisible={setModalVisible} modalVisible={modalVisible} />
 
-                   </Pressable>
+                </Pressable>
 
 
             </ScrollView>
@@ -498,12 +522,13 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         borderWidth: 1,
         borderColor: Colors.text,
-        height: 70,
+        height: 50,
         padding: 0,
         marginVertical: 10,
         borderRadius: 5,
-        justifyContent: "space-between",
-        flexWrap: 'nowrap'
+        justifyContent: "center",
+        flexWrap: 'nowrap',
+        alignItems:'center',
     },
 
     currency: {

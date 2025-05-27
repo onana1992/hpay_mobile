@@ -66,8 +66,7 @@ function ChooseBenefScreen() {
     const chooseClient = (client: any) => {
         dispatch(saveBenef(client));
         navigation.goBack();
-    }
-
+    };
 
     function getInitials(phrase: string) {
         const words = phrase.split(' '); // Divise la phrase en mots
@@ -78,7 +77,7 @@ function ChooseBenefScreen() {
 
         // Retourne les initiales des deux premiers mots en majuscule
         return words[0][0].toUpperCase() + words[1][0].toUpperCase();
-    }
+    };
 
 
 
@@ -169,7 +168,7 @@ function ChooseBenefScreen() {
 
         return (
             <View style={styles.emptycard}>
-                <Text style={{ color: Colors.text }}>Aucun beneficiaire enegistré</Text>
+                <Text style={{ color: Colors.text }}>{t('benef.nobeneficiaryregistered')}</Text>
             </View>
         );
 
@@ -182,17 +181,20 @@ function ChooseBenefScreen() {
         return (
             <View>
                 <View>
-                    <Text style={styles.title}>Veuillez Choissir le beneficiaire de votre transfert </Text>
+                    <Text style={styles.title}>{t('benef.choosethebeneficiary')}</Text>
                 </View>
 
-                <View style={{ marginTop: 10, flexDirection: 'row', width: '100%' }}>
+                {/*<View style={{ marginTop: 10, flexDirection: 'row', width: '100%' }}>
                     <Searchbar
-                        placeholder="Prenom, nom, numero"
+                        placeholder={t('benef.Firstnamelastnamenumber')}
                         onChangeText={setSearchQuery}
                         value={searchQuery}
-                        style={{ flex: 1, backgroundColor: '#ffffff', borderColor: 'gray', borderWidth: 1 }}
+                        iconColor={Colors.text}
+                        placeholderTextColor="gray"
+                        style={{ flex: 1, color: Colors.text, backgroundColor: '#ffffff', borderColor: 'gray', borderWidth: 1 }}
+                        onPressIn={() => { navigation.navigate('FilterBeneficiaireScreen'); }}
                     />
-                </View>
+                </View>*/}
 
                 <View style={{ marginBottom: 20, marginTop: 20 }}>
 
@@ -222,7 +224,7 @@ function ChooseBenefScreen() {
                             alignItems: 'flex-start',
                             justifyContent: 'center',
                         }}>
-                            <Text style={styles.addrowText}>Ajouter manuellement un bénéficiaire</Text>
+                            <Text style={styles.addrowText}>{t('benef.manuallyaddabeneficiary')}</Text>
                         </View>
 
                         <View style={{
@@ -262,9 +264,14 @@ function ChooseBenefScreen() {
                                 alignItems: 'flex-start',
                                 justifyContent: 'center',
                             }}>
-                                <Text style={styles.addrowText}>{newClients[0].prenoms} et  {newClients.length - 1} autre personnes de votre repertoire utilisent  HPay</Text>
-
+                                {
+                                    newClients.length > 1 ?
+                                        <Text style={styles.addrowText}>{newClients[0].prenoms} {t('benef.and')}  {newClients.length - 1} {t('benef.otherpeopleinyourdirectoryuseHPay')}</Text>
+                                        :
+                                        <Text style={styles.addrowText}>{newClients[0].prenoms} {t('benef.fromyourdirectoryuseHPay')}</Text>
+                                }
                             </View>
+
 
                             <View style={{
                                 flex: 2,
@@ -272,7 +279,7 @@ function ChooseBenefScreen() {
                                 justifyContent: 'center',
                             }}>
                                 <View style={styles.display}>
-                                    <Text>Tout afficher</Text>
+                                    <Text style={{ color: Colors.text }}>{t('benef.displayall')}</Text>
                                 </View>
                             </View>
                         </TouchableOpacity>
@@ -282,7 +289,7 @@ function ChooseBenefScreen() {
 
 
                     <View style={{ marginTop: 20 }}>
-                        <Text style={{ fontWeight: 'bold', color: Colors.text, fontSize: 22 }}>Bénéficiaires enregistrés</Text>
+                        <Text style={{ fontWeight: 'bold', color: Colors.text, fontSize: 22 }}>{t('benef.registeredbeneficiaries')}</Text>
                     </View>
 
 
@@ -324,9 +331,9 @@ function ChooseBenefScreen() {
 
                             <View style={{ flex: 1 }}>
                                 <View style={styles.benefavatar}>
-                                    {filePath ?
+                                    {item.photo != null  ?
                                         <Image
-                                            source={filePath ? { uri: filePath } : require('../../assets/avatar.jpg')}
+                                            source={{ uri: item.photo }}
                                             style={styles.avatarImage}
                                         />
                                         :
@@ -345,7 +352,7 @@ function ChooseBenefScreen() {
 
                             <View style={{ flex: 1, alignItems: 'flex-end' }}>
                                 <View style={styles.display}>
-                                    <Text>Envoyer</Text>
+                                    <Text style={{ color: Colors.text }}>{t('benef.send')}</Text>
                                 </View>
                             </View>
 
@@ -447,12 +454,12 @@ const styles = StyleSheet.create({
     },
 
     avatarImage: {
-        height: 100,
-        width: 100,
+        width: 50,
+        height: 50,
         overflow: 'hidden',
-        borderColor: Colors.primary,
+        borderColor: '#e0e0e0',
         borderWidth: 1,
-        borderRadius: 30,
+        borderRadius: 25,
     },
 
     emptycard: {

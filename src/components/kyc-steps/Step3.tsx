@@ -233,7 +233,7 @@ const Step3 = ({ data, setData, step, setStep }: { data: any, setData: any, step
                     setData(
                         {
                             ...data,
-                            photo_piece_verso: response.assets[0].uri,
+                            photo_piece_verso: response.assets[0],
                         }
                     );
                     setDocumentBackUri(response.assets[0].uri);
@@ -271,14 +271,14 @@ const Step3 = ({ data, setData, step, setStep }: { data: any, setData: any, step
                     position: 'bottom'
                 });*/
                 return;
-            } else if (response.errorCode == 'permission') {
+            } else if (response.errorCode === 'permission') {
                 /*Toast.show({
                     type: 'message',
                     props: { message: I18n.t('permissionnotsatisfied') },
                     position: 'bottom'
                 });*/
                 return;
-            } else if (response.errorCode == 'others') {
+            } else if (response.errorCode === 'others') {
                 /*Toast.show({
                     type: 'message',
                     props: { message: I18n.t('permissionnotsatisfied') },
@@ -293,7 +293,7 @@ const Step3 = ({ data, setData, step, setStep }: { data: any, setData: any, step
             setFileName(response.assets[0].fileName);*/
 
             if (doc === 1) {
-                console.log(response.assets[0])
+                //console.log(response.assets[0])
                 setDocumentFrontUri(response.assets[0].uri);
                 setData(
                     {
@@ -372,7 +372,8 @@ const Step3 = ({ data, setData, step, setStep }: { data: any, setData: any, step
                                 placeholder={t('kyc.chooseadocumenttype')}
                                 placeholderStyle={styles.placeholderStyle}
                                 selectedTextStyle={styles.selectedTextStyle}
-                                inputSearchStyle={styles.inputSearchStyle}
+                                itemTextStyle={{ color: 'black' }}
+                                iconStyle={styles.iconStyle}
                                 data={identityTypes}
                                 value={typeId.value}
                                 onChange={(item: any) => setTypeId(item)}
@@ -389,15 +390,16 @@ const Step3 = ({ data, setData, step, setStep }: { data: any, setData: any, step
                                     <Text style={styles.inputTitleText}>{t('kyc.numberofthedocument')}*</Text>
                             </View>
 
-                            <TextInput
-                                label={t('kyc.numberofthechoosedocument')}
-                                returnKeyType="next"
-                                value={documentNumber.value}
-                                onChangeText={(text: string) => setDocumentNumber({ value: text, error: '' })}
-                                error={!!documentNumber.error}
-                                errorText={documentNumber.error}
-                                autoCapitalize="none"
-                                description={undefined}
+                                <TextInput
+                            
+                                    label={t('kyc.numberofthechoosedocument')}
+                                    returnKeyType="next"
+                                    value={documentNumber.value}
+                                    onChangeText={(text: string) => setDocumentNumber({ value: text, error: '' })}
+                                    error={!!documentNumber.error}
+                                    errorText={documentNumber.error}
+                                    autoCapitalize="none"
+                                    description={undefined}
                             />
                         </View>
 
@@ -408,7 +410,7 @@ const Step3 = ({ data, setData, step, setStep }: { data: any, setData: any, step
 
                             <View style={{ flexDirection: 'row', marginVertical: 1, }}>
                                 <DateInput
-                                        label={t('kyc.expirationdate')}
+                                     label={t('kyc.expirationdate')}
                                     value={date_exp.value}
                                     onChange={(d: Date | undefined) => setDate_exp({ value: d, error: '' })}
                                     hasError={!!date_exp.error}
@@ -546,6 +548,8 @@ const styles = StyleSheet.create({
         marginTop: 20
     },
 
+   
+
 
     icon: {
         marginRight: 5,
@@ -564,12 +568,13 @@ const styles = StyleSheet.create({
 
     placeholderStyle: {
         fontSize: 16,
-        color: Colors.text,
+        color: 'gray',
     },
+
 
     selectedTextStyle: {
         fontSize: 16,
-        color: Colors.text,
+        color: 'black',
     },
 
     iconStyle: {
@@ -580,7 +585,14 @@ const styles = StyleSheet.create({
     inputSearchStyle: {
         height: 40,
         fontSize: 16,
-        color: Colors.text
+        color: 'black',
+    },
+
+    iconImage: {
+        height: 120,
+        width: 120,
+        overflow: 'hidden',
+        marginBottom: 10,
     },
 
     idcard: {
@@ -601,15 +613,6 @@ const styles = StyleSheet.create({
         height: '100%',
         justifyContent: 'flex-end',
         alignItems: 'center'
-    },
-
-    
-
-     iconImage: {
-        height: 70,
-        width: 70,
-        overflow: 'hidden',
-        marginBottom: 10,
     },
 
     error: {

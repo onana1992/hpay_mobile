@@ -13,7 +13,6 @@ import {
     View,
     Text,
     StyleSheet,
-    KeyboardAvoidingView,
     Pressable,
     Keyboard,
     ScrollView,
@@ -136,9 +135,8 @@ function KycScreen({ navigation, user }: { navigation: any, user: any }) {
         
        
 
-       // setModalVisible(true);
-
-       saveKyc(form_data).then((response: any) => {
+        setModalVisible(true);
+        saveKyc(form_data).then((response: any) => {
 
             if (response.data.statusCode === 200) {
                 setModalVisible(false);
@@ -148,7 +146,7 @@ function KycScreen({ navigation, user }: { navigation: any, user: any }) {
             setModalVisible(false);
 
             console.log(response)
-           
+
 
         }).catch((_error: any) => {
 
@@ -156,7 +154,7 @@ function KycScreen({ navigation, user }: { navigation: any, user: any }) {
             //setIsloading(false);
             console.log(_error);
 
-        })
+        });
         
         
 

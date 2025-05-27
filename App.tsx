@@ -5,10 +5,9 @@
 
 import React, { useEffect } from 'react';
 
-import { SafeAreaView, StatusBar, useColorScheme, View, Text } from 'react-native';
+import { SafeAreaView, StatusBar, useColorScheme, View, Text, Linking } from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 import {  Provider as PaperProvider, DefaultTheme } from 'react-native-paper';
-
 import { MenuProvider } from 'react-native-popup-menu';
 import { enGB, fr, registerTranslation } from 'react-native-paper-dates';
 import store from './src/store/store';
@@ -24,38 +23,11 @@ import StackNavigation from './src/navigation/StackNavigation';
 import messaging from '@react-native-firebase/messaging';
 import { navigate } from './NavigationService';
 
+
 registerTranslation('en-GB', enGB);
 registerTranslation('fr', fr);
 
-/*type SectionProps = PropsWithChildren<{
-  title: string;
-}>;*/
 
-/*function Section({children, title}: SectionProps): JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-}*/
 
 function App(): JSX.Element {
 
@@ -80,10 +52,34 @@ function App(): JSX.Element {
     }, []);
 
 
-    /*const isDarkMode = useColorScheme() === 'dark';*/
-    /*const backgroundStyle = {
-      backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-    };*/
+    useEffect(() => {
+        // Fonction pour gérer les liens entrants
+        const handleDeepLink = (event) => {
+            const { url } = event;
+            console.log('URL du Deep Link:', url);
+            // Extraire des informations et naviguer vers l'écran approprié
+        };
+
+        // Écouter les événements de deep link
+        Linking.addEventListener('url', handleDeepLink);
+
+        // Vérifier si l'app a été ouverte via un deep link (au lancement)
+        Linking.getInitialURL().then((url) => {
+            if (url) {
+                console.log('URL initiale:', url);
+                // Gérer la navigation
+            }
+        });
+
+        // Nettoyer l'événement au démontage
+        return () => {
+            //Linking.removeAllListeners();
+            //removeEventListener('url', handleDeepLink);
+        };
+    }, []);
+
+
+
 
 
     messaging().onNotificationOpenedApp(remoteMessage => {
@@ -154,3 +150,7 @@ function App(): JSX.Element {
 
 
 export default App;
+
+function removeEventListener(arg0: string, handleDeepLink: (event: any) => void) {
+    throw new Error('Function not implemented.');
+}

@@ -17,6 +17,8 @@ import {
 import Feather from 'react-native-vector-icons/Feather';
 import { Colors } from '../../themes';
 import Modal from 'react-native-modal';
+import { useTranslation } from 'react-i18next';
+
 
 
 interface MyComponentProps {
@@ -35,6 +37,9 @@ const AmountCurrencyInput: React.FC<MyComponentProps> = ({ amount, setAmount, ac
     const [visible, setVisible] = React.useState<boolean>(false);
     const [borderColor, setBorderColor] = React.useState(Colors.primary);
     const [borderWidth, setBorderWidth] = React.useState(1);
+    const { t } = useTranslation();
+
+    //console.log(accounts[0].compte.typeCompte.idTypeCompte);
 
     const handleFocus = () => {
         setBorderColor(Colors.primary);
@@ -65,22 +70,24 @@ const AmountCurrencyInput: React.FC<MyComponentProps> = ({ amount, setAmount, ac
 
     const accountName = (account:any) => {
 
-        if (account.compte.devise== "CAD") {
-           // eslint-disable-next-line quotes
-           return "Dollard Canadien"
+        if (account.compte.devise == 'CAD' && accounts[0].compte.typeCompte.idTypeCompte !== 6 ) {
+            return t('account.currencyaccount') + ' CAD';
         }
 
-
-        else if (account.compte.devise == "USD") {
-            return "Dollard Americain"   
+        else if (account.compte.devise == 'USD') {
+            return t('account.currencyaccount') + ' USD';
         }
 
         else if (account.compte.devise == 'EUR') {
-            return "Euro"
+            return t('account.currencyaccount') + ' EUR';
         }
 
         else if (account.compte.devise == 'GBP') {
-            return "Livre Sterling"
+            return t('account.currencyaccount') + ' GBP';
+        }
+
+        else {
+            return t('account.principalAccount');
         }
 
     }
@@ -91,12 +98,29 @@ const AmountCurrencyInput: React.FC<MyComponentProps> = ({ amount, setAmount, ac
     }
 
     const renderItem = ({ item }: { item: any }) => (
-        <TouchableOpacity style={styles.itemContainer} onPress={() => { selectAccount(item) } }>
-            <Image source={item.icon} style={styles.currency} />
-            <View style={{ flex: 1, alignItems: 'flex-start', justifyContent: 'flex-start', height: 40, padding: 5 }}>
+        <TouchableOpacity style={styles.itemContainer} onPress={() => { selectAccount(item) }}>
+
+            {/*<Image source={item.icon} style={styles.currency} />*/}
+
+            <View style={{
+                width: 40,
+                height: 40,
+                borderRadius: 20,
+                backgroundColor: '#e6e4e0',
+                alignItems: 'center',
+                justifyContent: 'center',
+            }}>
+                <Text style={{ fontSize: 22, color: 'white' }}>
+                    {item?.emoji}
+                </Text>
+            </View>
+
+
+            <View style={{ flex: 6, marginLeft:15, alignItems: 'flex-start', justifyContent: 'flex-start', height: 40, padding: 5 }}>
                 <Text style={{ color: Colors.text, fontWeight: 'bold' }}>{item.compte.devise}</Text>
                 <Text style={{ color: Colors.text, fontWeight: 'bold' }}>{accountName(item)}</Text>
             </View>
+
             <View style={{ flex: 1, alignItems: 'flex-end', justifyContent: 'flex-end', height: 40, padding: 5 }}>
                 {/*<Text style={{ color: Colors.text, fontSize: 12 }}>{formatAmount1(item.compte.solde)} {item.compte.devise}</Text>*/}
                 <Feather name="chevron-right" size={18} color={Colors.gray} />
@@ -127,10 +151,20 @@ const AmountCurrencyInput: React.FC<MyComponentProps> = ({ amount, setAmount, ac
 
             <TouchableOpacity style={styles.inputButton} onPress={() => { setVisible(true) } }>
                 <View style={{ flex: 1, flexDirection: 'row', height: 40, alignItems: 'center', justifyContent: 'center' }}>
-                    <Image
-                        source={account?.icon}
-                        style={styles.currency}
-                    />
+
+                    <View style={{
+                        width: 40,
+                        height: 40,
+                        borderRadius: 20,
+                        backgroundColor: '#e6e4e0',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                    }}>
+                        <Text style={{ fontSize: 22, color: 'white' }}>
+                            {account?.emoji}
+                        </Text>
+                    </View>
+
 
                     <Text style={{ marginLeft: 5, fontWeight: 'bold', fontSize: 17, color: Colors.text }}>
                         {account?.compte?.devise}
@@ -217,7 +251,7 @@ const styles = StyleSheet.create({
     content: {
         backgroundColor: '#ffffff',
         padding: 20,
-        height: 430,
+        height: 480,
     },
 
     modalTitle: {
@@ -232,6 +266,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginBottom: 15,
         padding: 10,
+        paddingLeft: 0,
         borderRadius: 5,
     },
 
@@ -239,6 +274,7 @@ const styles = StyleSheet.create({
     textContainer: {
         flex: 1,
     },
+
     amount: {
         fontSize: 14,
         color: '#555',

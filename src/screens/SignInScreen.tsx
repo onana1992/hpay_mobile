@@ -99,6 +99,8 @@ function SignInScreen({ navigation }: {navigation:any}){
             
         }).catch((error: any) => {
 
+            console.log(error.response.data)
+
             if (error.response.data.statusCode === '401') {
 
                 if (error.response.data.statusCode.message === 'Account not activated') {

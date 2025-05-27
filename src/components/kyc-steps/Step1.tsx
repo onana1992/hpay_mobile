@@ -51,6 +51,14 @@ const Step1 = ({ data, setData, step, setStep }: { data:any, setData:any, step:a
     const [date_naissance, setDate_naissance] = React.useState<{ value: Date | undefined, error: string }>({ value: data.date_naissance, error: '' });
     const { t } = useTranslation();
 
+    function formatDateToYMD(date) {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+        const day = String(date.getDate()).padStart(2, '0');
+
+        return `${year}-${month}-${day}`;
+    }
+
 
 
     const [country, setCountry] = React.useState({ label: '🇨🇦 Canada', value: 'ca', indicator: "1" });
@@ -119,12 +127,12 @@ const Step1 = ({ data, setData, step, setStep }: { data:any, setData:any, step:a
       
         const familyNameError  = firstNameValidator(familyname.value);
         const firstNameError = familyNameValidator(firstName.value);
-        const dateNaissError = dateNaissValidator(date_naissance.value);
+        const dateNaissError = dateNaissValidator(formatDateToYMD(date_naissance.value));
         const nationalityError = nationalityValidator(nationality.value);
 
     
 
-        if (firstNameError || familyNameError || nationalityError) {
+        if (firstNameError || familyNameError || nationalityError || dateNaissError) {
 
             setFamilyName({ ...familyname, error: t(`${familyNameError}`) });
             setFirstName({ ...firstName, error: t(`${firstNameError}`) });

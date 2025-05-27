@@ -6,7 +6,6 @@ import React from 'react';
 import {  Text, StyleSheet, View, Image } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { Colors } from '../themes';
-import { TouchableOpacity } from 'react-native';
 
 
 type PropType = {
@@ -19,17 +18,16 @@ type PropType = {
     devise: string,
     heure: string
     index: number
-    size:number
+    size: number
+    taux:number
 }
 
 
 
 
-export default function HistoryItem({user, clientFrom, clientTo, compteFrom, compteTo, montant, devise, heure, index,size }: PropType) {
+export default function HistoryItem({user, clientFrom, clientTo, compteFrom, compteTo, montant, devise, heure, index,size, taux }: PropType) {
 
     const { t } = useTranslation();
-
-
     const getInitials = (phrase: string) => {
         const words = phrase.split(' '); // Divise la phrase en mots
         if (words.length < 2) {
@@ -41,33 +39,31 @@ export default function HistoryItem({user, clientFrom, clientTo, compteFrom, com
         return words[0][0].toUpperCase() + words[1][0].toUpperCase();
     };
 
+    /*const currencyIcon = (dev:string) => {
 
-
-    const currencyIcon = (devise:string) => {
-
-        if (devise === 'CAD') {
+        if (dev === 'CAD') {
             return require('../assets/cad.png');
         }
 
-        else if (devise === 'USD') {
+        else if (dev === 'USD') {
             return require('../assets/us.png');
         }
 
-        else if (devise === 'EUR') {
+        else if (dev === 'EUR') {
             return require('../assets/ue.png');
         }
 
-        else if (devise === 'GBP') {
+        else if (dev === 'GBP') {
             return require('../assets/gb.png');
         }
 
-    };
+    };*/
 
 
 
     if (clientTo.id !== clientFrom.id && clientFrom.id === user.client.id) {
 
-        // l'utlisateur est l'émettreur
+        // l'utlisateur est l'émetteur
         return (
             <View style={{ flexDirection: 'row', marginTop: 25, padding: 5, paddingBottom: 10, borderBottomColor: Colors.gray, borderBottomWidth: index + 1 === size ? 0 : 0.4 }}>
                 <View style={{ flex: 1, }}>
@@ -89,12 +85,15 @@ export default function HistoryItem({user, clientFrom, clientTo, compteFrom, com
 
                             }
                         </View>
-                        <View style={{}} >
+                        {/*
+                           <View style={{}} >
                             <Image
-                                source={currencyIcon(compteTo.devise)}
+                                source={currencyIcon(compteTo?.devise)}
                                 style={styles.currencyImage}
                             />
-                        </View>
+                        </View> 
+
+                        */}
                     </View>
 
                 </View>
@@ -105,8 +104,8 @@ export default function HistoryItem({user, clientFrom, clientTo, compteFrom, com
                     <Text style={{ lineHeight: 20, fontSize: 14, color: Colors.gray }}>{heure}</Text>
                 </View>
 
-                <View style={{ flex: 2, alignItems: 'flex-end' }}>
-                    <Text style={{ lineHeight: 20, fontSize: 14, color: 'red' }} >- {montant} {devise}</Text>
+                <View style={{ flex: 3, alignItems: 'flex-end' }}>
+                    <Text style={{ lineHeight: 20, fontSize: 14, color: 'red' }} >- {(Number(montant) / taux).toFixed(2)} CAD {/*{compteFrom.devise}*/}</Text>
                 </View>
             </View>
         );
@@ -136,12 +135,16 @@ export default function HistoryItem({user, clientFrom, clientTo, compteFrom, com
 
                             }
                         </View>
-                        <View style={{}} >
-                            <Image
-                                source={currencyIcon(compteFrom.devise)}
-                                style={styles.currencyImage}
-                            />
-                        </View>
+                        {/*
+                            <View style={{}} >
+                                <Image
+                                    source={currencyIcon(compteFrom?.devise)}
+                                    style={styles.currencyImage}
+                                />
+                            </View>
+                            */
+                        }
+
                     </View>
 
                 </View>
@@ -152,8 +155,8 @@ export default function HistoryItem({user, clientFrom, clientTo, compteFrom, com
                     <Text style={{ lineHeight: 20, fontSize: 14, color: Colors.gray }}>{heure}</Text>
                 </View>
 
-                <View style={{ flex: 2, alignItems: 'flex-end' }}>
-                    <Text style={{ lineHeight: 20, fontSize: 14, color: 'green' }} >+ {montant} {devise}</Text>
+                <View style={{ flex: 3, alignItems: 'flex-end' }}>
+                    <Text style={{ lineHeight: 20, fontSize: 14, color: 'green' }} >+ {(Number(montant) / taux).toFixed(2)} CAD {/*{compteTo.devise}*/}</Text>
                 </View>
             </View>
         );
@@ -174,7 +177,7 @@ export default function HistoryItem({user, clientFrom, clientTo, compteFrom, com
                         <View style={styles.avatar} >
                             {clientFrom.photoClient != null ?
                                 <Image
-                                    source={{ uri: clientFrom.photoClient }}
+                                    source={{ uri: clientFrom?.photoClient }}
                                     style={styles.avatarImage}
                                 />
                                 :
@@ -184,24 +187,25 @@ export default function HistoryItem({user, clientFrom, clientTo, compteFrom, com
 
                             }
                         </View>
-
+                        {/*
                         <View style={{}} >
 
                             <Image
-                                source={currencyIcon(compteTo.devise)}
+                                source={currencyIcon(compteTo?.devise)}
                                 style={styles.currencyImageTo}
                             />
 
                         </View>
-
+                        */}
+                        {/*
                         <View style={{}} >
 
                             <Image
-                                source={currencyIcon(compteFrom.devise)}
+                                source={currencyIcon(compteFrom?.devise)}
                                 style={styles.currencyImageFrom}
                             />
 
-                        </View>
+                        </View>*/}
 
                     </View>
 
@@ -213,9 +217,9 @@ export default function HistoryItem({user, clientFrom, clientTo, compteFrom, com
                     <Text style={{ lineHeight: 20, fontSize: 14, color: Colors.gray }}>{heure}</Text>
                 </View>
 
-                <View style={{ flex: 2, alignItems: 'flex-end' }}>
-                    <Text style={{ lineHeight: 20, fontSize: 14, color: 'green' }} >+ {montant} {devise}</Text>
-                    <Text style={{ lineHeight: 20, fontSize: 14, color: 'red' }} >- {montant} {devise}</Text>
+                <View style={{ flex: 3, alignItems: 'flex-end' }}>
+                    <Text style={{ lineHeight: 20, fontSize: 14, color: 'green' }} >+ {(Number(montant) / taux).toFixed(2)} CAD {/*{devise}*/}</Text>
+                    <Text style={{ lineHeight: 20, fontSize: 14, color: 'red' }} >- {(Number(montant) / taux).toFixed(2)} CAD {/*{devise}*/}</Text>
                 </View>
             </View>
         );

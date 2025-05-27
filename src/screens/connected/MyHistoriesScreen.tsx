@@ -93,6 +93,7 @@ function MyHistoriesScreen({ navigation }: { navigation: any }) {
                     compteTo: item.compteTo,
                     numVirement: item.virementNum,
                     heure: heure,
+                    tauxConversion: item.tauxConversion,
                 });
             });
 
@@ -100,7 +101,6 @@ function MyHistoriesScreen({ navigation }: { navigation: any }) {
                 title: date,
                 data: grouped[date],
             }));
-
 
             setHistories(DATA);
             setLoading(false);
@@ -261,6 +261,7 @@ function MyHistoriesScreen({ navigation }: { navigation: any }) {
                         heure={item.heure}
                         index={index}
                         size={size}
+                        taux={item.tauxConversion}
                     />
                 )}
                 renderSectionHeader={({ section: { title } }) => (

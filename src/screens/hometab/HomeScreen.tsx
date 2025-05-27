@@ -1,4 +1,5 @@
-﻿/* eslint-disable curly */
+﻿/* eslint-disable no-lone-blocks */
+/* eslint-disable curly */
 /* eslint-disable dot-notation */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/no-unstable-nested-components */
@@ -13,7 +14,6 @@ import {
     StyleSheet,
     View,
     TouchableOpacity,
-    Image,
     Text,
     RefreshControl,
     FlatList,
@@ -23,25 +23,25 @@ import {
     Alert,
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
-import { saveAccount,  signIn, saveBenefs } from '../../store/profilSlice';
+import { saveAccount, signIn, saveBenefs, savenotReadMessage } from '../../store/profilSlice';
 import Colors from '../../themes/Colors';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Feather from 'react-native-vector-icons/Feather';
 import { ScrollView } from 'react-native-virtualized-view';
 import { connect } from 'react-redux';
-import { fetchBeficiariesRequest, fetchRatesRequest, getHistory, saveFCMTokenRequest, searchClientByPhoneRequest } from '../../services/request';
+import { fetchBeficiariesRequest, fetchRatesRequest, getHistory, getNumberMessageNonlu, saveFCMTokenRequest, searchClientByPhoneRequest } from '../../services/request';
 import AvartarButton from '../../components/connected/AvartarButton';
 import HistoryItem from '../../components/HistoryItem';
 import { useTranslation } from 'react-i18next';
 import { formatDate, formatHeure } from '../../helpers/functions';
-import {
-    RESULTS,
-    requestNotifications,
-} from 'react-native-permissions';
+import { RESULTS, requestNotifications } from 'react-native-permissions';
 import messaging from '@react-native-firebase/messaging';
-import axios from 'axios';
+import { client } from '../../services/axiosClient';
+
 
 function HomeScreen({ navigation, user }: { navigation: any, user: any }) {
+
+    //console.log(user.comptes);
 
     const { t } = useTranslation();
     const dispatch = useDispatch();
@@ -58,8 +58,10 @@ function HomeScreen({ navigation, user }: { navigation: any, user: any }) {
     const isIos = () => Platform.OS === 'ios';
     const isAndroid = () => Platform.OS === 'android';
     const getPlatformVersion = () => Number(Platform.Version);
+    const notReadMessage = useSelector<number>((state: any) => state.profil.notReadMessage);
+    const [icon, setIcon] = React.useState('');
 
-    //console.log(user.client.id);
+
 
     const requestNotificationsPermission = (onGranted: () => void, onBlocked: () => void) => {
         requestNotifications(['alert', 'sound', 'badge']).then(({ status }) => {
@@ -93,6 +95,17 @@ function HomeScreen({ navigation, user }: { navigation: any, user: any }) {
     };
 
 
+    const protectedNavigation = (screen:string) => {
+
+        if (user.client.valider === '1') {
+            navigation.navigate(screen);
+        } else {
+            navigation.navigate('kyc');
+        }
+
+    };
+
+
     // demande de la permission pour push notofictio
     React.useEffect(() => {
 
@@ -113,7 +126,7 @@ function HomeScreen({ navigation, user }: { navigation: any, user: any }) {
 
         await messaging().registerDeviceForRemoteMessages();
         const token = await messaging().getToken();
-        console.log('le token est :', token);
+        // console.log('le token est :', token);
 
         saveToken(user.client.id,token);
 
@@ -136,7 +149,7 @@ function HomeScreen({ navigation, user }: { navigation: any, user: any }) {
     // message en foreground
     React.useEffect(() => {
         const unsubscribe = messaging().onMessage(async remoteMessage => {
-           // Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
+            // Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
         });
 
         return unsubscribe;
@@ -149,8 +162,8 @@ function HomeScreen({ navigation, user }: { navigation: any, user: any }) {
         getBeneficiaries();
         fetchAccount(user);
         fetchHistory();
+        fetchNotReadNumber();
     }, []);
-
 
 
 
@@ -161,7 +174,7 @@ function HomeScreen({ navigation, user }: { navigation: any, user: any }) {
 
 
     React.useEffect(() => {
-        calculateAmmount();
+        //calculateAmmount();
     }, [accounts]);
 
 
@@ -172,6 +185,7 @@ function HomeScreen({ navigation, user }: { navigation: any, user: any }) {
             getClient();
             fetchAccount(user);
             fetchHistory();
+            fetchNotReadNumber();
         });
 
         return unsubscribe;
@@ -222,22 +236,57 @@ function HomeScreen({ navigation, user }: { navigation: any, user: any }) {
         let devises: any[] = [];
         let montant: number = 0;
 
+
         if (accounts.length > 0) {
-            devises.push(accounts[1].compte.devise);
-            devises.push(accounts[2].compte.devise);
-            devises.push(accounts[3].compte.devise);
 
-            fetchRatesRequest(accounts[0].compte.devise, devises).then((response) => {
+           // devises.push(accounts[1]?.compte.devise);
+           // devises.push(accounts[2]?.compte.devise);
+            //devises.push(accounts[3]?.compte.devise);
+            for (let i = 1; i < accounts.length; i++){
+                devises.push(accounts[i]?.compte.devise);
+            }
 
-                console.log(devises);
-                console.log(response.data);
+            fetchRatesRequest(accounts[0]?.compte.devise, devises).then((response) => {
+
+                //console.log(devises);
+                //console.log(response.data);
                 //console.log(response.data['EUR']);
                 //console.log(response.data['USD']);
                 //console.log(response.data['GBP']);
 
-                montant = accounts[0].compte.solde + accounts[1].compte.solde / response.data['USD'].hpayRate ;
-                montant = montant + accounts[2].compte.solde / response.data['EUR'].hpayRate ;
-                montant = montant + accounts[3].compte.solde / response.data['GBP'].hpayRate ;
+                montant = accounts[0]?.compte.solde;
+
+                for (let j = 1; j < accounts.length; j++){
+
+                   if (accounts[j].devise === 'CAD') {
+                        montant = montant + accounts[j]?.compte.solde / response.data['CAD']?.hpayRate;
+                   }
+
+                    if (accounts[j].devise  === 'USD') {
+                         montant = montant + accounts[j]?.compte.solde / response.data['USD']?.hpayRate;
+                    }
+
+
+                    else if (accounts[j].devise === 'EUR') {
+                        montant = montant + accounts[j]?.compte.solde / response.data['EUR']?.hpayRate;
+                    }
+
+
+                    else if (accounts[j].devise  === 'GBP') {
+                        montant = montant + accounts[j]?.compte.solde / response.data['GBP']?.hpayRate;
+                    }
+
+                }
+
+
+
+                {/*
+                    montant = accounts[0]?.compte.solde + accounts[1]?.compte.solde / response.data['USD'].hpayRate;
+                    montant = montant + accounts[2]?.compte.solde / response.data['EUR']?.hpayRate;
+                    montant = montant + accounts[3]?.compte.solde / response.data['GBP']?.hpayRate;
+                 */
+                }
+
                 setMontantTotal(montant);
             }).catch((error) => {
 
@@ -287,6 +336,7 @@ function HomeScreen({ navigation, user }: { navigation: any, user: any }) {
                     compteTo: item.compteTo,
                     numVirement: item.virementNum,
                     heure: heure,
+                    tauxConversion: item.tauxConversion,
                 });
             });
 
@@ -312,24 +362,22 @@ function HomeScreen({ navigation, user }: { navigation: any, user: any }) {
 
     const fetchAccount = (parmUser:any) => {
 
+        let allAccount = [];
+
         const mainAccount = parmUser.client.comptes.find((account: any) => {
             if (account.typeCompte.idTypeCompte === 6) {
-                console.log('compte principal', account.devise);
+                //console.log('compte principal', account.devise);
                 return true;
             }
         });
 
         const otherAccounts = parmUser.client.comptes.filter((account: any) => {
-
-            if (account.typeCompte.idTypeCompte != 6 && account.typeCompte.idTypeCompte != 2) {
-
+            if (account.typeCompte.idTypeCompte !== 6 && account.typeCompte.idTypeCompte !== 2) {
                 return account;
             }
-
         });
 
 
-        let allAccount = [];
         allAccount.push(mainAccount);
 
         for (const acc of otherAccounts) {
@@ -338,41 +386,58 @@ function HomeScreen({ navigation, user }: { navigation: any, user: any }) {
 
         const newAccountsList = allAccount.map((account: any) => {
 
-            if (account.typeCompte.idTypeCompte === 6) {
+            setIcon(account.pays.emoji);
+
+           if (account.typeCompte.idTypeCompte === 6) {
                 return {
                     id: account.typeCompte.idTypeCompte,
                     icon: require('../../assets/cad.png'),
+                    emoji: account.pays.emoji,
                     compte: account,
                 };
             }
 
-            else if (account.typeCompte.idTypeCompte == 1) {
+
+            else if (account.devise === 'CAD') {
+                return {
+                    id: account.typeCompte.idTypeCompte,
+                    icon: require('../../assets/cad.png'),
+                    emoji: '🇨🇦',
+                    compte: account,
+                };
+            }
+
+            else if (account.devise === 'USD') {
                 return {
                     id: account.typeCompte.idTypeCompte,
                     icon: require('../../assets/us.png'),
+                    emoji:'🇺🇸',
                     compte: account,
                 };
             }
 
-            else if (account.typeCompte.idTypeCompte == 4) {
+
+            else if (account.devise === 'EUR') {
                 return {
                     id: account.typeCompte.idTypeCompte,
                     icon: require('../../assets/ue.png'),
+                    emoji:'🇪🇺',
                     compte: account,
                 };
             }
 
-            else if (account.typeCompte.idTypeCompte == 5) {
+            else if (account.devise === 'GBP') {
                 return {
                     id: account.typeCompte.idTypeCompte,
                     icon: require('../../assets/gb.png'),
+                    emoji:'🇬🇧',
                     compte: account,
                 };
             }
 
         });
 
-
+        //console.log(newAccountsList);
         setAccounts(newAccountsList);
 
         // enregistrement dans le redux
@@ -389,9 +454,10 @@ function HomeScreen({ navigation, user }: { navigation: any, user: any }) {
     const AccountItem = ({ item }) => (
         <TouchableOpacity style={styles.accountItem} onPress={() => { navigation.navigate('AccountScreen', { account: item}); } }>
 
-            <View style={{ flex: 1, flexDirection: 'row', height: 20,   }}>
-                <Image
-                    source={item.icon}
+            <View style={{ flex: 1, flexDirection: 'row', height: 20 }}>
+              { /*
+                    <Image
+                    source={item?.icon}
                     style={{
                         height: 40,
                         width: 40,
@@ -400,9 +466,27 @@ function HomeScreen({ navigation, user }: { navigation: any, user: any }) {
                         borderRadius: 20,
                     }}
                 />
-                <Text style={{ marginTop:10,  marginLeft: 10, fontWeight: 'bold', fontSize: 17, color: Colors.text }}>
-                    {item.compte.devise}
+
+                */
+              }
+
+                <View style={{
+                    width: 40,
+                    height:40,
+                    borderRadius:20,
+                    backgroundColor:'white',
+                    alignItems:'center',
+                    justifyContent:'center',
+                }}>
+                    <Text style={{  fontSize: 24, color:'white' }}>
+                        {item?.emoji}
+                    </Text>
+                </View>
+
+                <Text style={{ marginTop:6,  marginLeft: 10, fontWeight: 'bold', fontSize: 17, color: Colors.text }}>
+                    {item?.compte.devise}
                 </Text>
+
             </View>
 
 
@@ -410,7 +494,7 @@ function HomeScreen({ navigation, user }: { navigation: any, user: any }) {
                 {
                     currencyVisible ?
                     <Text style={{ marginLeft: 10, fontWeight: 'bold', fontSize: 20, color: Colors.text }}>
-                            {item.compte.solde.toFixed(2)}
+                          {item?.compte.solde.toFixed(2)}
                     </Text>
                     :
                     <Text style={{ marginLeft: 10, fontWeight: 'bold', fontSize: 20, color: Colors.text }}>
@@ -422,6 +506,14 @@ function HomeScreen({ navigation, user }: { navigation: any, user: any }) {
         </TouchableOpacity>
     );
 
+    const fetchNotReadNumber = () => {
+        getNumberMessageNonlu(user?.client?.id).then((response) => {
+            dispatch(savenotReadMessage(response.data.nonLu));
+        }).catch((error) => {
+            // console.log(error);
+        });
+    };
+
 
     const EmptyCard = () => {
 
@@ -431,7 +523,7 @@ function HomeScreen({ navigation, user }: { navigation: any, user: any }) {
                     loading ?
                         <View>
                             <ActivityIndicator size="small" color={Colors.primary} />
-                            <Text style={{ color: Colors.text }}> {t('homescreen.loadinginprogress')} </Text>
+                            <Text style={{ color: Colors.text }}>{t('homescreen.loadinginprogress')}</Text>
                         </View>
                         :
                         <Text style={{ color: Colors.text }}>{t('homescreen.notransactionmade')}</Text>
@@ -442,11 +534,11 @@ function HomeScreen({ navigation, user }: { navigation: any, user: any }) {
     };
 
 
-
     const onRefresh = React.useCallback(() => {
         setRefreshing(true);
         getClient();
         fetchHistory();
+        fetchNotReadNumber();
     }, []);
 
 
@@ -458,7 +550,7 @@ function HomeScreen({ navigation, user }: { navigation: any, user: any }) {
             <View>
                 {
                     totalElement > 8 &&
-                    < View style={{ flexDirection: 'row', width: '100%', marginTop: 20 }}>
+                    <View style={{ flexDirection: 'row', width: '100%', marginTop: 20 }}>
                         <View style={{ flex: 1 }}>
                                 <TouchableOpacity style={styles.morebutton} onPress={() => { navigation.navigate('MyHistoriesScreen') }}>
                                     <Text style={styles.morebuttonText}>{t('homescreen.seealltransactions')}</Text>
@@ -473,7 +565,6 @@ function HomeScreen({ navigation, user }: { navigation: any, user: any }) {
 
 
 
-
     return (
 
         <View style={styles.main}>
@@ -482,7 +573,8 @@ function HomeScreen({ navigation, user }: { navigation: any, user: any }) {
 
                 <View style={{ height:'100%' }}>
 
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 20, paddingVertical: 10 }} >
+                    <View style={{ flexDirection: 'row', alignItems:'center', justifyContent: 'space-between', padding: 20, paddingTop: 20, height: 75 }} >
+
                         <AvartarButton
                             prenom={user?.client.prenoms}
                             profilUrl={user?.client.photoClient}
@@ -493,11 +585,32 @@ function HomeScreen({ navigation, user }: { navigation: any, user: any }) {
                             <TouchableOpacity style={{ justifyContent: 'center', marginRight: 10 }} onPress={() => { navigation.navigate('MyMessageScreen'); }}>
                                 <View style={styles.eye} >
                                     <Feather name="bell" size={16} color={Colors.text} />
-
-                                    <View style={{}}>
-
-                                    </View>
                                 </View>
+                                { Number(notReadMessage) > 0 ?
+
+                                    <View style={{
+                                        position: 'relative',
+                                        width: 10,
+                                        height: 10,
+                                        backgroundColor: 'red',
+                                        left: 24,
+                                        bottom: 24,
+                                        borderRadius: 5,
+                                    }}>
+                                    </View>
+                                    :
+                                    <View style={{
+                                        position: 'relative',
+                                        width: 10,
+                                        height: 10,
+                                        backgroundColor: 'transparent',
+                                        left: 24,
+                                        bottom: 24,
+                                        borderRadius: 5,
+                                    }}>
+                                    </View>
+                                }
+
                             </TouchableOpacity>
 
                             <TouchableOpacity style={{ justifyContent: 'center' }} onPress={() => { setCurrencyVisible((prev) => !prev); }}>
@@ -509,6 +622,17 @@ function HomeScreen({ navigation, user }: { navigation: any, user: any }) {
                                             <Feather name="eye-off" size={16} color={Colors.text} />
                                     }
                                 </View>
+                                <View style={{
+                                    position: 'relative',
+                                    width: 10,
+                                    height: 10,
+                                    backgroundColor: 'transparent',
+                                    left: 24,
+                                    bottom: 24,
+                                    borderRadius: 5,
+                                }}>
+                                    <></>
+                                </View>
                             </TouchableOpacity>
 
                         </View>
@@ -518,7 +642,7 @@ function HomeScreen({ navigation, user }: { navigation: any, user: any }) {
 
 
                     <ScrollView
-                        style={{ padding: 20, paddingVertical: 10 }}
+                        style={{ padding: 20, paddingVertical: 10, paddingTop: 0, }}
                         refreshControl={
                             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
                         }
@@ -527,10 +651,10 @@ function HomeScreen({ navigation, user }: { navigation: any, user: any }) {
                             accounts.length > 0 &&
                             <View>
                                 <View>
-                                    <Text style={{ fontSize: 16, color: Colors.text }}>Solde Total</Text>
+                                        <Text style={{ fontSize: 16, color: Colors.text }}>{t('homescreen.totalamount')}</Text>
                                 </View>
                                 <View>
-                                        <Text style={{ fontSize: 26, color: Colors.text, fontWeight: 'bold' }}>{montantTotal.toFixed(2)} {accounts[0].compte.devise} </Text>
+                                    <Text style={{ fontSize: 26, color: Colors.text, fontWeight: 'bold' }}>{montantTotal.toFixed(2)} {accounts[0]?.compte.devise} </Text>
                                 </View>
                             </View>
 
@@ -540,7 +664,7 @@ function HomeScreen({ navigation, user }: { navigation: any, user: any }) {
                         <FlatList
                             data={accounts}
                             renderItem={AccountItem}
-                            keyExtractor={item => item.id}
+                            keyExtractor={item => item?.compte.id}
                             horizontal={true}  // Makes the FlatList scroll horizontally
                             showsHorizontalScrollIndicator={false}  // Hide horizontal scroll indicator (optional)
                         />
@@ -556,9 +680,10 @@ function HomeScreen({ navigation, user }: { navigation: any, user: any }) {
                                     justifyContent: 'center',
                                     alignItems: 'center',
                                 }}
-                                    onPress={() => { navigation.navigate('CashInScreen')}}
+                                    disabled={true}
+                                    onPress={() => { protectedNavigation('CashInScreen'); }}
                                 >
-                                    <AntDesign name="pluscircleo" size={26} color="#ffffff" />
+                                    <AntDesign name="pluscircleo" size={26} color="#ffffff"/>
                                 </TouchableOpacity>
                                 <View style={{ height: 50 }}>
                                     <Text style={{ color: 'black', fontWeight: 'bold', marginTop: 5, textAlign: 'center' }}>{t('homescreen.add')}</Text>
@@ -577,7 +702,7 @@ function HomeScreen({ navigation, user }: { navigation: any, user: any }) {
                                         alignItems: 'center',
                                     }}
 
-                                    onPress={() => { navigation.navigate('TransfertScreen')}}
+                                    onPress={() => { protectedNavigation('TransfertScreen')}}
                                 >
                                     <Feather name="send" size={26} color={Colors.text} />
                                 </TouchableOpacity>
@@ -596,7 +721,8 @@ function HomeScreen({ navigation, user }: { navigation: any, user: any }) {
                                     justifyContent: 'center',
                                     alignItems: 'center',
                                 }}
-                                    onPress={() => { navigation.navigate('PayScreen'); }}
+                                    disabled={true}
+                                    onPress={() => { protectedNavigation('PayScreen'); }}
                                 >
                                     <AntDesign name="qrcode" size={26} color={Colors.text} />
                                 </TouchableOpacity>
@@ -645,6 +771,7 @@ function HomeScreen({ navigation, user }: { navigation: any, user: any }) {
                                         heure={item.heure}
                                         index={index}
                                         size={size}
+                                        taux={item.tauxConversion}
                                     />
                                 )}
                                 renderSectionHeader={({ section: { title } }) => (

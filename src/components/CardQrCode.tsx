@@ -3,8 +3,7 @@
 /* eslint-disable eol-last */
 /* eslint-disable prettier/prettier */
 import React from 'react';
-import { SafeAreaView, Text, TouchableOpacity, StyleSheet, View, Image } from 'react-native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import { SafeAreaView, Text, StyleSheet, View} from 'react-native';
 import Modal from 'react-native-modal';
 import { Colors } from '../themes';
 import { useTranslation } from 'react-i18next';
@@ -21,7 +20,7 @@ type PropType = {
 
 export default function CardQrCode({ isVisible, onClose, cardNum }: PropType) {
 
-    const { t, i18n } = useTranslation();
+    const {t} = useTranslation();
 
    // console.log(qrcode)
 
@@ -59,10 +58,10 @@ export default function CardQrCode({ isVisible, onClose, cardNum }: PropType) {
                     <Text style={styles.title}>{t('account.cardqrcode')}</Text>
                 </View>
 
-                <View style={{ alignContent: 'center', alignItems: 'center', marginTop: 40 }}>
+                <View style={{ alignContent: 'center', alignItems: 'center', marginTop: 40, marginBottom: 40 }}>
                     <QRCode
                         value={cardNum}
-                        size={200} // You can adjust the size of the QR code
+                        size={220} // You can adjust the size of the QR code
                         color="black" // The color of the QR code
                         backgroundColor="white" // The background color
                     />
@@ -84,7 +83,7 @@ const styles = StyleSheet.create({
     content: {
         backgroundColor: '#ffffff',
         padding: 20,
-        height: 350,
+        height: 370,
     },
 
     QRImage: {

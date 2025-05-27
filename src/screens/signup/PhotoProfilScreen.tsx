@@ -34,28 +34,24 @@ import axios from 'axios';
 import LoadingModal from '../../components/LoadingModal';
 import StepCompnent from '../../components/StepCompnent';
 import { useRoute } from '@react-navigation/native';
+import Toast from 'react-native-toast-message';
+import { saveProfilImage } from '../../services/request';
 
 
 function PhotoProfilScreen({ navigation }: { navigation: any }) {
 
     const route = useRoute<any>();
     const { t } = useTranslation();
-    const dispatch = useDispatch();
     const [fileName, setFileName] = React.useState<string>('');
     const [filePath, setFilePath] = React.useState<string>('');
     const [visible, setVisible] = React.useState(false);
     const { phone, idclient } = route.params;
 
-    // { phone: "14388833759", idclient: "105s" }
+    //   { phone: "4388833001", idclient: "115" }     ;
 
-           
-    const BASE_URL = 'http://10.0.0.133:5000/api';
     const [modalVisible, setModalVisible] = React.useState(false);
    
 
-    const onLoginPressed = () => {
-        dispatch(signIn({ tel: '4388833759' }));
-    }
 
 
     const requestCameraPermission = async () => {
@@ -88,7 +84,7 @@ function PhotoProfilScreen({ navigation }: { navigation: any }) {
     const captureImage = async (type: string) => {
 
         let options = {
-            mediaType: 'photo',
+            mediaType: 'image',
             maxWidth: 300,
             maxHeight: 550,
             quality: 1,
@@ -229,22 +225,24 @@ function PhotoProfilScreen({ navigation }: { navigation: any }) {
 
         setModalVisible(true);
 
-
-        axios.post(`${BASE_URL}/auth/upload-photo/${idclient}`, form_data, {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-            },
-        }).then(response => {
+        saveProfilImage(form_data, idclient).then((response) => {
 
             setModalVisible(false);
             navigation.navigate('ParrainageScreen', { phone: phone, idclient: idclient })
-        
-        }).catch(function (error) {
+
+        }).catch((error) => {
+
             setModalVisible(false);
-            console.log(error.response)
+            console.log(error.response.data)
 
-        });
+            Toast.show({
+                type: 'error',
+                text1: t('error'),
+                text2: t('signupscreen.photonotsave'),
+                position: 'top'
+            });
 
+        })
     
     };
 
@@ -296,9 +294,9 @@ function PhotoProfilScreen({ navigation }: { navigation: any }) {
 
                         <Button
                             mode="contained"
-                           //disabled={true}
+                            disabled={filePath === ''}
                             onPress={() => { sendpicture() }}>
-                            Soumettre     
+                                {t('photoProfilScreen.submit')}     
                         </Button>
 
                         <Button
@@ -382,6 +380,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
 
+
     avatarImage: {
         height: 140,
         width: 140,
@@ -390,6 +389,7 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         borderRadius: 70,
     },
+
 
     addButton: {
         height: 50,

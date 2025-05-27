@@ -27,7 +27,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import QrCodeModal from '../../components/QrCodeModal';
 import AvartarButton from '../../components/connected/AvartarButton';
-import Share from 'react-native-share';
+import { Share, Button } from 'react-native';
 
 
 function ParrainageScreen({ navigation }: { navigation: any }) {
@@ -45,10 +45,26 @@ function ParrainageScreen({ navigation }: { navigation: any }) {
     };
 
 
+    const shareDeepLink = async () => {
+        try {
+            const result = await Share.share({
+                message: 'Open this link: myapp://open/screen1',
+            });
+
+            if (result.action === Share.sharedAction) {
+                console.log('Link shared');
+            }
+        } catch (error) {
+            console.error(error.message);
+        }
+    };
+
+
+
     const whatsappShare = async () => {
 
         const message = encodeURIComponent(
-            `Telécharger l'application HPay https://play.google.com/store/apps/details?id=com.hpay.cash&hl=fr_CA&pli=1 et utilisé mon code de parrainage HPAY_45453 et beneficier d'un bonus de 10$`
+            `Telécharger l'application HPay hpayapp://open/screen1 et utilisé mon code de parrainage HPAY_45453 et beneficier d'un bonus de 10$`
         );
 
         const url = `whatsapp://send?text=${message}`;
@@ -92,15 +108,15 @@ function ParrainageScreen({ navigation }: { navigation: any }) {
             </View>
 
             <ScrollView>
-                <View style={{ marginTop: 10 }}>
-                    <Text style={styles.title}>Recommandez HPay et Gagnez des points</Text>
-                    <Text style={styles.subtitle}>Partager votre code de parrainage à vos amis.Vous gagnez des points de recompenses  lorsqu'un nouveau membre s'incrit avec le code.  </Text>
+                <View style={{ marginTop: 0 }}>
+                    <Text style={styles.title}>{t('sponsorTab.sponsorship')} </Text>
+                    {/*<Text style={styles.subtitle}>Partager votre code de parrainage à vos amis.Vous gagnez des points de recompenses  lorsqu'un nouveau membre s'incrit avec le code.  </Text>*/}
                 </View>
 
                 <View style={styles.card}>
 
                     <Text style={{ fontSize: 16, color: Colors.text, paddingVertical:15, fontWeight:'bold' }}>
-                        Partagez votre code
+                        {t('sponsorTab.shareyourcode')}
                     </Text>
 
                     <View style={{
@@ -138,7 +154,7 @@ function ParrainageScreen({ navigation }: { navigation: any }) {
                             <Ionicons name="qr-code-outline" size={25} color={Colors.text} />
                         </TouchableOpacity>
 
-                        <TouchableOpacity style={styles.shareButton} >
+                        <TouchableOpacity style={styles.shareButton} onPress={() => { shareDeepLink(); } }>
                             <Ionicons name="share-social-outline" size={25} color={Colors.text} />
                         </TouchableOpacity>
 

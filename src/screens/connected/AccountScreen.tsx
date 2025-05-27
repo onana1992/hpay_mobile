@@ -13,9 +13,7 @@ import {
     StyleSheet,
     View,
     TouchableOpacity,
-    Image,
     Text,
-    ScrollView,
     ActivityIndicator,
     SectionList,
 } from 'react-native';
@@ -38,7 +36,6 @@ function AccountScreen({ navigation }: { navigation: any }) {
     const route = useRoute<any>();
     const { t } = useTranslation();
     const user = useSelector((state: any) => state.profil.user);
-    const dispatch = useDispatch();
     const [visible, setVisible] = React.useState(false);
     const [langageModalvisible, setLangageModalvisible] = React.useState(false);
     const { account } = route.params;
@@ -50,13 +47,27 @@ function AccountScreen({ navigation }: { navigation: any }) {
     const [totalElement, setTotalElement] = React.useState<number>(0);
     const [histories, setHistories] = React.useState<any[]>([]);
 
-    console.log(account.compte.idCompte);
+    //console.log(account.compte.idCompte);
+
 
     React.useEffect(() => {
         fetchHistory(user?.client?.id,  account.compte.idCompte, 'desc', page, size);
     }, []);
 
+
+    const protectedNavigation = (screen: string, accountParm:any) => {
+
+        if (user.client.valider === '1') {
+            navigation.navigate(screen, { accountParm: accountParm });
+        } else {
+            navigation.navigate('kyc');
+        }
+
+    };
+
+
     const fetchHistory = (
+
         idClient: string,
         idCompte: string,
         sortDirection: string,
@@ -100,6 +111,7 @@ function AccountScreen({ navigation }: { navigation: any }) {
                     compteTo: item.compteTo,
                     numVirement: item.virementNum,
                     heure: heure,
+                    tauxConversion: item.tauxConversion,
                 });
             });
 
@@ -130,7 +142,6 @@ function AccountScreen({ navigation }: { navigation: any }) {
 
 
     const EmptyCard = () => {
-
         return (
             <View style={styles.emptycard}>
                 {
@@ -144,7 +155,6 @@ function AccountScreen({ navigation }: { navigation: any }) {
                 }
             </View>
         );
-
     };
 
 
@@ -154,7 +164,7 @@ function AccountScreen({ navigation }: { navigation: any }) {
             <View>
                 {
                     totalPages > page + 1 &&
-                    < View style={{ flexDirection: 'row', width: '100%', marginTop: 20 }}>
+                    <View style={{ flexDirection: 'row', width: '100%', marginTop: 20 }}>
                         <View style={{ flex: 1 }}>
                             <TouchableOpacity style={styles.morebutton} onPress={() => { fetchMore(); }}>
                                 <Text style={styles.morebuttonText}> {t('account.seemore')} </Text>
@@ -174,36 +184,43 @@ function AccountScreen({ navigation }: { navigation: any }) {
             <View>
 
                 <View style={{ alignItems: 'center' }}>
-                    <Image
-                        source={account.icon}
-                        style={{
-                            height: 100,
-                            width: 100,
-                            overflow: 'hidden',
-                            borderWidth: 1,
-                            borderRadius: 20,
-                        }}
-                    />
+
+                    <View style={{
+                        width: 100,
+                        height:100,
+                        borderRadius:50,
+                        backgroundColor:'#e6e4e0',
+                        alignItems:'center',
+                        justifyContent:'center',
+                    }}>
+                        <Text style={{  fontSize: 60, color:'white' }}>
+                            {account?.emoji}
+                        </Text>
+                    </View>
 
                     <View style={{ alignItems: 'center' }}>
 
                         {
                             account.compte.typeCompte.typeCompteCode === 'HPAY' &&
-                            <Text style={{ fontWeight: 'bold', fontSize: 17, color: Colors.text, marginTop: 10, marginBottom: -10 }}>
+                            <Text style={{ fontWeight: 'bold', fontSize: 18, color: Colors.text, marginTop: 5, }}>
                                 {t('account.principalAccount')}
                             </Text>
 
                         }
 
-                        <Text style={{ fontWeight: 'bold', fontSize: 17, color: Colors.text, marginTop: 10 }}>
-                            {t('account.currencyaccount')} {account.compte.devise}
-                        </Text>
+                        {
+                            account.compte.typeCompte.typeCompteCode !== 'HPAY' &&
+                            <Text style={{ fontWeight: 'bold', fontSize: 18, color: Colors.text, marginTop: 5 }}>
+                                {t('account.currencyaccount')} {account.compte.devise}
+                            </Text>
+                        }
 
                         <Text style={{ textAlign: 'center', fontSize: 14, color: Colors.gray, marginTop: 0 }}>
                             {t('account.accountnumber')} : {account.compte.numCompte}
                         </Text>
 
                     </View>
+
 
                     <View>
                         <Text style={{ fontWeight: 'bold', fontSize: 30, color: Colors.text, marginTop: 10 }}>
@@ -223,12 +240,22 @@ function AccountScreen({ navigation }: { navigation: any }) {
                                 justifyContent: 'center',
                                 alignItems: 'center',
                             }}
-                                onPress={() => { navigation.navigate('CashInScreen', { accountParm: account }) }}
+                                disabled={true}
+                                onPress={() => { protectedNavigation('CashInScreen', account ); }}
                             >
-                                <AntDesign name="pluscircleo" size={26} color="#ffffff" />
+                                <AntDesign name="pluscircleo" size={26} color="#ffffff"/>
                             </TouchableOpacity>
                             <View style={{ height: 50 }}>
-                                <Text style={{ color: 'black', fontWeight: 'bold', marginTop: 5, textAlign: 'center' }}>{t('account.add')}</Text>
+                                <Text
+                                    style={{
+                                        color: 'black',
+                                        fontWeight: 'bold',
+                                        marginTop: 5,
+                                        textAlign: 'center',
+                                    }}
+                                >
+                                    {t('account.add')}
+                                </Text>
                             </View>
                         </View>
 
@@ -241,7 +268,7 @@ function AccountScreen({ navigation }: { navigation: any }) {
                                 justifyContent: 'center',
                                 alignItems: 'center',
                             }}
-                                onPress={() => { navigation.navigate('TransfertScreen', { accountParm: account }) }}
+                                onPress={() => { protectedNavigation('TransfertScreen', account); }}
                             >
                                 <Feather name="send" size={26} color={Colors.text} />
                             </TouchableOpacity>
@@ -259,7 +286,8 @@ function AccountScreen({ navigation }: { navigation: any }) {
                                 justifyContent: 'center',
                                 alignItems: 'center',
                             }}
-                                onPress={() => { navigation.navigate('PayScreen', { accountParm: account }) }}
+                                disabled={true}
+                                onPress={() => { protectedNavigation('PayScreen', account); }}
                             >
                                 <AntDesign name="qrcode" size={26} color={Colors.text} />
                             </TouchableOpacity>
@@ -338,6 +366,7 @@ function AccountScreen({ navigation }: { navigation: any }) {
                         heure={item.heure}
                         index={index}
                         size={size}
+                        taux={item.tauxConversion}
                     />
                 )}
                 renderSectionHeader={({ section: { title } }) => (

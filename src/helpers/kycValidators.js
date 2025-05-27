@@ -1,3 +1,9 @@
+
+function isValidDateInput(input) {
+	const date = new Date(input);
+	return date instanceof Date && !isNaN(date.getTime());
+}
+
 function firstNameValidator(firstName) {
 	if (!firstName) return "identitycreen.requiredvalue";
 	return ''
@@ -9,8 +15,16 @@ function familyNameValidator(familyName) {
 }
 
 function dateNaissValidator(dateNaiss) {
-	if (!dateNaiss || undefined) return "identitycreen.requiredvalue"
-	return ''
+
+	if (!dateNaiss || undefined) {
+
+		return "identitycreen.requiredvalue";
+	} else if (!isValidDateInput(dateNaiss)) {
+		return "identitycreen.invalidformat";
+
+	}
+
+	return '';
 }
 
 
@@ -57,7 +71,17 @@ function DocumentNumberValidator(number) {
 
 function DateExpValidator(date) {
 	if (!date) return "identitycreen.requiredvalue";
-	return ''
+	
+
+	if (!date || undefined) {
+
+		return "identitycreen.requiredvalue";
+	} else if (!isValidDateInput(date)) {
+		return "identitycreen.invalidformat";
+
+	}
+
+	return '';
 }
 
 

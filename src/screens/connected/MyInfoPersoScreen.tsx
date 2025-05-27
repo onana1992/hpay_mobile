@@ -1,4 +1,5 @@
-﻿/* eslint-disable curly */
+﻿/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable curly */
 /* eslint-disable no-alert */
 /* eslint-disable react/no-unstable-nested-components */
 /* eslint-disable @typescript-eslint/no-unused-vars */
@@ -37,13 +38,13 @@ function MyInfoPersoScreen({ navigation }: { navigation: any }) {
     const [familyName, setFamilyName] = React.useState({ value: user.client.nom, error: '' });
     const [firstName, setFirstName] = React.useState({ value: user.client.prenoms, error: '' });
     const [dateNaiss, setDateNaiss] = React.useState<{ value: Date | undefined, error: string }>({ value: new Date(user.client.dateNaissance), error: '' });
-   
-  
+
+
     const changeCountry = (item: any) => {
         setCountry(item);
         const choosecountry: any = countries.find((it: { indicatif: any; }) => it.indicatif === item.indicator);
         setSelectedCountry(choosecountry);
-    }
+    };
 
 
     React.useEffect(() => {
@@ -73,7 +74,6 @@ function MyInfoPersoScreen({ navigation }: { navigation: any }) {
 
             <ScrollView>
 
-                
                 <View style={{}}>
                     <Text style={styles.title}>Mes informations personnelles</Text>
                 </View>
@@ -118,6 +118,7 @@ function MyInfoPersoScreen({ navigation }: { navigation: any }) {
                             onChangeText={(text: string) => setFirstName({ value: text, error: '' })}
                             autoCapitalize="none"
                             description={undefined}
+                            disabled={true}
                         />
                     </View>
                 </View>
@@ -133,6 +134,7 @@ function MyInfoPersoScreen({ navigation }: { navigation: any }) {
                             onChangeText={(text: string) => setFamilyName({ value: text, error: '' })}
                             autoCapitalize="none"
                             description={undefined}
+                            disabled={true}
                         />
                     </View>
                 </View>
@@ -145,7 +147,7 @@ function MyInfoPersoScreen({ navigation }: { navigation: any }) {
                             //label={t('identitycreen.dateofbirth')}
                             value={dateNaiss.value}
                             onChange={(d: Date | undefined) => setDateNaiss({ value: d, error: '' })}
-                           
+                            disabled={true}
                         />
                     </View>
                 </View>
@@ -164,7 +166,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#ffffff',
         padding: 20,
         paddingBottom: 0,
-        paddingVertical: 10
+        paddingVertical: 10,
     },
 
     title: {
@@ -230,7 +232,7 @@ const styles = StyleSheet.create({
         color: Colors.text,
         fontWeight: 'bold',
         marginBottom: 10,
-    }
+    },
 
 
 });

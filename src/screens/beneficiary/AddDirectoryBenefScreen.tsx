@@ -1,4 +1,5 @@
-﻿/* eslint-disable curly */
+﻿/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable curly */
 /* eslint-disable no-alert */
 /* eslint-disable react/no-unstable-nested-components */
 /* eslint-disable @typescript-eslint/no-unused-vars */

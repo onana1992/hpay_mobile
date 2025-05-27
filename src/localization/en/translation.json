@@ -19,7 +19,8 @@
     "pay": "Pay",
     "send": "Send",
     "add": "Add",
-    "recenttransactions": "Recent transactions"
+    "recenttransactions": "Recent transactions",
+    "totalamount": "Total amount"
   },
 
 
@@ -68,7 +69,13 @@
     "differentfrompassword": "Different from password",
     "requiredvalue": "Required value",
     "accountalreadyexist": "An account already exist with this number",
-    "submit": "Submit"
+    "submit": "Submit",
+    "termsandcondition": "Terms and conditions of use of the application",
+    "youmustaccepttermsandcondition": "You must accept the terms and conditions to register",
+    "photonotsave": "Failed to save your photo, please try again",
+    "letSignin": "Sign In",
+    "congratulation": "Congratulation",
+    "accountcreatewithsucces": "Your account has been created with success"
   },
 
 
@@ -120,6 +127,7 @@
     "veriftitle": "Let's verify your email address",
     "verifmsg": "We sended you an verification code by email. Please enter this code to verify your email adress",
     "emailalreadyused": "Email address already used"
+     
 
   },
 
@@ -134,12 +142,15 @@
     "confirm": "Confirm",
     "clientnotfound": "No member with this referal code found",
     "failure": "Failure",
+    "success": "Success",
     "confirmaddingsponsor": "Confirm adding sponsor",
     "confirmmsg": "The member linked to the number entered has been found, please enter confirm to add him as a sponsor",
     "sponsorshipalreadyaexist": "This sponsorship already exist",
     "code": "Referral code",
-    "entrersponsorcode": "Enter the code of your sponsor"
+    "entrersponsorcode": "Enter the code of your sponsor",
+    "sponsoradded": "the sponsor has been successfully added"
   },
+
 
   "countryScreen": {
     "title": "Let's start with your country and city of residence",
@@ -173,7 +184,9 @@
 
   "photoProfilScreen": {
     "title": "Add a profil photo",
-    "titlemsg": "Please choose a profile photo to allow your correspondents to identify you"
+    "titlemsg": "Please choose a profile photo to allow your correspondents to identify you",
+    "submit": "Submit",
+    
   },
 
 
@@ -222,7 +235,9 @@
     "accountvalidated": "Account validated",
     "accountvalidatedmsg": "We have validated your KYC information. You now have access to all the features of the application.",
     "drivenlicence": "Driven licence",
-    "consularcard": "Consular card"
+    "consularcard": "Consular card",
+    "invalidformat": "Date invalid",
+    "youmustcheckreadandapprove": "you must check read and approve."
   },
 
   "profil": {
@@ -241,6 +256,7 @@
     "notificationparameters": "Notification parameters",
     "logout": "Log out"
   },
+
 
   "benef": {
     "addsuccess": "Customer has been added to your beneficiaries.",
@@ -263,8 +279,13 @@
     "Addthebeneficiariespresentinyourcontacts": "Add the beneficiaries present in your contacts",
     "contactsinyourdirectoryuseHpay": "contacts in your directory use Hpay",
     "add": "Add",
-    "cancel" : "Cancel"
+    "cancel": "Cancel",
+    "choosethebeneficiary": "Please choose the beneficiary of your transfer",
+    "searchandaddabeneficiary": "Search and add a beneficiary",
+    "phonenumber": "Phone number",
+    "searchmessage": "Enter the phone number without the country code. Eg: 4388833759"
   },
+
 
 
   "account": {
@@ -286,7 +307,7 @@
     "Deletethecard": "Delete the card",
     "ChangePINcode": "Change PIN code",
     "Areyousureyouwanttoremovethiscard": "Are you sure you want to remove this card ?",
-    "Addthecardtoyouraccount": "Add the card to your account",
+    "Addthecardtoyouraccount": "Add a card to your account",
     "account": "Account",
     "Cardnumber": "Card number",
     "pincode": "Pin Code",
@@ -304,11 +325,13 @@
     "currencycard": "Currency Card",
     "principalAccount": "MAIN ACCOUNT",
     "displaytheqrcode": "Display the Qr code of the Card",
-    "cardqrcode": "QR code of your card",
+    "cardqrcode": "The QR code of your card",
     "seemore": "Voir plus",
     "loadinginprogress": "Loading in progress...",
-   
+    "changeyourcardcode": "Change your card's PIN code"
   },
+
+
 
 
   "transaction": {
@@ -331,11 +354,26 @@
     "theamounttransferredwillbe": "The amount transferred will be",
     "validate": "Validate",
     "amounttransferred": "amounttransferred",
-    "in": "In",
+    "in": "in",
     "transfersentto": "Transfer sent to",
     "Transferreceivedfrom": "Transfer received from",
-    "transferbetweenaccounts": "Transfer between accounts"
+    "transferbetweenaccounts": "Transfer between accounts",
+    "print": "Print the receipt",
+    "close": "Fermer",
+    "transfercomplete": "Transfer complete",
+    "transferfailed": "Transfert failed",
+    "transactions": "Transactions",
+    "makeadeposit": "Make a deposit",
+    "payatthemerchant": "Payment to the Seller",
+    "Dailytransferlimitreached": "Daily transfer limit reached",
+    "limithasbeenreached": "The daily transferable amount limit has been reached"
+  },
 
+
+
+  "sponsorTab": {
+    "sponsorship": "Sponsorship",
+    "shareyourcode": "Share your code"
   },
 
 
@@ -363,6 +401,5 @@
   "requiredDocument": "Required Document",
   "send": "Send",
   "delete": "Delete"
-
 
 }

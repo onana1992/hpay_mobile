@@ -54,6 +54,8 @@ interface VirementDataType {
     gainHpay: number | null;
     ip: string | null;
     agent: string | null;
+    montantCompteTo: number | null;
+    montantCompteFrom: number | null;
 }
 
 
@@ -73,9 +75,12 @@ function TransfertScreen({ navigation }: { navigation: any }) {
     const [benefAccount, setBenefAccount] = React.useState<any>(null);
     const [benefaccounts, setBenefAccounts] = React.useState<any[]>([]);
     const [rate, setRate] = React.useState<number>(1);
+    const [CADRate, setCADRate] = React.useState<number>(1);
     const [benefAmount, setBenefAmount] = React.useState<string>('0.00');
     const [ipAdress, setIpAddress] = React.useState<string | null>("");
     const [agent, setAgent] = React.useState<string | null>("");
+
+    console.log(accounts);
 
 
     const [data, setData] = React.useState<VirementDataType>({
@@ -97,6 +102,8 @@ function TransfertScreen({ navigation }: { navigation: any }) {
         gainHpay: null,
         ip: null,
         agent: null,
+        montantCompteTo: null,
+        montantCompteFrom: null,
     });
 
 
@@ -124,7 +131,7 @@ function TransfertScreen({ navigation }: { navigation: any }) {
 
         setData({
             ...data,
-            montant: Number(amount),
+            montant: Number((Number(amount) * CADRate).toFixed(2)),
             frais: '0',
             fraisMontant: 0,
             idClientFrom: user.client.id,
@@ -136,12 +143,14 @@ function TransfertScreen({ navigation }: { navigation: any }) {
             programmer: '0',
             deviseFrom: account.compte.devise,
             deviseTo: benefAccount.compte.devise,
-            total: Number(amount),
-            tauxConversion: rate,
+            total: Number((Number(amount) * CADRate).toFixed(2)),
+            tauxConversion: CADRate,
             gainHpayCAD: 0,
             gainHpay: 0,
             ip: ipAdress,
             agent: agent,
+            montantCompteTo: Number((Number(amount) * rate).toFixed(2)),
+            montantCompteFrom: Number(Number(amount).toFixed(2)),
         });
 
 
@@ -156,7 +165,7 @@ function TransfertScreen({ navigation }: { navigation: any }) {
                 rate: rate,
                 data: {
                     ...data,
-                    montant: Number(amount),
+                    montant: Number((Number(amount) * CADRate).toFixed(2)),
                     frais: '0',
                     fraisMontant: 0,
                     idClientFrom: user.client.id,
@@ -168,12 +177,14 @@ function TransfertScreen({ navigation }: { navigation: any }) {
                     programmer: '0',
                     deviseFrom: account.compte.devise,
                     deviseTo: benefAccount.compte.devise,
-                    total: Number(amount),
-                    tauxConversion: rate,
+                    total: Number((Number(amount) * CADRate).toFixed(2)),
+                    tauxConversion: CADRate,
                     gainHpayCAD: 0,
                     gainHpay: 0,
                     ip: ipAdress,
                     agent: agent,
+                    montantCompteTo: Number((Number(amount) * rate).toFixed(2)),
+                    montantCompteFrom: Number(Number(amount).toFixed(2)),
                 },
             }
         );
@@ -211,72 +222,88 @@ function TransfertScreen({ navigation }: { navigation: any }) {
     };
 
 
-
     const fetchAccount = (benef:any) => {
 
         if (!benef.compte) {
             return [];
         } else {
 
-            const mainAccount = benef.compte.find((account: any) => {
-                if (account.typeCompte.idTypeCompte === 6) {
-                    return true;
-                }
-            });
-
-            const otherAccounts = benef.compte.filter((account: any) => {
-
-                if (account.typeCompte.idTypeCompte !== 6 && account.typeCompte.idTypeCompte !== 2) {
-
-                    return account;
-                }
-
-            });
 
 
-            let allAccount = [];
-            allAccount.push(mainAccount);
+        const mainAccount = benef.compte.find((account: any) => {
+            if (account.typeCompte.idTypeCompte === 6) {
+                return true;
+            }
+        });
 
-            for (const acc of otherAccounts) {
-                allAccount.push(acc);
+
+        const otherAccounts = benef.compte.filter((account: any) => {
+
+            if (account.typeCompte.idTypeCompte !== 6 && account.typeCompte.idTypeCompte !== 2) {
+
+                return account;
             }
 
-            const newAccountsList = allAccount.map((account: any) => {
-
-                if (account.typeCompte.idTypeCompte === 6) {
-                    return {
-                        id: account.typeCompte.idTypeCompte,
-                        icon: require('../../assets/cad.png'),
-                        compte: account,
-                    };
-                }
-
-                else if (account.typeCompte.idTypeCompte === 1) {
-                    return {
-                        id: account.typeCompte.idTypeCompte,
-                        icon: require('../../assets/us.png'),
-                        compte: account,
-                    };
-                }
-
-                else if (account.typeCompte.idTypeCompte === 4) {
-                    return {
-                        id: account.typeCompte.idTypeCompte,
-                        icon: require('../../assets/ue.png'),
-                        compte: account,
-                    };
-                }
-
-                else if (account.typeCompte.idTypeCompte === 5) {
-                    return {
-                        id: account.typeCompte.idTypeCompte,
-                        icon: require('../../assets/gb.png'),
-                        compte: account,
-                    };
-                }
+        });
 
 
-            });
+        let allAccount = [];
+        allAccount.push(mainAccount);
+
+        for (const acc of otherAccounts) {
+            allAccount.push(acc);
+        }
+
+        const newAccountsList = allAccount.map((account: any) => {
+
+            if (account.typeCompte.idTypeCompte === 6) {
+                return {
+                    id: account.typeCompte.idTypeCompte,
+                    icon: require('../../assets/cad.png'),
+                    emoji: account.pays.emoji,
+                    compte: account,
+                };
+            }
+
+            else if (account.devise === 'CAD') {
+                return {
+                    id: account.typeCompte.idTypeCompte,
+                    icon: require('../../assets/cad.png'),
+                    emoji: '🇨🇦',
+                    compte: account,
+                };
+            }
+
+            else if (account.devise === 'USD') {
+                return {
+                    id: account.typeCompte.idTypeCompte,
+                    icon: require('../../assets/us.png'),
+                    emoji: '🇺🇸',
+                    compte: account,
+                };
+            }
+
+            else if (account.devise === 'EUR') {
+                return {
+                    id: account.typeCompte.idTypeCompte,
+                    icon: require('../../assets/ue.png'),
+                    emoji: '🇪🇺',
+                    compte: account,
+                };
+            }
+
+
+            else if (account.devise === 'GBP') {
+                return {
+                    id: account.typeCompte.idTypeCompte,
+                    icon: require('../../assets/gb.png'),
+                    emoji: '🇬🇧',
+                    compte: account,
+                };
+            }
+
+
+        });
 
 
             return newAccountsList;
@@ -301,6 +328,19 @@ function TransfertScreen({ navigation }: { navigation: any }) {
     };
 
 
+    const getCADRate = async (currencyFrom: string) => {
+
+        currencyRateRequest(currencyFrom, 'CAD').then((response: any) => {
+
+            //console.log("le taux applicable", response.data.realRate);
+            setCADRate(response.data.realRate);
+
+        }).catch((error: any) => {
+
+
+        });
+    };
+
 
 
     React.useEffect(() => {
@@ -312,6 +352,7 @@ function TransfertScreen({ navigation }: { navigation: any }) {
         }
 
         getRate(benefAccount?.compte.devise, account?.compte.devise);
+        getCADRate(account?.compte.devise);
 
     }, [benef]);
 
@@ -321,6 +362,7 @@ function TransfertScreen({ navigation }: { navigation: any }) {
         //console.log(benefAccount?.compte.devise);
         //console.log(account?.compte.devise);
         getRate(account?.compte.devise, benefAccount?.compte.devise,);
+        getCADRate(account?.compte.devise);
 
     }, [account, benefAccount]);
 

@@ -29,17 +29,25 @@ import TotalToPay from '../../components/transaction/TotalToPay';
 import { sendTransfertRequest } from '../../services/request';
 import LoadingModal from '../../components/LoadingModal';
 import Toast from 'react-native-toast-message';
+import StatutModal from '../../components/transaction/StatutModal';
 
 
 function ConfirmTransfertBetweenAccount({ navigation }: { navigation: any }) {
 
     const route = useRoute<any>();
-
-    // console.log(route.params);
-    // const { benef, amount, account, benefAccount, rate } = route.params;
     const { benef, amount, account, benefAccount, rate, data } = route.params;
     const [modalVisible, setModalVisible] = React.useState(false);
     const { t } = useTranslation();
+    const [completeModalOpen, setCompleteModalOpen] = React.useState(false);
+    const [statut, setStatut] = React.useState(true);
+    const [title, setTitle] = React.useState('');
+    const [message, setMessage] = React.useState('');
+
+
+    const closeModal = () => {
+        setCompleteModalOpen(false);
+        navigation.navigate('Home');
+    };
 
 
     const send = () => {
@@ -57,66 +65,84 @@ function ConfirmTransfertBetweenAccount({ navigation }: { navigation: any }) {
     const confirmSend = () => {
 
         console.log(data);
-        //setModalVisible(true);
+        setModalVisible(true);
 
         sendTransfertRequest(data).then((response) => {
 
-            console.log(response.data);
-            setModalVisible(false);
-            Toast.show({
-                type: 'error',
-                text1: t('success'),
-                text2: t('transaction.transfercompletedsuccessfully'),
-                position: 'top',
-            });
-
-            navigation.navigate('Home');
+           setModalVisible(false);
+           setTitle('transaction.transfercomplete');
+           setMessage('');
+           setStatut(true);
+           setModalVisible(false);
+           setCompleteModalOpen(true);
 
         }).catch((error) => {
 
-            console.log(error.response.data);
+            setTitle('transaction.transferfailed');
+            setStatut(false);
             setModalVisible(false);
+            setCompleteModalOpen(true);
 
             if (error.response.data.statusCode === 401) {
 
                 if (error.response.data.message === 'insufficient balance') {
-                    Toast.show({
+                    /*Toast.show({
                         type: 'error',
                         text1: t('Error'),
                         text2: t('transaction.transfercompletedsuccessfully'),
                         position: 'top',
-                    });
+                    });*/
+                    setMessage('transaction.insufficientbalance');
                 }
 
                 else if (error.response.data.message === 'client to not found') {
-                    Toast.show({
+                    /*Toast.show({
                         type: 'error',
                         text1: t('Error'),
                         text2: t('transaction.customeraccountisnotvalidated'),
                         position: 'top',
-                    });
+                    });*/
+                    setMessage('transaction.customeraccountisnotvalidated');
                 }
 
+
                 else if (error.response.data.message === 'compte from not found') {
-                    Toast.show({
+                    /*Toast.show({
                         type: 'error',
                         text1: t('Error'),
                         text2: t('transaction.issueraccoundclosed'),
                         position: 'top',
-                    });
+                    });*/
+                    setMessage('transaction.issueraccoundclosed');
                 }
 
+
                 else if (error.response.data.message === 'compte to not found') {
-                    Toast.show({
+                    /*Toast.show({
                         type: 'error',
                         text1: t('Error'),
                         text2: t('transaction.benefclosedaccount'),
                         position: 'top',
-                    });
+                    });*/
+                    setMessage('transaction.benefclosedaccount');
                 }
 
-            }
 
+                else if (error.response.data.message === 'montant limite par transfert dépassé') {
+                    setMessage('transaction.amountexceedsauthorizedlimit');
+                }
+
+                else if (error.response.data.message === 'montant limite journalier depassé') {
+                    setMessage('transaction.limithasbeenreached');
+                }
+
+
+                else if (error.response.data.message === 'nombre de transfert depassé') {
+                    setMessage('transaction.Dailytransferlimitreached');
+                }
+
+
+            }
 
         });
     };
@@ -145,14 +171,12 @@ function ConfirmTransfertBetweenAccount({ navigation }: { navigation: any }) {
 
                 <Text style={styles.title}>{t('transaction.Summaryofyourtransfer')}</Text>
 
-
-
                 <View style={{ marginTop: 30, borderBottomColor: Colors.background, borderBottomWidth: 1, paddingVertical: 20 }}>
 
                     <View style={{
                         flexDirection: 'row',
                         justifyContent: 'space-between',
-                        alignItems: 'center'
+                        alignItems: 'center',
                     }}>
 
                         <View>
@@ -207,18 +231,25 @@ function ConfirmTransfertBetweenAccount({ navigation }: { navigation: any }) {
 
                 <View style={{ flexDirection: 'row', width: '100%' }}>
                     <View style={{ flex: 1 }}>
-                        <TouchableOpacity style={styles.addbutton} onPress={() => { send() }}>
+                        <TouchableOpacity style={styles.addbutton} onPress={() => { send(); }}>
                             <Text style={styles.addbuttonText}>{t('transaction.Confirmthetransfer')}</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
-
 
             </View>
 
             <LoadingModal
                 setModalVisible={setModalVisible}
                 modalVisible={modalVisible}
+            />
+
+            <StatutModal
+                completeModalOpen={completeModalOpen}
+                closeModal={closeModal}
+                success={statut}
+                title={title}
+                message={message}
             />
 
         </View>
@@ -260,11 +291,12 @@ const styles = StyleSheet.create({
         marginLeft: 10,
     },
 
+
     input: {
-        height: "100%",
+        height: '100%',
         width: '100%',
         padding: 0,
-        fontSize: 26
+        fontSize: 26,
     },
 
     addbutton: {
@@ -295,8 +327,6 @@ const styles = StyleSheet.create({
         color: '#ffffff',
         fontSize: 16,
     },
-
-
 
 });
 

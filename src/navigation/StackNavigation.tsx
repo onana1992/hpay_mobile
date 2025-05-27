@@ -61,7 +61,8 @@ export default function StackNavigation() {
                     <Stack.Screen
                         name="Tab"
                         component={TabNavigator}
-                        options={{ headerShown: false }} />
+                        options={{ headerShown: false }} 
+                    />
 
                     <Stack.Screen
                         name="ProfilScreen"
@@ -75,7 +76,8 @@ export default function StackNavigation() {
                             headerStyle: {
                                 backgroundColor: Colors.primary,
                             },
-                        }} />
+                        }}
+                    />
 
                     <Stack.Screen
                         name="kyc"
@@ -89,33 +91,39 @@ export default function StackNavigation() {
                             headerStyle: {
                                 backgroundColor: Colors.primary,
                             },
-                        }} />
+                        }}
+                    />
 
                     <Stack.Screen
                         name="AddBeneficiariesScreen"
                         component={AddBeneficiariesScreen}
-                        options={{ headerShown: false }} />
+                        options={{ headerShown: false }} 
+                    />
 
                     <Stack.Screen
                         name="AddDirectoryBenefScreen"
                         component={AddDirectoryBenefScreen}
-                        options={{ headerShown: false }} />
+                        options={{ headerShown: false }}
+                    />
 
                     <Stack.Screen
                         name="ProfilBenefScreen"
                         component={ProfilBenefScreen}
-                        options={{ headerShown: false }} />
+                        options={{ headerShown: false }}
+                     />
 
                     <Stack.Screen
                         name="AccountScreen"
                         component={AccountScreen}
-                        options={{ headerShown: false }} />
+                        options={{ headerShown: false }}
+                    />
 
 
                     <Stack.Screen
                         name="TransfertScreen"
                         component={TransfertScreen}
-                        options={{ headerShown: false }} />
+                        options={{ headerShown: false }} 
+                    />
 
                     <Stack.Screen
                         name="ChooseBenefScreen"
@@ -125,12 +133,14 @@ export default function StackNavigation() {
                     <Stack.Screen
                         name="ConfirmTransfert"
                         component={ConfirmTransfert}
-                        options={{ headerShown: false }} />
+                        options={{ headerShown: false }} 
+                    />
 
                     <Stack.Screen
                         name="TransfertBetweenAccount"
                         component={TransfertBetweenAccount}
-                        options={{ headerShown: false }} />
+                        options={{ headerShown: false }} 
+                    />
 
                     <Stack.Screen
                         name="ConfirmTransfertBetweenAccount"
@@ -145,71 +155,82 @@ export default function StackNavigation() {
                     <Stack.Screen
                         name="MyMessageScreen"
                         component={MyMessageScreen}
-                        options={{ headerShown: false }} />
+                        options={{ headerShown: false }} 
+                    />
 
                     <Stack.Screen
                         name="CashInScreen"
                         component={CashInScreen}
-                        options={{ headerShown: false }} />
+                        options={{ headerShown: false }} 
+                    />
 
                     <Stack.Screen
                         name="InteractCashinScreen"
                         component={InteractCashinScreen}
-                        options={{ headerShown: false }} />
+                        options={{ headerShown: false }}
+                    />
 
                     <Stack.Screen
                         name="SellerCashInScreen"
                         component={SellerCashInScreen}
-                        options={{ headerShown: false }} />
+                        options={{ headerShown: false }}
+                    />
 
                     <Stack.Screen
                         name="PayScreen"
                         component={PayScreen}
-                        options={{ headerShown: false }} />
+                        options={{ headerShown: false }} 
+                    />
 
                     <Stack.Screen
                         name="CardDetail"
                         component={CardDetail}
-                        options={{ headerShown: false }} />
+                        options={{ headerShown: false }} 
+                    />
 
                     <Stack.Screen
                         name="AddCardScreen"
                         component={AddCardScreen}
-                        options={{ headerShown: false }} />
+                        options={{ headerShown: false }} 
+                    />
 
                     <Stack.Screen
                         name="ModifierCardScreen"
                         component={ModifierCardScreen}
-                        options={{ headerShown: false }} />
+                        options={{ headerShown: false }} 
+                    />
 
                     <Stack.Screen
                         name="ModifyCardPinScreen"
                         component={ModifyCardPinScreen}
-                        options={{ headerShown: false }} />
+                        options={{ headerShown: false }} 
+                    />
 
 
                     <Stack.Screen
                         name="MyInfoPersoScreen"
                         component={MyInfoPersoScreen}
-                        options={{ headerShown: false }} />
+                        options={{ headerShown: false }} 
+                    />
 
 
                     <Stack.Screen
                         name="MyHistoriesScreen"
                         component={MyHistoriesScreen}
-                        options={{ headerShown: false }} />
+                        options={{ headerShown: false }} 
+                    />
 
                     <Stack.Screen
                         name="ChangePasswordScreen"
                         component={ChangePasswordScreen}
-                        options={{ headerShown: false }} />
+                        options={{ headerShown: false }} 
+                    />
 
                     <Stack.Screen
                         name="ActivationCarteScreen"
                         component={ActivationCarteScreen}
-                        options={{ headerShown: false }} />
-
-
+                        options={{ headerShown: false }} 
+                    />
 
                 </Stack.Navigator>
 
@@ -227,74 +248,81 @@ export default function StackNavigation() {
                     <Stack.Screen
                         name="SignIn"
                         component={SignInScreen}
-                        options={{ headerShown: false }} />
+                        options={{ headerShown: false }}
+                    />
 
 
                     <Stack.Screen
                         name="CountryScreen"
                         component={CountryScreen}
-                        options={{ headerShown: false }} />
+                        options={{ headerShown: false }}
+                    />
 
 
                     <Stack.Screen
                         name="SignUp"
                         component={SignUpScreen}
-                        options={{ headerShown: false }} />
-
+                        options={{ headerShown: false }}
+                    />
 
 
                     <Stack.Screen
                         name="TelVerification"
                         component={TelVerificationScreen}
-                        options={{ headerShown: false }} />
-
+                        options={{ headerShown: false }}
+                    />
 
 
                     <Stack.Screen
                         name="Identity"
                         component={IdentityScreen}
-                        options={{ headerShown: false }} />
+                        options={{ headerShown: false }}
+                    />
 
 
                     <Stack.Screen
                         name="Email"
                         component={EmailScreen}
-                        options={{ headerShown: false }} />
+                        options={{ headerShown: false }}
+                    />
 
 
                     <Stack.Screen
                         name="PhotoScreen"
                         component={PhotoProfilScreen}
-                        options={{ headerShown: false }} />
+                        options={{ headerShown: false }}
+                    />
 
 
                     <Stack.Screen
                         name="Recover"
                         component={RecoverScreen}
-                        options={{ headerShown: false }} />
+                        options={{ headerShown: false }}
+                    />
 
 
                     <Stack.Screen
                         name="Verification"
                         component={VerificationScreen}
-                        options={{ headerShown: false }} />
+                        options={{ headerShown: false }}
+                    />
 
 
                     <Stack.Screen
                         name="NewPassword"
                         component={NewPasswordScreen}
-                        options={{ headerShown: false }} />
-
-
+                        options={{ headerShown: false }}
+                    />
 
                     <Stack.Screen
                         name="ParrainageScreen"
                         component={ParrainageScreen}
-                        options={{ headerShown: false }} />
+                        options={{ headerShown: false }}
+                    />
 
 
-
-                </Stack.Navigator>}
+                </Stack.Navigator>
+            }
 
         </NavigationContainer>
     );

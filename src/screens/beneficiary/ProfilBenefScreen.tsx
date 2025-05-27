@@ -35,7 +35,7 @@ function ProfilBenefScreen({ navigation }: { navigation: any }) {
     const dispatch = useDispatch();
     const { t } = useTranslation();
 
-    console.log(client);
+    //console.log(client);
 
 
     const devises = [
@@ -85,8 +85,13 @@ function ProfilBenefScreen({ navigation }: { navigation: any }) {
 
 
     const send = () => {
-        dispatch(saveBenef(client));
-        navigation.navigate('TransfertScreen');
+
+        if (user.client.valider === '1') {
+            dispatch(saveBenef(client));
+            navigation.navigate('TransfertScreen');
+        } else {
+            navigation.navigate('kyc');
+        }
     };
 
 
@@ -132,7 +137,7 @@ function ProfilBenefScreen({ navigation }: { navigation: any }) {
                                     alignItems: 'center',
                                 }}
 
-                                onPress={() => { send() }}
+                                onPress={() => { send()}}
                             >
                                 <Feather name="send" size={26} color={Colors.text} />
                             </TouchableOpacity>
@@ -238,9 +243,10 @@ function ProfilBenefScreen({ navigation }: { navigation: any }) {
 
 
             <FlatList
-                data={client.compte.filter((item:any) => {
+                /*data={client.compte.filter((item:any) => {
                     return item.devise !== 'HPC';
-                })}
+                })}*/
+                data={[]}
                 renderItem={AccountItem}
                 ListHeaderComponent={<Header /> }
                 keyExtractor={item => item.idCompte.toString()}

@@ -54,7 +54,7 @@ export default function EmailVerificationModal({ isVisible, onClose, phone, idcl
             verifyEmailRequest(idclient, code).then((response: any) => {
 
                 setModalVisible(false);
-                navigation.navigate("PhotoScreen", { phone : phone , idclient: idclient });
+                navigation.navigate('PhotoScreen', { phone : phone , idclient: idclient });
                 onClose();
 
             }).catch((_error: any) => {
@@ -80,9 +80,9 @@ export default function EmailVerificationModal({ isVisible, onClose, phone, idcl
     };
 
     const resendCode = () => {
-
         console.log("à implementer")
     };
+
 
     return (
         <Modal
@@ -91,8 +91,8 @@ export default function EmailVerificationModal({ isVisible, onClose, phone, idcl
             onBackdropPress={onClose}
             onSwipeComplete={onClose} // Handle swipe to close
             swipeDirection={['down']}
-          //  animationIn="slideInUp" // Optional: animation for modal entry
-          //  animationOut="slideOutDown" // Optional: animation for modal exit
+            //  animationIn="slideInUp" // Optional: animation for modal entry
+            //  animationOut="slideOutDown" // Optional: animation for modal exit
             style={styles.modal}>
             <SafeAreaView style={styles.content}>
 
@@ -159,7 +159,7 @@ export default function EmailVerificationModal({ isVisible, onClose, phone, idcl
     );
 }
 
-const { width, height } = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
 
@@ -228,7 +228,7 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
         borderRadius: 5,
         width: width,
-        paddingHorizontal:20
+        paddingHorizontal:20,
     },
 
 

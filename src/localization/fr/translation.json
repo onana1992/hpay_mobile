@@ -19,7 +19,8 @@
     "pay": "Payer",
     "send": "Envoyer",
     "add": "Ajouter",
-    "recenttransactions": "Transaction récentes"
+    "recenttransactions": "Transaction récentes",
+    "totalamount": "Solde Total"
   },
 
 
@@ -38,7 +39,6 @@
     "loginorpasswordinvalid": "Login ou mot de passe invalide",
     "connexionfailure": "Échec de connexion"
   },
-
 
 
   "signupscreen": {
@@ -65,7 +65,14 @@
     "requiredvalue": "Valeur requise",
     "accountalreadyexist": "un compte existe déjà avec ce numéro de télephone",
     "registrationfailure": "Échec d'inscription",
-    "submit": "Soumettre"
+    "submit": "Soumettre",
+    "termsandcondition": "Termes et conditions d'utlisation de l'application",
+    "youmustaccepttermsandcondition": "Vous devez accepter les termes et conditions pour vous inscrire",
+    "photonotsave": "Échec de sauvegarde de votre photo, ressayez",
+    "letSignin": "Connectez vous",
+    "congratulation": "Félicitation",
+    "accountcreatewithsucces": "Votre compte a été créé avec succès"
+
   },
 
 
@@ -137,14 +144,15 @@
     "confirm": "confirmer",
     "clientnotfound": "Aucun membre avec ce code de parrainage n'a été trouvé",
     "failure": "Echec",
-    "confirmaddingsponsor": "Confirmer l'ajout de parrain",
-    "confirmmsg": "Le propietaire du code a été trouvé, veuillez confirme pour l'ajouter comme parrain",
+    "success": "Succès",
+    "confirmaddingsponsor": "Confirmer l'ajout du parrain",
+    "confirmmsg": "Le propietaire du code a été trouvé, veuillez confirmer pour l'ajouter comme parrain",
     "sponsorshipalreadyaexist": "Ce parrainage existe dejà",
     "code": "Code de parrainnage",
-    "entrersponsorcode": "Entrer le code de votre parrain"
-
-
+    "entrersponsorcode": "Entrer le code de votre parrain",
+    "sponsoradded": "Le parrain a été ajouté avec succès"
   },
+
 
   "countryScreen": {
     "title": "Commençons par votre pays et votre ville de residence",
@@ -180,8 +188,8 @@
 
   "photoProfilScreen": {
     "title": "Ajoutez une photo de profil",
-    "titlemsg": "Veuillez choisir une photo de profil afin de permettre à vos correspondants de vous identifier"
-
+    "titlemsg": "Veuillez choisir une photo de profil afin de permettre à vos correspondants de vous identifier",
+    "submit": "Soumettre"
   },
 
 
@@ -233,7 +241,9 @@
     "accountvalidated": "Compte validé",
     "accountvalidatedmsg": "Nous avons validé vos informations KYC. Vous avez maintenant  accès à toute les fonctionnalités de l'application.",
     "drivenlicence": "Permis de conduire",
-    "consularcard": "Carte consulaire/Carte de séjour"
+    "consularcard": "Carte consulaire/Carte de séjour",
+    "invalidformat": "Date invalide",
+    "youmustcheckreadandapprove": "Vous devez cocher lu et approuvé."
   },
 
 
@@ -268,14 +278,19 @@
     "and": "et",
     "displayall": "Afficher tout",
     "searchresult": "Résultat de la recherche",
-    "search": "Recherche",
+    "search": "Rechercher",
     "Firstnamelastnamenumber": "Prénom, nom ou numéro",
-    "delete": "Suprimer",
+    "delete": "Supprimer",
     "send": "Envoyer",
     "Addthebeneficiariespresentinyourcontacts": "Ajouter les bénéficiaires présents dans vos contacts",
     "contactsinyourdirectoryuseHpay": "contacts de votre répertoire utilisent Hpay",
     "add": "Ajouter",
-    "cancel": "Annuler"
+    "cancel": "Annuler",
+    "choosethebeneficiary": "Veuillez Choissir le beneficiaire de votre transfert",
+    "searchandaddabeneficiary": "Recherchez et ajoutez un bénéficiaire",
+    "phonenumber": "Numéro de telephone",
+    "searchmessage": "Entrez le numéro de télephone sans l'indicatif du pays. Ex: 4388833759"
+
   },
 
 
@@ -298,14 +313,14 @@
     "Deletethecard": "Supprimer la carte",
     "ChangePINcode": "Changer le code PIN",
     "Areyousureyouwanttoremovethiscard": "Êtes-vous sûr de vouloir supprimer cette carte ?",
-    "Addthecardtoyouraccount": "Ajoutez la carte à votre compte",
+    "Addthecardtoyouraccount": "Ajoutez une carte à votre compte",
     "account": "Compte",
     "Cardnumber": "Numéro de carte",
     "pincode": "Code PIN",
     "save": "Enregistrer",
     "enterthepincode": "Entrez le code PIN",
     "Enterthecardnumber": "Entrez le numéro de carte",
-    "enabledisable": "Activer/Désactiver la carte",
+    "enabledisable": "Activez/Désactivez la carte",
     "areyousureyouwanttodisablethiscard": "Voulez-vous vraiment désactiver cette carte ?",
     "CardAlreadyUsed": "Carte déjà utlisée",
     "Cardnotregistered": "Carte non enregistrée",
@@ -316,9 +331,11 @@
     "currencycard": "Carte en devise",
     "principalAccount": "COMPTE PRINCIPAL",
     "displaytheqrcode": "Afficher le code QR de la carte",
-    "cardqrcode": "Code QR de votre carte",
+    "cardqrcode": "Le code QR de votre carte",
     "seemore": "Voir plus",
-    "loadinginprogress": "Chargement en cours..."
+    "loadinginprogress": "Chargement en cours...",
+    "changeyourcardcode": "Modifier le code pin de votre carte",
+    "enabled": "Activez/désactivez"
 
   },
 
@@ -329,7 +346,7 @@
     "Summaryofyourtransfer": "Récapitulatif de votre transfert",
     "Confirmthetransfer": "Confirmer le transfert",
     "doyoureallywanttocancelthistransaction": "Voulez-vous vraiment annuler cette transaction ?",
-    "sendmoney": "Envoyez de l'argent",
+    "sendmoney": "Envoyer de l'argent",
     "howmuchdoyouwanttosend": "Combien souhaitez-vous envoyer ?",
     "whichaccountdoyouwanttosendfrom": "Avec quel compte souhaitez-vous envoyer ?",
     "whichaccountwouldyouliketosendto": "Dans quel compte souhaitez vous envoyez ?",
@@ -343,10 +360,25 @@
     "theamounttransferredwillbe": "Le montant transféré sera",
     "validate": "Valider",
     "amounttransferred": "Montant transferé",
-    "in ": "en",
+    "in": "en",
     "transfersentto": "Transfert envoyé à",
     "Transferreceivedfrom": "Transfert reçu de ",
-    "transferbetweenaccounts": "Transfert entre comptes"
+    "transferbetweenaccounts": "Transfert entre comptes",
+    "print": "Imprimer le reçu",
+    "close": "Fermer",
+    "transfercomplete": "Transfert effectué",
+    "transferfailed": "Transfert échoué",
+    "transactions": "Transactions",
+    "makeadeposit": "Effectuer un dépôt",
+    "payatthemerchant": "Paiement chez marchand",
+    "Dailytransferlimitreached": "Limite quotidienne de transferts atteinte.",
+    "limithasbeenreached": "La limite du montant transférable quotidien a été atteinte.",
+    "amountexceedsauthorizedlimit": "Le montant saisi dépasse la limite autorisée."
+  },
+
+  "sponsorTab": {
+    "sponsorship": "Parrainage",
+    "shareyourcode": "Partagez votre code"
   },
 
 

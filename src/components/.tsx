@@ -22,7 +22,6 @@ export default function CardQrCode({ isVisible, onClose, qrcode }: PropType) {
     const { t, i18n } = useTranslation();
 
 
-
     return (
         <Modal
             isVisible={isVisible}
@@ -34,11 +33,13 @@ export default function CardQrCode({ isVisible, onClose, qrcode }: PropType) {
             animationOut="slideOutDown" // Optional: animation for modal exit
             style={styles.modal}>
             <SafeAreaView style={styles.content}>
-
+                
+                
                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginBottom: 0 }}>
                     <View style={{ height: 5, width: 40, borderRadius: 5, backgroundColor: Colors.background }}>
                     </View>
                 </View>
+
 
                 {/*<View style={{ flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'flex-end',  }}>
                     <TouchableOpacity style={{
@@ -66,8 +67,6 @@ export default function CardQrCode({ isVisible, onClose, qrcode }: PropType) {
                 <View style={{ marginTop: 10, alignItems: 'center' }}>
                     <Text style={{ textAlign: 'center', fontSize: 16, color: Colors.text }}>Invitez vos amis à scanner votre code QR pour télécharger l'application Hpay et beneficiez des points à chacune de leur recharges.</Text>
                 </View>
-
-
 
             </SafeAreaView>
         </Modal>

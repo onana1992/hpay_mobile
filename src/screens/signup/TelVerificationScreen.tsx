@@ -40,7 +40,7 @@ function TelVerificationScreen({ navigation}: {navigation:any,}) {
     const [modalVisible, setModalVisible] = React.useState(false);
     const { phone, idclient } = route.params;
 
-    console.log(phone);
+   // console.log(phone);
 
 
     const lauchUpdateCode = () =>{
@@ -95,7 +95,6 @@ function TelVerificationScreen({ navigation}: {navigation:any,}) {
         if (code.length == 4) {
             
             setModalVisible(true);
-
             verifyTelRequest(idclient, code).then((response: any) => {
 
                 setModalVisible(false);

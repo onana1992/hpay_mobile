@@ -27,7 +27,7 @@ import AvartarButton from '../../components/connected/AvartarButton';
 
 export default function TransactionScreen({ navigation }: { navigation: any}) {
 
-
+    const { t } = useTranslation();
     const dispatch = useDispatch();
     const [isPanelActive, setIsPanelActive] = React.useState(false);
     const [filePath, setFilePath] = React.useState(null);
@@ -41,6 +41,14 @@ export default function TransactionScreen({ navigation }: { navigation: any}) {
         );
     };
 
+    const protectedNavigation = (screen: string) => {
+
+        if (user.client.valider === '1') {
+            navigation.navigate(screen);
+        } else {
+            navigation.navigate('kyc');
+        }
+    };
 
 
     return (
@@ -53,12 +61,11 @@ export default function TransactionScreen({ navigation }: { navigation: any}) {
                 />
 
                 <View >
-
                 </View>
             </View>
 
             <ScrollView>
-                <Text style={styles.title}>Transactions</Text>
+                <Text style={styles.title}>{t('transaction.transactions')}</Text>
 
                 <View style={{ minHeight: 200, borderRadius: 10, marginTop:10 }}>
                     <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginTop: 10 }}>
@@ -67,66 +74,64 @@ export default function TransactionScreen({ navigation }: { navigation: any}) {
                             <TouchableOpacity
                                 style={{
                                     height: 130,
-                                    width: "90%",
+                                    width: '90%',
                                     borderRadius: 25,
                                     backgroundColor: '#e6e4e0',
-                                    padding: 15
+                                    padding: 15,
                                 }}
-                                onPress={() => { navigation.navigate("CashInScreen") }}
+                                disabled={true}
+                                onPress={() => { protectedNavigation('CashInScreen');}}
                             >
                                 <View style={{  }}>
                                     <AntDesign name="pluscircleo" size={26} color={Colors.primary} />
                                 </View>
                                 <View style={{ }}>
-                                    <Text style={{ color: 'black', fontWeight: 'bold', marginTop: 5,  }}>Faire un dépot</Text>
+                                    <Text style={{ color: 'black', fontWeight: 'bold', marginTop: 5,  }}>{t('transaction.makeadeposit')}</Text>
                                 </View>
                             </TouchableOpacity>
-                            
                         </View>
 
                         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
                             <TouchableOpacity
                                 style={{
                                     height: 130,
-                                    width: "90%",
+                                    width: '90%',
                                     borderRadius: 25,
                                     backgroundColor: '#e6e4e0',
-                                    
-                                    padding: 15
+                                    padding: 15,
                                 }}
-                                onPress={() => { navigation.navigate("TransfertScreen") }}
+
+                                onPress={() => { protectedNavigation('TransfertScreen') }}
                             >
                                 <View style={{  }}>
                                     <Feather name="send" size={26} color={Colors.primary} />
                                 </View>
                                 <View style={{ }}>
-                                    <Text style={{ color: 'black', fontWeight: 'bold', marginTop: 5}}>Envoyer de l'argent</Text>
+                                    <Text style={{ color: 'black', fontWeight: 'bold', marginTop: 5}}>{t('transaction.sendmoney')}</Text>
                                 </View>
                             </TouchableOpacity>
-                            
                         </View>
 
 
                         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
                             <TouchableOpacity style={{
                                 height: 130,
-                                width: "90%",
+                                width: '90%',
                                 borderRadius: 25,
                                 backgroundColor: '#e6e4e0',
-                                padding: 15
+                                padding: 15,
                             }}
-                                onPress={() => { navigation.navigate('PayScreen') }}
+                                disabled={true}
+                                onPress={() => { protectedNavigation('PayScreen'); }}
                             >
                                 <View style={{ }}>
                                     <AntDesign name="qrcode" size={26} color={Colors.primary} />
                                 </View>
                                 <View style={{  }}>
-                                    <Text style={{ color: 'black', fontWeight: 'bold', marginTop: 5 }}>Payer chez un marchand</Text>
+                                    <Text style={{ color: 'black', fontWeight: 'bold', marginTop: 5 }}>{t('transaction.payatthemerchant')}</Text>
                                 </View>
                             </TouchableOpacity>
-                            
                         </View>
-
 
                     </View>
 
@@ -136,30 +141,28 @@ export default function TransactionScreen({ navigation }: { navigation: any}) {
                         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'flex-start' }}>
                             <TouchableOpacity style={{
                                 height: 130,
-                                width: "90%",
+                                width: '90%',
                                 borderRadius: 25,
                                 backgroundColor: '#e6e4e0',
-                                padding: 15
+                                padding: 15,
                             }}
-                                onPress={() => { navigation.navigate('TransfertBetweenAccount') }}
+                                onPress={() => { protectedNavigation('TransfertBetweenAccount'); }}
                             >
                                 <View style={{}}>
                                     <Ionicons name="swap-vertical" size={26} color={Colors.primary} />
                                 </View>
                                 <View style={{}}>
-                                    <Text style={{ color: 'black', fontWeight: 'bold', marginTop: 5, }}>transfert entre compte</Text>
+                                    <Text style={{ color: 'black', fontWeight: 'bold', marginTop: 5, }}>{t('transaction.transferbetweenaccounts')}</Text>
                                 </View>
                             </TouchableOpacity>
 
                         </View>
 
                         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-                            
 
                         </View>
 
                         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-                          
 
                         </View>
 
@@ -167,12 +170,14 @@ export default function TransactionScreen({ navigation }: { navigation: any}) {
                 </View>
 
 
-                <View style={{ marginTop: 30, }}>
+                {/*
+                 <View style={{ marginTop: 30, }}>
                     <Text style={{ fontSize: 22, fontWeight: 'bold', color: Colors.text }}>Historiques des transactions</Text>
                     <View >
                         <EmptyCard />
                     </View>
                 </View>
+                */}
 
 
             </ScrollView>
@@ -187,9 +192,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#ffffff',
         padding:20,
         flex: 1,
-        paddingVertical: 10 
+        paddingVertical: 10,
     },
-
 
     avatarImage: {
         height: 100,
@@ -230,6 +234,5 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
-
 
 });

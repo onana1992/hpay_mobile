@@ -325,9 +325,9 @@ function BeneficiariesScreen({ navigation }: { navigation: any }) {
 
                             <View style={{flex:1} }>
                                 <View style={styles.benefavatar}>
-                                    {filePath ?
+                                    {item.photo != null  ?
                                         <Image
-                                            source={filePath ? { uri: filePath } : require('../../assets/avatar.jpg')}
+                                            source={{ uri: item.photo }}
                                             style={styles.avatarImage}
                                         />
                                         :
@@ -451,12 +451,12 @@ const styles = StyleSheet.create({
 
 
     avatarImage: {
-        height: 100,
-        width: 100,
+        width: 50,
+        height: 50,
         overflow: 'hidden',
-        borderColor: Colors.primary,
+        borderColor: '#e0e0e0',
         borderWidth: 1,
-        borderRadius: 30,
+        borderRadius: 25,
     },
 
     emptycard: {

@@ -49,9 +49,14 @@ const Step4 = ({ data, setData, step, setStep, kycSaveRequest }: { data: any, se
     const onSubmit = () => {
 
         if (checked) {
-
             kycSaveRequest();
-
+        } else {
+            Toast.show({
+                type: 'info',
+                text1: t('Info'),
+                text2: t('kyc.youmustcheckreadandapprove'),
+                position: 'top'
+            });
         }
 
     }

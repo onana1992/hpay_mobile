@@ -6,7 +6,8 @@ const initialState = {
     benefs: [],
     newClients: [],
     accounts: [],
-    benef:null,
+    benef: null,
+    notReadMessage:0,
 };
 
 
@@ -52,12 +53,17 @@ const profilSlice = createSlice({
         state.benef = null;
     },
 
+    savenotReadMessage: (state, action) => {
+        state.notReadMessage = action.payload;
+    },
+
   },
 });
 
 
 export const { signIn, signOut, saveToken,
-               saveBenefs, saveNewClients,
-               saveAccount, saveBenef } = profilSlice.actions;
+                saveBenefs, saveNewClients,
+                saveAccount, saveBenef,
+                savenotReadMessage } = profilSlice.actions;
 
 export default profilSlice.reducer;

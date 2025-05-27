@@ -18,14 +18,12 @@ import {
     Platform,
     KeyboardAvoidingView,
 } from 'react-native';
-import { signOut } from '../../store/profilSlice';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Colors } from '../../themes';
 import { useSelector, useDispatch } from 'react-redux';
-import { saveBenef} from '../../store/profilSlice';
 import { useTranslation } from 'react-i18next';
 import { Searchbar } from 'react-native-paper';
-import { addBenefRequest, fetchBeficiariesRequest, searchClientByPhoneRequest } from '../../services/request';
+import { addBenefRequest, searchClientByPhoneRequest } from '../../services/request';
 import LoadingModal from '../../components/LoadingModal';
 import Toast from 'react-native-toast-message';
 
@@ -39,31 +37,30 @@ function AddBeneficiariesScreen({ navigation }: { navigation: any }) {
     const [filePath, setFilePath] = React.useState(null);
     const [searchQuery, setSearchQuery] = React.useState('');
     const [client, setClient] = React.useState<null | any>(null);
-    const [modalVisible, setModalVisible] = React.useState<null | any>(null);
+    const [modalVisible, setModalVisible] = React.useState<boolean>(false);
     const [messageVisible, setmessageVisible] = React.useState<boolean>(true);
 
 
-    const lauchSponsorSearch = () => {
+    const lauchSearch = () => {
 
         setClient(null);
         setModalVisible(true);
         searchClientByPhoneRequest(searchQuery).then((response: any) => {
-            console.log(response.data.response.data);
+           // console.log(response.data.response.data);
             setClient(response.data.response.data);
             setModalVisible(false);
 
         }).catch((_error: any) => {
 
-            console.log(_error);
-
+            //console.log(_error);
             setModalVisible(false);
 
            if (_error.response.status === 404) {
                 Toast.show({
                     type: 'error',
                     text1: 'Non trouvé',
-                    text2: "Aucun utlisateur HPay ne correspond à ce numéro.",
-                    position: 'top'
+                    text2: 'Aucun utlisateur HPay ne correspond à ce numéro.',
+                    position: 'top',
                 });
             } 
 
@@ -80,7 +77,7 @@ function AddBeneficiariesScreen({ navigation }: { navigation: any }) {
                 type: 'error',
                 text1: 'Erreur',
                 text2: "Impossible d'ajouter. Ce compte ce compte correspond au votre",
-                position: 'top'
+                position: 'top',
             });
 
         } else {
@@ -123,6 +120,12 @@ function AddBeneficiariesScreen({ navigation }: { navigation: any }) {
 
     };
 
+
+    const cancel = () => {
+
+        setClient(null);
+        setSearchQuery('');
+    };
 
     const EmptySearch = () => {
 
@@ -182,16 +185,16 @@ function AddBeneficiariesScreen({ navigation }: { navigation: any }) {
                 <ScrollView style={{ marginBottom:45 }}>
 
                     <View style={{  }}>
-                        <Text style={styles.title}>Ajoutez un bénéficiaire</Text>
+                        <Text style={styles.title}>{t('benef.searchandaddabeneficiary')}</Text>
                     </View>
 
-                    <View style={{ marginTop: 20, flexDirection: 'row', width: '100%', }}>
+                    <View style={{ marginTop: 20, flexDirection: 'row', width: '100%' }}>
                         <Searchbar
-                            placeholder="Numéro de téléphone"
+                            placeholder={t('benef.phonenumber')}
                             onChangeText={setSearchQuery}
                             value={searchQuery}
-                            onIconPress={() => {lauchSponsorSearch(); }}
-                            onSubmitEditing={() => {lauchSponsorSearch(); }}
+                            onIconPress={() => {lauchSearch(); }}
+                            onSubmitEditing={() => {lauchSearch(); }}
                             keyboardType="numeric"
                             style={{ flex: 1, backgroundColor: '#ffffff', borderColor: 'gray', borderWidth: 1 }}
                         />
@@ -204,14 +207,14 @@ function AddBeneficiariesScreen({ navigation }: { navigation: any }) {
                             backgroundColor: '#e6e4e0',
                             padding: 10,
                             borderRadius: 10,
-                            flexDirection: 'row'
+                            flexDirection: 'row',
 
                         }}>
                             <TouchableOpacity onPress={() => { setmessageVisible(false) }}>
                                 <Ionicons name="close-outline" color={Colors.text} size={22} />
                             </TouchableOpacity>
                             <View style={{paddingHorizontal:5 }}>
-                                <Text style={{ color: Colors.text, paddingHorizontal:5 }}>Entrez le numéro de télephone avec l'indicatif du pays. Ex: 14388833759</Text>
+                                <Text style={{ color: Colors.text, paddingHorizontal: 5 }}>{t('benef.searchmessage') }</Text>
                             </View>
                         </View>
                     }
@@ -219,17 +222,17 @@ function AddBeneficiariesScreen({ navigation }: { navigation: any }) {
 
                     <View style={{
                         flex: 1,
-                        width: "100%",
+                        width: '100%',
                         justifyContent: 'center',
                         alignItems: 'center',
                         marginTop: 60,
-                        paddingHorizontal:0
+                        paddingHorizontal:0,
                     }}>
                         {
                             client &&
                             <View style={{ alignItems: 'center' }}>
                                 <View style={styles.avatar}>
-                                        { client.client.photoClient!=null ?
+                                        { client.client.photoClient != null ?
                                             <Image
                                                 source={{ uri: client.client.photoClient} }
                                                 style={styles.avatarImage}
@@ -251,7 +254,7 @@ function AddBeneficiariesScreen({ navigation }: { navigation: any }) {
 
                         {
                             !client &&
-                            <View style={{ alignItems: 'center', marginTop: 20, width: "100%", }}>
+                            <View style={{ alignItems: 'center', marginTop: 20, width: '100%', }}>
                                     {/*<EmptySearch/>*/}
                             </View>
                         }
@@ -263,17 +266,30 @@ function AddBeneficiariesScreen({ navigation }: { navigation: any }) {
 
             <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'center', marginBottom:10 }}>
                 <View style={{ flexDirection: 'row', width: '100%' }}>
-                    {/*<View style={{ flex: 1, marginRight:20 }}>
-                        <TouchableOpacity style={styles.cancelbutton}>
-                            <Text style={styles.cancelbuttonText}>Annuler</Text>
-                        </TouchableOpacity>
-                    </View>*/}
+
 
                     <View style={{ flex: 1 }}>
-                        <TouchableOpacity disabled={!client} style={client ? styles.addbutton : styles.addbuttonDisabled} onPress={() => { addBenef()}}>
-                            <Text style={styles.addbuttonText}>Ajouter</Text>
+                        <TouchableOpacity disabled={!client} style={client ? styles.addbutton : styles.addbuttonDisabled} onPress={() => { cancel(); }}>
+                            <Text style={styles.addbuttonText}>{t('benef.cancel')}</Text>
                         </TouchableOpacity>
                     </View>
+
+                    { !client &&
+                        <View style={{ flex: 1 , marginLeft:5 }}>
+                            <TouchableOpacity  style={client ? styles.addbutton : styles.addbuttonDisabled} onPress={() => { lauchSearch(); }}>
+                                <Text style={styles.addbuttonText}>{t('benef.search')}</Text>
+                            </TouchableOpacity>
+                        </View>
+                    }
+
+                    { client &&
+                        <View style={{ flex: 1, marginLeft: 5 }}>
+                            <TouchableOpacity  style={client ? styles.addbutton : styles.addbuttonDisabled} onPress={() => { addBenef(); }}>
+                                <Text style={styles.addbuttonText}>{t('benef.add')}</Text>
+                            </TouchableOpacity>
+                        </View>
+                    }
+
                 </View>
             </View>
 
@@ -394,7 +410,7 @@ const styles = StyleSheet.create({
 
     addbuttonDisabled: {
         height: 50,
-        backgroundColor: Colors.primary1,
+        backgroundColor: Colors.primary,
         borderRadius: 10,
         alignItems: 'center',
         justifyContent: 'center',

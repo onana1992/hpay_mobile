@@ -27,7 +27,7 @@ import EmailVerificationModal from '../../components/EmailVerificationModal';
 import { useRoute } from '@react-navigation/native';
 import { emailValidator } from '../../helpers/emailValidator';
 import { postEmailRequest } from '../../services/request';
-
+import Toast from 'react-native-toast-message';
 
 
 function EmailScreen({ navigation}: {navigation:any}) {
@@ -38,17 +38,17 @@ function EmailScreen({ navigation}: {navigation:any}) {
     const [modalVisible, setModalVisible] = React.useState(false);
     const [verifModalVisible, setVerifModalVisible] = React.useState<boolean>(false);
     const { phone, idclient } = route.params;
-
-    console.log(phone);
+    
+    //{ phone:4388833709 , idclient: 108 }
+    
+    //route.params;
+    //console.log(phone);
 
     const onLoginPressed = () => {
 
-       // setVerifModalVisible(true);
-
+        // setVerifModalVisible(true);
         //navigation.navigate('PhotoScreen');
-
         //console.log(email.value);
-
         const emailError = emailValidator(email.value);  
         
         if (emailError) {
@@ -60,25 +60,30 @@ function EmailScreen({ navigation}: {navigation:any}) {
         setModalVisible(true);
         setEmail({ ...email, error: '' });
         postEmailRequest(idclient, email.value ).then((response: any) => {
-           
             setModalVisible(false);
             setVerifModalVisible(true);
-
-
         }).catch((_error: any) => {
-            console.log(_error.response.data);
-            if (_error.response.data.message == "email already used") {
+            
+            //console.log(_error.response.data.message);
+            if (_error.response.data.message === 'email already used') {
                 setEmail({ ...email, error: t('emailscreen.emailalreadyused') })
+                 Toast.show({
+                    type: 'error',
+                    text1: t('failure'),
+                    text2: t('emailscreen.emailalreadyused'),
+                    position: 'top'
+                });
             }
+
             setModalVisible(false);
         })
+
         
     }
 
 
-
     const pass = () => {
-        navigation.navigate('PhotoScreen');
+        navigation.navigate('PhotoScreen', { phone : phone , idclient: idclient });
     }
 
     
@@ -89,7 +94,7 @@ function EmailScreen({ navigation}: {navigation:any}) {
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             style={styles.main}
         >
-            <NoConnectedHeader navigation={navigation} />
+            <NoConnectedHeader navigation={navigation}/>
             <ScrollView>
 
                 <Pressable style={styles.content} onPress={Keyboard.dismiss}>
@@ -135,11 +140,11 @@ function EmailScreen({ navigation}: {navigation:any}) {
                     {t('emailscreen.submit')}
                 </Button>
 
-                <Button
+                {/*<Button
                     mode="outlined"
                     onPress={() => { pass() }}>
                     {t('emailscreen.pass')}
-                </Button>
+                </Button>*/}
             </View>
             <LoadingModal setModalVisible={setModalVisible} modalVisible={modalVisible} />
             <EmailVerificationModal

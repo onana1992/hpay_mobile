@@ -1,3 +1,4 @@
+/* eslint-disable react/self-closing-comp */
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable quotes */
 /* eslint-disable prettier/prettier */
@@ -7,7 +8,7 @@ import {
     View,
     Text,
     TouchableOpacity,
-    Image
+    Image,
 } from 'react-native';
 import { Colors } from '../../themes';
 import { useNavigation } from '@react-navigation/native'; 
@@ -50,6 +51,16 @@ const AvartarButton: React.FC<MyComponentProps> = ({ profilUrl, prenom }) => {
                     </View>
 
                 }
+            </View>
+            <View style={{
+                position: 'relative',
+                bottom: 35,
+                left:35,
+                width: 15,
+                height: 15,
+                borderRadius:7.5,
+                backgroundColor:"#80EF80",
+            }}>
             </View>
         </TouchableOpacity>
 

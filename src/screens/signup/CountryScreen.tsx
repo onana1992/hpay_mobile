@@ -41,7 +41,7 @@ function CountryScreen({ navigation }: {navigation:any}) {
 
     React.useState(() => {
 
-        setModalVisible(true);
+        /*setModalVisible(true);*/
         getPaysRequest1().then((response: any) => {
 
             setCountries(response.data.response.data);
@@ -54,7 +54,7 @@ function CountryScreen({ navigation }: {navigation:any}) {
             if (error){
                 console.log(error);
             }
-            setModalVisible(false);
+            /*setModalVisible(false);*/
 
         });
 
@@ -185,7 +185,6 @@ function CountryScreen({ navigation }: {navigation:any}) {
                         onPress={() => { next() }}>
                         {t('countryScreen.next')}
                     </Button>
-
                 </View>
             <LoadingModal setModalVisible={setModalVisible} modalVisible={modalVisible} />
         </View>       

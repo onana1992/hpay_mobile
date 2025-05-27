@@ -83,11 +83,8 @@ function CardDetail({ navigation }: { navigation: any }) {
 
 
     const navigateTo = (page:string) => {
-
-        if (user.client.valider == '1') {
-
+        if (user.client.valider === '1') {
             navigation.navigate(page, { account: account });
-
         } else {
             navigation.navigate('kyc');
         }
@@ -131,7 +128,6 @@ function CardDetail({ navigation }: { navigation: any }) {
         }).catch((error: any) => {
 
         });
-
     };
 
 
@@ -233,7 +229,7 @@ function CardDetail({ navigation }: { navigation: any }) {
 
                 <View style={{ flex: 1, flexDirection: 'row' }}>
                     <View style={{ flex: 1, flexDirection: 'row', height: 40, alignItems: 'flex-start' }}>
-                        <Image
+                        {/*<Image
                             source={account.icon}
                             style={{
                                 height: 40,
@@ -242,7 +238,7 @@ function CardDetail({ navigation }: { navigation: any }) {
                                 borderWidth: 1,
                                 borderRadius: 20,
                             }}
-                        />
+                        />*/}
                         <View>
                             {
 
@@ -278,7 +274,7 @@ function CardDetail({ navigation }: { navigation: any }) {
 
                 <View style={{ flex: 1, flexDirection: 'row' }}>
                     <View style={{ flex: 1, flexDirection: 'row', height: 40, alignItems: 'flex-start' }}>
-                        <Image
+                        {/*<Image
                             source={account.icon}
                             style={{
                                 height: 40,
@@ -287,10 +283,27 @@ function CardDetail({ navigation }: { navigation: any }) {
                                 borderWidth: 1,
                                 borderRadius: 20,
                             }}
-                        />
+                        />*/}
                         {/*<Text style={{ marginLeft: 5, fontWeight: 'bold', fontSize: 17, color: Colors.text }}>
                              {account.compte.devise}
                         </Text>*/}
+
+                        <View style={{
+                            width: 40,
+                            height: 40,
+                            borderRadius: 20,
+                            backgroundColor: 'white',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                        }}>
+                            <Text style={{ fontSize: 24, color: 'white' }}>
+                                {account?.emoji}
+                            </Text>
+                        </View>
+
+                        <Text style={{ marginTop: 6, marginLeft: 10, fontWeight: 'bold', fontSize: 17, color: Colors.text }}>
+                            {account?.compte.devise}
+                        </Text>
 
                     </View>
                 </View>

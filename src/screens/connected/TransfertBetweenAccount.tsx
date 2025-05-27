@@ -30,6 +30,9 @@ import ChangeRate from '../../components/transaction/ChangeRate';
 import TransactionFee from '../../components/transaction/TransactionFee';
 import TotalToPay from '../../components/transaction/TotalToPay';
 import { currencyRateRequest } from '../../services/request';
+import { NetworkInfo } from 'react-native-network-info';
+import UserAgent from 'react-native-user-agent';
+
 
 interface VirementDataType {
     montant: number | null;
@@ -48,6 +51,11 @@ interface VirementDataType {
     tauxConversion: number | null;
     gainHpayCAD: number | null;
     gainHpay: number | null;
+    ip: string | null;
+    agent: string | null;
+    montantCompteTo: number | null;
+    montantCompteFrom: number | null;
+
 }
 
 function TransfertBetweenAccount({ navigation }: { navigation: any }) {
@@ -66,6 +74,9 @@ function TransfertBetweenAccount({ navigation }: { navigation: any }) {
     const [benefaccounts, setBenefAccounts] = React.useState<any[]>([]);
     const [rate, setRate] = React.useState<number>(1);
     const [benefAmount, setBenefAmount] = React.useState<string>('0.00');
+    const [ipAdress, setIpAddress] = React.useState<string | null>("");
+    const [agent, setAgent] = React.useState<string | null>("");
+    const [CADRate, setCADRate] = React.useState<number>(1);
 
 
     const [data, setData] = React.useState<VirementDataType>({
@@ -85,10 +96,18 @@ function TransfertBetweenAccount({ navigation }: { navigation: any }) {
         tauxConversion: null,
         gainHpayCAD: null,
         gainHpay: null,
-
+        ip: null,
+        agent: null,
+        montantCompteTo: null,
+        montantCompteFrom: null,
     });
 
-    //console.log(benef);
+    React.useEffect(() => {
+        setAgent(UserAgent.getUserAgent());
+        NetworkInfo.getIPAddress()
+            .then(ip => setIpAddress(ip))
+            .catch(error => console.error(error));
+    }, []);
 
 
     const cancel = () => {
@@ -134,6 +153,7 @@ function TransfertBetweenAccount({ navigation }: { navigation: any }) {
 
         setBenefAccounts(filterAccounts);
         getRate(account?.compte.devise, filterAccounts[0]?.compte.devise);
+        getCADRate(account?.compte.devise);
         setBenefAccount(filterAccounts[0]);
     };
 
@@ -152,13 +172,26 @@ function TransfertBetweenAccount({ navigation }: { navigation: any }) {
     };
 
 
+    const getCADRate = async (currencyFrom: string) => {
+
+        currencyRateRequest(currencyFrom, 'CAD').then((response: any) => {
+
+            //console.log("le taux applicable", response.data.realRate);
+            setCADRate(response.data.realRate);
+
+        }).catch((error: any) => {
+
+
+        });
+    };
+
 
     const send = () => {
 
 
         setData({
             ...data,
-            montant: Number(amount),
+            montant: Number((Number(amount) * CADRate).toFixed(2)),
             frais: '0',
             fraisMontant: 0,
             idClientFrom: user.client.id,
@@ -170,10 +203,14 @@ function TransfertBetweenAccount({ navigation }: { navigation: any }) {
             programmer: '0',
             deviseFrom: account.compte.devise,
             deviseTo: benefAccount.compte.devise,
-            total: Number(amount),
-            tauxConversion: rate,
+            total: Number((Number(amount) * CADRate).toFixed(2)),
+            tauxConversion: CADRate,
             gainHpayCAD: 0,
             gainHpay: 0,
+            ip: ipAdress,
+            agent: agent,
+            montantCompteTo: Number((Number(amount) * rate).toFixed(2)),
+            montantCompteFrom: Number(Number(amount).toFixed(2)),
         });
 
 
@@ -187,7 +224,7 @@ function TransfertBetweenAccount({ navigation }: { navigation: any }) {
                 rate: rate,
                 data: {
                     ...data,
-                    montant: Number(amount),
+                    montant: Number((Number(amount) * CADRate).toFixed(2)),
                     frais: '0',
                     fraisMontant: 0,
                     idClientFrom: user.client.id,
@@ -199,10 +236,14 @@ function TransfertBetweenAccount({ navigation }: { navigation: any }) {
                     programmer: '0',
                     deviseFrom: account.compte.devise,
                     deviseTo: benefAccount.compte.devise,
-                    total: Number(amount),
-                    tauxConversion: rate,
+                    total: Number((Number(amount) * CADRate).toFixed(2)),
+                    tauxConversion: CADRate,
                     gainHpayCAD: 0,
                     gainHpay: 0,
+                    ip: ipAdress,
+                    agent: agent,
+                    montantCompteTo: Number((Number(amount) * rate).toFixed(2)),
+                    montantCompteFrom: Number(Number(amount).toFixed(2)),
                 },
             }
         );
@@ -218,6 +259,7 @@ function TransfertBetweenAccount({ navigation }: { navigation: any }) {
     React.useEffect(() => {
 
         getRate(account?.compte.devise, benefAccount?.compte.devise);
+        getCADRate(account?.compte.devise);
 
     }, [benefAccount]);
 
@@ -377,8 +419,7 @@ const styles = StyleSheet.create({
         height: "100%",
         width: '100%',
         padding: 0,
-        fontSize: 26
-
+        fontSize: 26,
     },
 
     addbutton: {

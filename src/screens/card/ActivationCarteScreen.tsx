@@ -223,45 +223,11 @@ function ActivationCarteScreen({ navigation }: { navigation: any }) {
 
 
 
-    const accountName = (account: any) => {
-
-        if (account.compte.devise == "CAD") {
-            return "Dollard Canadien";
-        }
-
-
-        else if (account.compte.devise == "USD") {
-            return "Dollard Americain";
-        }
-
-        else if (account.compte.devise == 'EUR') {
-            return "Euro";
-        }
-
-        else if (account.compte.devise == 'GBP') {
-            return "Livre Sterling";
-        }
-
-    };
-
-
-
-    const EmptyCard = () => {
-        return (
-            <View style={styles.emptycard}>
-                <Text style={{ color: Colors.text }}> Aucune carte enregistré </Text>
-            </View>
-        );
-    };
-
-
-
-
 
     return (
         <View style={styles.main}>
 
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', }} >
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }} >
                 <TouchableOpacity style={{
                     justifyContent: 'center',
                     backgroundColor: '#e6e4e0',
@@ -269,7 +235,7 @@ function ActivationCarteScreen({ navigation }: { navigation: any }) {
                     width: 40,
                     alignItems: 'center',
                     borderRadius: 20,
-                }} onPress={() => { cancel() }} >
+                }} onPress={() => { cancel(); }} >
                     <View>
                         <Ionicons name="close" color={Colors.text} size={24} />
                     </View>
@@ -290,8 +256,31 @@ function ActivationCarteScreen({ navigation }: { navigation: any }) {
                 >
                     <Pressable onPress={Keyboard.dismiss}>
 
-                        <Text style={[styles.inputTitleText, { marginBottom: 0 }]}>Compte</Text>
+                        <Text style={[styles.inputTitleText, { marginBottom: 0 }]}>{t('account.account')}</Text>
                         <View style={styles.account} >
+                            <View style={{ flex: 1, flexDirection: 'row', alignItems: 'flex-start' }}>
+
+                                <View style={{
+                                    width: 40,
+                                    height: 40,
+                                    borderRadius: 20,
+                                    backgroundColor: 'white',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                }}>
+                                    <Text style={{ fontSize: 24, color: 'white' }}>
+                                        {account?.emoji}
+                                    </Text>
+                                </View>
+
+                                <Text style={{ marginTop: 10, marginLeft: 5, fontWeight: 'bold', fontSize: 17, color: Colors.text }}>
+                                    {account?.compte.devise}
+                                </Text>
+
+                            </View>
+                        </View>
+
+                        {/*<View style={styles.account} >
                             <View style={{ width: '60%', padding: 5 }} >
                                 <View style={{ flex: 1, flexDirection: 'row', height: 40, alignItems: 'center', justifyContent: 'flex-start' }}>
                                     <Image
@@ -307,12 +296,12 @@ function ActivationCarteScreen({ navigation }: { navigation: any }) {
 
                                 </View>
                             </View>
-                        </View>
+                        </View>*/}
 
 
 
                         <View style={{ flex: 1, alignContent: 'flex-start', justifyContent: 'flex-start', marginTop: 20 }}>
-                            <Text style={styles.inputTitleText}>Activer/Désactiver*</Text>
+                            <Text style={styles.inputTitleText}>{t('account.enabled')}*</Text>
                             <View style={{ flexDirection: 'row', width: '100%', marginTop:10 }}>
                                 <Switch
                                     value={isSwitchOn}
@@ -325,7 +314,6 @@ function ActivationCarteScreen({ navigation }: { navigation: any }) {
 
 
                     </Pressable>
-
                     <LoadingModal setModalVisible={setModalVisible} modalVisible={modalVisible} />
                 </KeyboardAvoidingView>
 
@@ -345,7 +333,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#ffffff',
         padding: 20,
         paddingBottom: 0,
-        paddingVertical: 10
+        paddingVertical: 10,
     },
 
     title: {
@@ -398,19 +386,20 @@ const styles = StyleSheet.create({
         color: Colors.text,
         fontWeight: 'bold',
         marginBottom: 5,
-        fontSize: 16
+        fontSize: 16,
     },
 
     account: {
         flexDirection: "row",
         borderWidth: 1,
         borderColor: Colors.text,
-        height: 70,
+        height: 50,
         padding: 0,
         marginVertical: 10,
         borderRadius: 5,
-        justifyContent: "space-between",
-        flexWrap: 'nowrap'
+        justifyContent: "center",
+        flexWrap: 'nowrap',
+        alignItems: 'center',
     },
 
     currency: {
