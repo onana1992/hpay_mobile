@@ -1,0 +1,12 @@
+[
+	{
+		"relation": [ "delegate_permission/common.handle_all_urls" ],
+		"target": {
+			"namespace": "com.hpay",
+			"package_name": "com.hpay",
+			"sha256_cert_fingerprints": [
+				"21:CF:4A:25:32:86:3D:16:76:F5:AB:C5:42:D6:17:FF:9E:E4:D1:4E:05:D0:9B:92:16:60:44:23:7D:B7:55:29"
+			]
+		}
+	}
+]

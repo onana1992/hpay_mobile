@@ -6515,10 +6515,10 @@
   "resolved" "https://registry.npmjs.org/react-native-virtualized-view/-/react-native-virtualized-view-1.0.0.tgz"
   "version" "1.0.0"
 
-"react-native@*", "react-native@0.71.17":
-  "integrity" "sha512-9z1s2y6IZJB1WMhAGarUbWdIWRAg0fTMV43HFrr0vJF4Fg98y/t3o5WvkrQZa6PWwG3c3HJjxNUdQOiBdvksVQ=="
-  "resolved" "https://registry.npmjs.org/react-native/-/react-native-0.71.17.tgz"
-  "version" "0.71.17"
+"react-native@*", "react-native@0.71.19":
+  "integrity" "sha512-E6Rz4lpe4NC9ZR6zq9AWiB0MAoVeidr+aPu/pmwk5ezvVL/wbQ1Gdj70v7fKMC8Nz5wYFO1S0XUNPUKYaPhfeg=="
+  "resolved" "https://registry.npmjs.org/react-native/-/react-native-0.71.19.tgz"
+  "version" "0.71.19"
   dependencies:
     "@jest/create-cache-key-function" "^29.2.1"
     "@react-native-community/cli" "10.2.7"
