@@ -70,7 +70,7 @@ const StatutModal = ({ completeModalOpen, closeModal, success, title, message } 
                 <View style={{flex:1, justifyContent:'flex-end'}}>
                     { success &&
                         <View style={{paddingVertical: 10}}>
-                         <TouchableOpacity style={styles.addbutton} onPress={() => { send(); }}>
+                            <TouchableOpacity disabled={true} style={styles.addbutton} onPress={() => { }}>
                             <Text style={styles.addbuttonText}>{t('transaction.print')}</Text>
                          </TouchableOpacity>
                         </View>

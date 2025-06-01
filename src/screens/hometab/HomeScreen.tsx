@@ -174,7 +174,7 @@ function HomeScreen({ navigation, user }: { navigation: any, user: any }) {
 
 
     React.useEffect(() => {
-        //calculateAmmount();
+        calculateAmmount();
     }, [accounts]);
 
 
@@ -222,7 +222,6 @@ function HomeScreen({ navigation, user }: { navigation: any, user: any }) {
             dispatch(signIn(response.data.response.data));
             fetchAccount(response.data.response.data);
             setRefreshing(false);
-
         }).catch((error: any) => {
             setRefreshing(false);
         });
@@ -248,44 +247,36 @@ function HomeScreen({ navigation, user }: { navigation: any, user: any }) {
 
             fetchRatesRequest(accounts[0]?.compte.devise, devises).then((response) => {
 
-                //console.log(devises);
-                //console.log(response.data);
-                //console.log(response.data['EUR']);
-                //console.log(response.data['USD']);
-                //console.log(response.data['GBP']);
 
                 montant = accounts[0]?.compte.solde;
 
+                console.log(accounts);
+
                 for (let j = 1; j < accounts.length; j++){
 
-                   if (accounts[j].devise === 'CAD') {
-                        montant = montant + accounts[j]?.compte.solde / response.data['CAD']?.hpayRate;
+
+
+                    if (accounts[j].compte.devise === 'CAD') {
+                        console.log(response.data['CAD']?.hpayRate);
+                       montant = montant + accounts[j]?.compte.solde / response.data['CAD']?.hpayRate;
                    }
 
-                    if (accounts[j].devise  === 'USD') {
+                    if (accounts[j].compte.devise  === 'USD') {
                          montant = montant + accounts[j]?.compte.solde / response.data['USD']?.hpayRate;
                     }
 
 
-                    else if (accounts[j].devise === 'EUR') {
+                    else if (accounts[j].compte.devise === 'EUR') {
                         montant = montant + accounts[j]?.compte.solde / response.data['EUR']?.hpayRate;
                     }
 
 
-                    else if (accounts[j].devise  === 'GBP') {
+                    else if (accounts[j].compte.devise  === 'GBP') {
                         montant = montant + accounts[j]?.compte.solde / response.data['GBP']?.hpayRate;
                     }
 
                 }
 
-
-
-                {/*
-                    montant = accounts[0]?.compte.solde + accounts[1]?.compte.solde / response.data['USD'].hpayRate;
-                    montant = montant + accounts[2]?.compte.solde / response.data['EUR']?.hpayRate;
-                    montant = montant + accounts[3]?.compte.solde / response.data['GBP']?.hpayRate;
-                 */
-                }
 
                 setMontantTotal(montant);
             }).catch((error) => {
@@ -311,7 +302,7 @@ function HomeScreen({ navigation, user }: { navigation: any, user: any }) {
             8
         ).then((response) => {
 
-          //  console.log(response.data.content);
+            console.log(response.data.content);
             const grouped: any = {};
             setSize(response.data.numberOfElements);
             setTotalElement(response.data.totalElements);
@@ -337,6 +328,8 @@ function HomeScreen({ navigation, user }: { navigation: any, user: any }) {
                     numVirement: item.virementNum,
                     heure: heure,
                     tauxConversion: item.tauxConversion,
+                    montantTo: item.montantTo,
+                    montantFrom: item.montantFrom,
                 });
             });
 
@@ -506,6 +499,7 @@ function HomeScreen({ navigation, user }: { navigation: any, user: any }) {
         </TouchableOpacity>
     );
 
+
     const fetchNotReadNumber = () => {
         getNumberMessageNonlu(user?.client?.id).then((response) => {
             dispatch(savenotReadMessage(response.data.nonLu));
@@ -540,7 +534,6 @@ function HomeScreen({ navigation, user }: { navigation: any, user: any }) {
         fetchHistory();
         fetchNotReadNumber();
     }, []);
-
 
 
 
@@ -767,6 +760,8 @@ function HomeScreen({ navigation, user }: { navigation: any, user: any }) {
                                         compteFrom={item.compteFrom}
                                         compteTo={item.compteTo}
                                         montant={item.montant}
+                                        montantFrom={item.montantFrom}
+                                        montantTo={item.montantTo}
                                         devise={item.devise}
                                         heure={item.heure}
                                         index={index}

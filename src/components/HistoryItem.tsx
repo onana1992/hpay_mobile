@@ -15,6 +15,8 @@ type PropType = {
     compteFrom: any,
     compteTo: any,
     montant: string,
+    montantFrom: string,
+    montantTo: string,
     devise: string,
     heure: string
     index: number
@@ -25,7 +27,7 @@ type PropType = {
 
 
 
-export default function HistoryItem({user, clientFrom, clientTo, compteFrom, compteTo, montant, devise, heure, index,size, taux }: PropType) {
+export default function HistoryItem({user, clientFrom, clientTo, compteFrom, compteTo, montant, montantFrom, montantTo, devise, heure, index,size, taux }: PropType) {
 
     const { t } = useTranslation();
     const getInitials = (phrase: string) => {
@@ -105,7 +107,7 @@ export default function HistoryItem({user, clientFrom, clientTo, compteFrom, com
                 </View>
 
                 <View style={{ flex: 3, alignItems: 'flex-end' }}>
-                    <Text style={{ lineHeight: 20, fontSize: 14, color: 'red' }} >- {(Number(montant) / taux).toFixed(2)} CAD {/*{compteFrom.devise}*/}</Text>
+                    <Text style={{ lineHeight: 20, fontSize: 14, color: 'red' }} >- {Number(montantFrom).toFixed(2)} {compteFrom.devise}</Text>
                 </View>
             </View>
         );
@@ -156,7 +158,7 @@ export default function HistoryItem({user, clientFrom, clientTo, compteFrom, com
                 </View>
 
                 <View style={{ flex: 3, alignItems: 'flex-end' }}>
-                    <Text style={{ lineHeight: 20, fontSize: 14, color: 'green' }} >+ {(Number(montant) / taux).toFixed(2)} CAD {/*{compteTo.devise}*/}</Text>
+                    <Text style={{ lineHeight: 20, fontSize: 14, color: 'green' }} >+ {Number(montantTo).toFixed(2)} {compteTo.devise}</Text>
                 </View>
             </View>
         );
@@ -218,8 +220,8 @@ export default function HistoryItem({user, clientFrom, clientTo, compteFrom, com
                 </View>
 
                 <View style={{ flex: 3, alignItems: 'flex-end' }}>
-                    <Text style={{ lineHeight: 20, fontSize: 14, color: 'green' }} >+ {(Number(montant) / taux).toFixed(2)} CAD {/*{devise}*/}</Text>
-                    <Text style={{ lineHeight: 20, fontSize: 14, color: 'red' }} >- {(Number(montant) / taux).toFixed(2)} CAD {/*{devise}*/}</Text>
+                    <Text style={{ lineHeight: 20, fontSize: 14, color: 'green' }} >+ {(Number(montantTo)).toFixed(2)}  {compteTo.devise }</Text>
+                    <Text style={{ lineHeight: 20, fontSize: 14, color: 'red' }} >- {(Number(montantFrom)).toFixed(2)}  {compteTo.devise}</Text>
                 </View>
             </View>
         );

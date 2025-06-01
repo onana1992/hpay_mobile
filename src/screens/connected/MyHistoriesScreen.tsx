@@ -94,6 +94,8 @@ function MyHistoriesScreen({ navigation }: { navigation: any }) {
                     numVirement: item.virementNum,
                     heure: heure,
                     tauxConversion: item.tauxConversion,
+                    montantTo: item.montantTo,
+                    montantFrom: item.montantFrom,
                 });
             });
 
@@ -262,6 +264,8 @@ function MyHistoriesScreen({ navigation }: { navigation: any }) {
                         index={index}
                         size={size}
                         taux={item.tauxConversion}
+                        montantFrom={item.montantFrom}
+                        montantTo={item.montantTo}
                     />
                 )}
                 renderSectionHeader={({ section: { title } }) => (

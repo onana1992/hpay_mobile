@@ -118,7 +118,7 @@ function SignInScreen({ navigation }: {navigation:any}){
 
             }
 
-            //console.log(error.response.data)
+            console.log(error)
             setModalVisible(false);
         })
 

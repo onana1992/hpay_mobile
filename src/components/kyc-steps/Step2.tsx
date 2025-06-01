@@ -26,23 +26,22 @@ import TextInput from '../../components/TextInput';
 import { Colors } from '../../themes';
 import Button from '../../components/Button';
 import { Dropdown } from 'react-native-element-dropdown';
-import { getPaysRequest } from '../../services/request';
+import { getPaysRequest, getPaysRequest1, getVilleRequest } from '../../services/request';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {
-    emailValidator,
     countryValidator,
     townValidator,
     addressValidator
 } from '../../helpers/kycValidators';
+import { COUNTRIES } from '../../assets/country/countries_fr';
 
 
 
 const Step2 = ({ data, setData, step, setStep, }: { data: any, setData: any, step: any, setStep: any }) => {
 
-
   
-    const [country, setCountry] = React.useState({ label: '🇨🇦 Canada', value: 'ca', indicator: "1" });
-    const [selectedCountry, setSelectedCountry] = React.useState(null);
+    const [country, setCountry] = React.useState<any>({ label: '🇨🇦 Canada', value: 'ca', indicator: '1' });
+    const [selectedCountry, setSelectedCountry] = React.useState(country);
     const [cities, setCities] = React.useState([]);
     const [countries, setCountries] = React.useState([]);
     const [city, setCity] = React.useState({ label: 'Montreal', value: 'Montreal' });
@@ -50,35 +49,8 @@ const Step2 = ({ data, setData, step, setStep, }: { data: any, setData: any, ste
     const [town, setTown] = React.useState({ value: '', id: 0, error: '' });
     const [telephone, setTelephone] = React.useState({ value: data.telephone, error: '' });
     const [telephone2, setTelephone2] = React.useState({ value: '', error: '' });
-    const [email, setEmail,] = React.useState({ value: '', error: '' });
     const { t } = useTranslation();
-    const [townData, setTownData] = React.useState<any>([]);
-    const COUNTRIES = [
-        { label: '🇨🇦 Canada', value: 'ca', indicator: "1" },
-        { label: '🇨🇲 Cameroun', value: 'cm', indicator: '237' },
-        { label: "🇨🇮 Cote d'ivoire", value: 'ci', indicator: "225" },
-        { label: "🇭🇹 Haiti", value: 'ht', indicator: "509" },
-        { label: "🇹🇬 Togo", value: 'tg', indicator: "228" },
-        { label: '🇸🇳 Senegal', value: 'sn', indicator: '221' },
-        { label: '🇨🇭 Suisse', value: 'ch', indicator: '41' },
-        { label: '🇬🇲 Gambie', value: 'gm', indicator: '220' },
-        { label: '🇲🇱 Mali', value: 'ml', indicator: '223' },
-        { label: '🇧🇯 Benin', value: 'bj', indicator: '229' },
-        { label: '🇬🇦 Gabon', value: 'ga', indicator: '241' },
-        { label: '🇺🇸 États-Unis', value: 'us', indicator: '1' },
-        { label: '🇨🇩 Congo RD', value: 'cd', indicator: '243' },
-        { label: '🇩🇴 République Dominicaine', value: 'do', indicator: '1' },
-        { label: '🇬🇹 Guatemala', value: 'gt', indicator: '502' },
-        { label: '🇨🇬 République du Congo', value: 'cg', indicator: '242' },
-        { label: '🇫🇷 France', value: 'fr', indicator: '33' },
-        { label: '🇧🇪 Belgique', value: 'be', indicator: '32' },
-        { label: '🇳🇬 Nigeria', value: 'ng', indicator: '234' },
-        { label: '🇨🇱 Chili', value: 'cl', indicator: '56' },
-        { label: '🇨🇴 Colombie', value: 'co', indicator: '57' },
-        { label: '🇱🇧 Liban', value: 'lb', indicator: '961' },
-        { label: '🇵🇪 Panama', value: 'pa', indicator: '507' },
-        { label: '🇹🇼 Taïwan', value: 'tw', indicator: '886' }
-    ];
+    
 
 
     const data1 = [
@@ -93,86 +65,82 @@ const Step2 = ({ data, setData, step, setStep, }: { data: any, setData: any, ste
         })
     }
 
-    const getPays = () =>{
-        
-         getPaysRequest().then((response: any) => {
-            
-            setCountries(response.data);
-            const firstCountry = response.data.find(item => item.id === 9);
-            setSelectedCountry(firstCountry);
-          
+ 
 
-            const formattedCities = firstCountry.villes.map(city => ({
+    React.useState(() => {
+
+       const initCountry = COUNTRIES.find((item: { indicator: string; }) => item.indicator === data.pays.indicatif);
+       setCountry(initCountry);
+
+
+       getPaysRequest1().then((response: any) => {
+           
+            setCountries(response.data.response.data);
+            const firstCountry = response.data.response.data.find((item: { indicatif: string; }) => item.indicatif === data.pays.indicatif);
+            setSelectedCountry(firstCountry)
+            fetchCities1(firstCountry.id);
+
+       }).catch((error: any) => {
+
+            if (error) {
+               // console.log(error);
+            }
+
+       });
+
+    }, []);
+
+
+    const fetchCities = (idPays: number) => {
+        getVilleRequest(idPays).then((response: any) => {
+
+
+            const formattedCities = response.data.response.data.map(city => ({
                 id: city.id,
                 label: city.ville,
                 value: city.ville
             }));
 
             setCities(formattedCities);
+
+            //const choosenTown = formattedCities.find((item: { id: any; }) => item.id === data.ville.id);
             setCity(formattedCities[0]);
 
+        }).catch((error: any) => {
+            // console.log(error);
+        });
+
+    }
+
+    const fetchCities1 = (idPays: number) => {
+        getVilleRequest(idPays).then((response: any) => {
+
+
+            const formattedCities = response.data.response.data.map(city => ({
+                id: city.id,
+                label: city.ville,
+                value: city.ville
+            }));
+
+            setCities(formattedCities);
+
+            const choosenTown = formattedCities.find((item: { id: any; }) => item.id === data.ville.id);
+            setCity(choosenTown);
 
         }).catch((error: any) => {
-
-            if (error){
-                console.log(error);
-            }
-
+            // console.log(error);
         });
-    
+
     }
 
 
-
-    React.useState(() => {
-        
-        getPays();
-
-    },[]);
-
-
-
-
-   const changeCountry = (item) => {
-       
-       const choosecountry = countries.find((it: { indicatif: any; })=> it.indicatif === item.indicator);
-       setSelectedCountry(choosecountry);
-       const formattedCities = choosecountry.villes.map((city: { ville: any; }) => ({
-            id: city.id,
-            label: city.ville,
-            value: city.ville
-       }));
-
-        setCities(formattedCities)
-        setCity(formattedCities[0]);
+    const changeCountry = (item: any) => {
+        setCountry(item);
+        const choosecountry: any = countries.find((it: { indicatif: any; }) => it.indicatif === item.indicator);
+        setSelectedCountry(choosecountry);
+        fetchCities(choosecountry?.id);
     }
 
-
-
-   /* React.useEffect(() => {
-
-        let tab: any = [];
-        countries.forEach((country, index) => {
-            tab.push({ label: country.pays, id: country.idpays, value: country.pays });
-        });
-        setCountryData(tab);
-
-       // console.log(tab);
-
-    }, []);*/
-
-    
-
-    /*const renderLabel = () => {
-        if (value || isFocus) {
-            return (
-                <Text style={[styles.label, isFocus && { color: 'blue' }]}>
-                    Dropdown label
-                </Text>
-            );
-        }
-        return null;
-    };*/
 
 
 
@@ -186,26 +154,6 @@ const Step2 = ({ data, setData, step, setStep, }: { data: any, setData: any, ste
         selectedList: [],
         error: '',
     });
-
-
-    const selectCountry = (pays: any) => {
-
-        setCountry({ value: pays.value, id: pays.id, error: '' });
-
-        let seletedCountry = countries.find((item) => {
-            return (item.pays === pays.value);
-        })
-
-        console.log(seletedCountry);
-
-        let tab: any = [];
-        seletedCountry.ville.forEach((item: {idville: any; ville: any;}, index: any) => {
-            tab.push({ label: item.ville, id: item.idville, value: item.ville });
-        });
-
-        setTownData(tab);
-
-    }
 
 
 
@@ -229,7 +177,6 @@ const Step2 = ({ data, setData, step, setStep, }: { data: any, setData: any, ste
 
         /*console.log({
             ...data,
-            email: email.value,
             pays: selectedCountry.id,
             ville: city.id,
             adresse: address.value,
@@ -247,7 +194,7 @@ const Step2 = ({ data, setData, step, setStep, }: { data: any, setData: any, ste
         );
         
            
-         setStep(3);
+         //setStep(3);
 
     }
 
@@ -275,7 +222,7 @@ const Step2 = ({ data, setData, step, setStep, }: { data: any, setData: any, ste
                         <Text style={{ fontSize: 16, color: Colors.text, fontWeight: 'bold' }}>2. {t('kyc.Addressdetails')} </Text>
                     </View>
 
-                    <View style={{alignItem:"center", justifyContent:'center'}}>
+                    <View style={{alignItem:'center', justifyContent:'center'}}>
                        <Ionicons name="checkmark-done-outline" size={20} color={step > 2 ? Colors.primary :'gray'}/>
                     </View>
                    
@@ -286,10 +233,7 @@ const Step2 = ({ data, setData, step, setStep, }: { data: any, setData: any, ste
                     &&
                     <View style={{ justifyContent: 'center', padding: 10 }}>
                         
-                    
-
-
-                    
+                  
 
                     <View style={{ flex: 1, alignContent: 'flex-start', justifyContent: 'flex-start', marginTop: 10}}>
                         
@@ -341,7 +285,7 @@ const Step2 = ({ data, setData, step, setStep, }: { data: any, setData: any, ste
                                 placeholder="Selectionez un pays"
                                 searchPlaceholder={t('rechercher')}
                                 value={city}
-                                    onChange={(item) => {
+                                onChange={(item) => {
                                     setCity(item);
                                 }}
                             />

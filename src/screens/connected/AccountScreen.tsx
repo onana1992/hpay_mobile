@@ -112,6 +112,8 @@ function AccountScreen({ navigation }: { navigation: any }) {
                     numVirement: item.virementNum,
                     heure: heure,
                     tauxConversion: item.tauxConversion,
+                    montantTo: item.montantTo,
+                    montantFrom: item.montantFrom,
                 });
             });
 
@@ -362,6 +364,8 @@ function AccountScreen({ navigation }: { navigation: any }) {
                         compteFrom={item.compteFrom}
                         compteTo={item.compteTo}
                         montant={item.montant}
+                        montantFrom={item.montantFrom}
+                        montantTo={item.montantTo}
                         devise={item.devise}
                         heure={item.heure}
                         index={index}

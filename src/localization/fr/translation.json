@@ -63,7 +63,7 @@
     "passwordinvalidformat": "Format invalide : \nAu minumum 8 caractères. \nAu moins une majuscule. \nAu moins une minuscule.\nAu moins un caractère spécial.",
     "differentfrompassword": "Different du mot de passe",
     "requiredvalue": "Valeur requise",
-    "accountalreadyexist": "un compte existe déjà avec ce numéro de télephone",
+    "accountalreadyexist": "un compte existe déjà avec ce numéro de télephone. Si vous avez commencé votre inscription, merci de vous connecter pour la poursuivre. ",
     "registrationfailure": "Échec d'inscription",
     "submit": "Soumettre",
     "termsandcondition": "Termes et conditions d'utlisation de l'application",
@@ -243,7 +243,8 @@
     "drivenlicence": "Permis de conduire",
     "consularcard": "Carte consulaire/Carte de séjour",
     "invalidformat": "Date invalide",
-    "youmustcheckreadandapprove": "Vous devez cocher lu et approuvé."
+    "youmustcheckreadandapprove": "Vous devez cocher lu et approuvé.",
+    "idnumberalreadyused": "Numéro du  document  d'identité dejà utilisé."
   },
 
 

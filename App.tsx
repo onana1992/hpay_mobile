@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unstable-nested-components */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable prettier/prettier */
@@ -17,7 +18,7 @@ import Colors from './src/themes/Colors';
 import { Portal, PortalProvider, PortalHost } from '@gorhom/portal';
 import { PersistGate } from 'redux-persist/integration/react';
 import { LogBox } from 'react-native';
-import Toast from 'react-native-toast-message';
+import Toast, { BaseToast, ErrorToast  } from 'react-native-toast-message';
 import changeNavigationBarColor from 'react-native-navigation-bar-color';
 import StackNavigation from './src/navigation/StackNavigation';
 import messaging from '@react-native-firebase/messaging';
@@ -111,7 +112,19 @@ function App(): JSX.Element {
                     navigate(screen, remoteMessage.data);
                 }
             }*/
-    });
+        });
+
+    const toastConfig = {
+
+        error: (props:any) => (
+            <ErrorToast
+                {...props}
+
+                text1NumberOfLines={3}
+                text2NumberOfLines={3}
+            />
+        ),
+    };
 
 
     return (
@@ -140,7 +153,7 @@ function App(): JSX.Element {
                             </MenuProvider>
                         </SafeAreaView>
                     </PaperProvider>
-                    <Toast/>
+                    <Toast config={toastConfig} />
                 </PersistGate>
             </Provider>
             <PortalHost name="transactionPanel" />

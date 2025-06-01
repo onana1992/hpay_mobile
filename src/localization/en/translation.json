@@ -68,7 +68,7 @@
     "noemptypasswordconfirmation": "Password confirmation cannot be empty",
     "differentfrompassword": "Different from password",
     "requiredvalue": "Required value",
-    "accountalreadyexist": "An account already exist with this number",
+    "accountalreadyexist": "An account already exist with this number. If you have started your registration, please log in to continue.",
     "submit": "Submit",
     "termsandcondition": "Terms and conditions of use of the application",
     "youmustaccepttermsandcondition": "You must accept the terms and conditions to register",
@@ -237,7 +237,8 @@
     "drivenlicence": "Driven licence",
     "consularcard": "Consular card",
     "invalidformat": "Date invalid",
-    "youmustcheckreadandapprove": "you must check read and approve."
+    "youmustcheckreadandapprove": "you must check read and approve.",
+    "idnumberalreadyused": "Number of the identity document already used "
   },
 
   "profil": {

@@ -34,13 +34,14 @@ import { connect } from 'react-redux';
 import LoadingModal from '../../components/LoadingModal';
 import { useDispatch } from 'react-redux';
 import { signIn} from '../../store/profilSlice';
-
+import Toast from 'react-native-toast-message';
 
 
 function KycScreen({ navigation, user }: { navigation: any, user: any }) {
 
+    //console.log(user.client.pays);
 
-    console.log(user);
+    //console.log(user);
     const { height } = Dimensions.get('window');
     const [step, setStep] = React.useState(1);
     const { t } = useTranslation();
@@ -63,8 +64,8 @@ function KycScreen({ navigation, user }: { navigation: any, user: any }) {
         statut_mat: 'C', // user.date_naissance,
         date_naissance: date,
         nationalite: null,// user.date_naissance,
-        pays: null,
-        ville: null,
+        pays: user.client.pays,
+        ville: user.client.ville,
         adresse: null,
         photo_piece_recto: null,
         photo_piece_verso: null,
@@ -153,6 +154,12 @@ function KycScreen({ navigation, user }: { navigation: any, user: any }) {
             setModalVisible(false);
             //setIsloading(false);
             console.log(_error);
+            Toast.show({
+                type: 'error',
+                text1: t('failure'),
+                text2: t('kyc.idnumberalreadyused'),
+                position: 'top'
+            });
 
         });
         
