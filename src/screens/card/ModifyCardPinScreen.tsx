@@ -140,25 +140,25 @@ function ModifyCardPinScreen({ navigation }: { navigation: any }) {
 
 
 
+
     const fetchAccount = (parmUser: any) => {
+
+        let allAccount = [];
 
         const mainAccount = parmUser.client.comptes.find((account: any) => {
             if (account.typeCompte.idTypeCompte === 6) {
+                //console.log('compte principal', account.devise);
                 return true;
             }
         });
 
         const otherAccounts = parmUser.client.comptes.filter((account: any) => {
-
             if (account.typeCompte.idTypeCompte !== 6 && account.typeCompte.idTypeCompte !== 2) {
-
                 return account;
             }
-
         });
 
 
-        let allAccount = [];
         allAccount.push(mainAccount);
 
         for (const acc of otherAccounts) {
@@ -169,45 +169,58 @@ function ModifyCardPinScreen({ navigation }: { navigation: any }) {
         const newAccountsList = allAccount.map((account: any) => {
 
 
-            if (account.typeCompte.idTypeCompte == 6) {
+            if (account.typeCompte.idTypeCompte === 6) {
                 return {
                     id: account.typeCompte.idTypeCompte,
                     icon: require('../../assets/cad.png'),
+                    emoji: account.pays.emoji,
                     compte: account,
                 };
             }
 
-            else if (account.typeCompte.idTypeCompte == 1) {
+
+            else if (account.devise === 'CAD') {
+                return {
+                    id: account.typeCompte.idTypeCompte,
+                    icon: require('../../assets/cad.png'),
+                    emoji: '🇨🇦',
+                    compte: account,
+                };
+            }
+
+            else if (account.devise === 'USD') {
                 return {
                     id: account.typeCompte.idTypeCompte,
                     icon: require('../../assets/us.png'),
+                    emoji: '🇺🇸',
                     compte: account,
                 };
             }
 
-            else if (account.typeCompte.idTypeCompte == 4) {
+
+            else if (account.devise === 'EUR') {
                 return {
                     id: account.typeCompte.idTypeCompte,
                     icon: require('../../assets/ue.png'),
+                    emoji: '🇪🇺',
                     compte: account,
                 };
             }
 
-            else if (account.typeCompte.idTypeCompte == 5) {
+            else if (account.devise === 'GBP') {
                 return {
                     id: account.typeCompte.idTypeCompte,
                     icon: require('../../assets/gb.png'),
+                    emoji: '🇬🇧',
                     compte: account,
                 };
             }
-
 
         });
 
 
-
         let newCompte = newAccountsList.find((acc: any) => {
-            if (account.id == acc.id) {
+            if (account.id === acc.id) {
                 return acc;
             }
         });
@@ -219,8 +232,6 @@ function ModifyCardPinScreen({ navigation }: { navigation: any }) {
         }, 1000);
 
     };
-
-
 
 
 

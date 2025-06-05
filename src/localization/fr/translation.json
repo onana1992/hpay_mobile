@@ -20,7 +20,8 @@
     "send": "Envoyer",
     "add": "Ajouter",
     "recenttransactions": "Transaction récentes",
-    "totalamount": "Solde Total"
+    "totalamount": "Solde Total",
+    "currentexchangerate": "Taux de change actuel "
   },
 
 
@@ -323,7 +324,7 @@
     "Enterthecardnumber": "Entrez le numéro de carte",
     "enabledisable": "Activez/Désactivez la carte",
     "areyousureyouwanttodisablethiscard": "Voulez-vous vraiment désactiver cette carte ?",
-    "CardAlreadyUsed": "Carte déjà utlisée",
+    "CardAlreadyUsed": "Carte déjà utlisée ou numéro de carte incorrect.",
     "Cardnotregistered": "Carte non enregistrée",
     "invalidcodepin": "Code pin invalide",
     "cardaddedsucceffuly": "Carte ajoutée avec succès",
@@ -336,7 +337,11 @@
     "seemore": "Voir plus",
     "loadinginprogress": "Chargement en cours...",
     "changeyourcardcode": "Modifier le code pin de votre carte",
-    "enabled": "Activez/désactivez"
+    "enabled": "Activez/désactivez",
+    "cardactivated": "Carte activée",
+    "carddesactivated": "Carte désactivée",
+    "active": "Activé",
+    "desactive": "désactivé"
 
   },
 
@@ -354,7 +359,7 @@
     "willreceive": "recevra",
     "chooseabeneficiary": "Choisir un beneficiaire",
     "confirmmsg": "En confirmant cette opération, vous acceptez que le montant soit envoyé sans possibilité de retour ou de modification. Vérifiez bien les détails avant de confirmer.",
-    "customeraccountisnotvalidated": "Le compte client de votre beneficiaire n'est pas validé",
+    "customeraccountisnotvalidated": "Le compte client de votre beneficiaire n'est pas encore validé. Il n'a pas encore soumis sa vérification KYC ou celle-ci est en attente de validation. Merci de l’informer de finaliser son KYC afin de pouvoir recevoir des transferts. ",
     "benefclosedaccount": "le compte du bénéficiaire choisi est suspendu ou fermé",
     "issueraccoundclosed": "Votre compte émetteur sélectionné est suspendu ou fermé",
     "transfermoneybetweenyouraccounts": "Transférer de l'argent entre vos comptes",

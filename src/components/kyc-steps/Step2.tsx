@@ -1,7 +1,4 @@
 ﻿/* eslint-disable @typescript-eslint/no-shadow */
-
-
-
 /* eslint-disable react/no-unstable-nested-components */
 /* eslint-disable jsx-quotes */
 /* eslint-disable no-trailing-spaces */
@@ -194,7 +191,7 @@ const Step2 = ({ data, setData, step, setStep, }: { data: any, setData: any, ste
         );
         
            
-         //setStep(3);
+         setStep(3);
 
     }
 

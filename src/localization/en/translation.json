@@ -20,7 +20,8 @@
     "send": "Send",
     "add": "Add",
     "recenttransactions": "Recent transactions",
-    "totalamount": "Total amount"
+    "totalamount": "Total amount",
+    "currentexchangerate": "Current exchange rate"
   },
 
 
@@ -317,7 +318,7 @@
     "Enterthecardnumber": "Enter the card number",
     "enabledisable": "Enable/Desable the card",
     "areyousureyouwanttodisablethiscard": "are you sure you want to disable this card ?",
-    "CardAlreadyUsed": "Card already used",
+    "CardAlreadyUsed": "Card already used or incorrect card number.",
     "Cardnotregistered": "Card not registered",
     "invalidcodepin": "Invalid Code Pin",
     "cardaddedsucceffuly": "Card added succeffuly",
@@ -329,7 +330,11 @@
     "cardqrcode": "The QR code of your card",
     "seemore": "Voir plus",
     "loadinginprogress": "Loading in progress...",
-    "changeyourcardcode": "Change your card's PIN code"
+    "changeyourcardcode": "Change your card's PIN code",
+    "cardactivated": "Card activated",
+    "carddesactivated": "Card disabled",
+    "active": "Enabled",
+    "desactive": "Disabled"
   },
 
 
@@ -348,7 +353,7 @@
     "willreceive": "will receive",
     "chooseabeneficiary": "Choose a beneficiary",
     "confirmmsg": "By confirming this transaction, you agree to the amount being sent without the possibility of return or modification. Please check the details carefully before confirming.",
-    "customeraccountisnotvalidated": "Your beneficiary's customer account is not validated",
+    "customeraccountisnotvalidated": "Your recipient's customer account is not yet validated.They have not yet submitted their KYC verification or it is pending validation.Please inform them to finalize their KYC in order to be able to receive transfers.",
     "benefclosedaccount": "The chosen beneficiary's account is suspended or closed",
     "issueraccoundclosed": "Your selected issuer account is suspended or closed",
     "transfermoneybetweenyouraccounts": "Transfer money between your accounts",

@@ -1,4 +1,5 @@
-﻿/* eslint-disable quotes */
+﻿/* eslint-disable @typescript-eslint/no-shadow */
+/* eslint-disable quotes */
 /* eslint-disable curly */
 /* eslint-disable no-alert */
 /* eslint-disable react/no-unstable-nested-components */
@@ -62,7 +63,7 @@ function CardDetail({ navigation }: { navigation: any }) {
     const deleteCard = () => {
 
 
-        if (user.client.valider == '1') {
+        if (user.client.valider === '1') {
 
             Alert.alert('', t('account.Areyousureyouwanttoremovethiscard'), [
                 {
@@ -132,6 +133,7 @@ function CardDetail({ navigation }: { navigation: any }) {
 
 
     function formatCreditCard(number: string) {
+
         // Remove non-digit characters
         const cleaned = number.replace(/\D/g, '');
 
@@ -144,23 +146,22 @@ function CardDetail({ navigation }: { navigation: any }) {
 
     const fetchAccount = (parmUser: any) => {
 
+        let allAccount = [];
+
         const mainAccount = parmUser.client.comptes.find((account: any) => {
             if (account.typeCompte.idTypeCompte === 6) {
+                //console.log('compte principal', account.devise);
                 return true;
             }
         });
 
         const otherAccounts = parmUser.client.comptes.filter((account: any) => {
-
             if (account.typeCompte.idTypeCompte !== 6 && account.typeCompte.idTypeCompte !== 2) {
-
                 return account;
             }
-
         });
 
 
-        let allAccount = [];
         allAccount.push(mainAccount);
 
         for (const acc of otherAccounts) {
@@ -175,34 +176,48 @@ function CardDetail({ navigation }: { navigation: any }) {
                 return {
                     id: account.typeCompte.idTypeCompte,
                     icon: require('../../assets/cad.png'),
+                    emoji: account.pays.emoji,
                     compte: account,
                 };
             }
 
-            else if (account.typeCompte.idTypeCompte === 1) {
+
+            else if (account.devise === 'CAD') {
+                return {
+                    id: account.typeCompte.idTypeCompte,
+                    icon: require('../../assets/cad.png'),
+                    emoji: '🇨🇦',
+                    compte: account,
+                };
+            }
+
+            else if (account.devise === 'USD') {
                 return {
                     id: account.typeCompte.idTypeCompte,
                     icon: require('../../assets/us.png'),
+                    emoji: '🇺🇸',
                     compte: account,
                 };
             }
 
-            else if (account.typeCompte.idTypeCompte === 4) {
+
+            else if (account.devise === 'EUR') {
                 return {
                     id: account.typeCompte.idTypeCompte,
                     icon: require('../../assets/ue.png'),
+                    emoji: '🇪🇺',
                     compte: account,
                 };
             }
 
-            else if (account.typeCompte.idTypeCompte === 5) {
+            else if (account.devise === 'GBP') {
                 return {
                     id: account.typeCompte.idTypeCompte,
                     icon: require('../../assets/gb.png'),
+                    emoji: '🇬🇧',
                     compte: account,
                 };
             }
-
 
         });
 
@@ -246,7 +261,7 @@ function CardDetail({ navigation }: { navigation: any }) {
                             }
                             <Text style={{ marginLeft: 5, fontWeight: 'bold', fontSize: 17, color: Colors.text }}>
                                 {
-                                    account.compte.carteClientQr.typeCarte == "CARTE_HPAY" && t('account.hpaycard')
+                                    account.compte.carteClientQr.typeCarte === "CARTE_HPAY" && t('account.hpaycard')
                                 }
                             </Text>
                             <Text style={{ marginLeft: 5,  fontSize: 14, color: Colors.text }}>
@@ -258,8 +273,24 @@ function CardDetail({ navigation }: { navigation: any }) {
                 </View>
 
 
-                <View style={{ flex: 3, alignItems: 'center', justifyContent: 'center' }}>
+                <View style={{ flex: 7, alignItems: 'center', justifyContent: 'center', marginTop:20 }}>
                     <Text style={{ color: Colors.text, fontSize: 22 }}> {formatCreditCard(account.compte.carteClientQr.numCarte)} </Text>
+                </View>
+
+                <View style={{ marginBottom: 0, paddingVertical: 2, flexDirection: 'row', flex: 1, width: '100%', justifyContent: 'space-between',  }}>
+                    <View  >
+                        <Text style={{ color: Colors.text, marginTop: -3, fontWeight:'bold' }}>EXP: {account.compte.carteClientQr?.dateExpire?.split('T')[0]} </Text>
+                    </View>
+
+                    <View>
+                        {
+                            account.compte.carteClientQr.actif === '1' ?
+                                <Text style={{ color:'green', marginTop: -3 }}>{t('account.active')} </Text>
+                                :
+                                <Text style={{ color: 'red', marginTop: -3 }}>{t('account.desactive')} </Text>
+                        }
+
+                    </View>
                 </View>
 
             </View>
@@ -622,10 +653,9 @@ const styles = StyleSheet.create({
     emptycard: {
         marginTop: 20,
         backgroundColor: '#e6e4e0',
-        padding: 20,
+        padding: 10,
         borderRadius: 10,
-        height: 180,
-        width: '100%',
+        height: 190,
         alignItems: 'center',
         justifyContent: 'center',
     },

@@ -63,7 +63,7 @@ function SignInScreen({ navigation }: {navigation:any}){
         signInRequest(telephone.value, password.value).then((response: any) => {
 
 
-            console.log(response.data)
+            //console.log(response.data)
 
             if (response.data.statusCode === 200) {
 
@@ -99,15 +99,19 @@ function SignInScreen({ navigation }: {navigation:any}){
             
         }).catch((error: any) => {
 
-            console.log(error.response.data)
+           // console.log(error.response.data)
 
-            if (error.response.data.statusCode === '401') {
+            if (error.response.data.statusCode === 401) {
 
-                if (error.response.data.statusCode.message === 'Account not activated') {
+                
 
+                if (error.response.data.message === 'Account not activated') {
+
+                    //console.log("xxxxxx");
 
                 } else {
 
+                    
                     Toast.show({
                         type: 'error',
                         text1: t('signinscreen.connexionfailure'),
@@ -118,7 +122,7 @@ function SignInScreen({ navigation }: {navigation:any}){
 
             }
 
-            console.log(error)
+            //console.log(error)
             setModalVisible(false);
         })
 

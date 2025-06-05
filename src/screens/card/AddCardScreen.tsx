@@ -33,12 +33,13 @@ import LoadingModal from '../../components/LoadingModal';
 import { saveAccount, signIn } from '../../store/profilSlice';
 import { NetworkInfo } from 'react-native-network-info';
 import { useTranslation } from 'react-i18next';
+import { TextInputMask } from 'react-native-masked-text';
 
 
 
 function numeroValidator(numero:string) {
     if (!numero) return "signupscreen.requiredvalue";
-    if (numero.length < 16) return "account.numerolessthan16";
+    if (numero.length < 19) return "account.numerolessthan16";
     if (numero.slice(0, 2) != "57") return "account.mustStartwith57";
     return '';
 }
@@ -65,7 +66,6 @@ function AddCardScreen({ navigation }: { navigation: any }) {
     const [ipAdress, setIpAddress] = React.useState<string | null>("");
     const { t } = useTranslation();
 
-    console.log(account);
 
     React.useEffect(() => {
         NetworkInfo.getIPAddress()
@@ -77,7 +77,6 @@ function AddCardScreen({ navigation }: { navigation: any }) {
     const cancel = () => {
         navigation.goBack();
     };
-
 
 
     function getCurrentDate() {
@@ -112,15 +111,12 @@ function AddCardScreen({ navigation }: { navigation: any }) {
             return;
         }
 
-        if (numero.value.length != 16) {
-
+        /*if (numero.value.length != 19) {
             return;
-
         } else if (numero.value.slice(0, 2) != "57") {
-
             return;
+        }*/
 
-        }
         else {
 
             saveCard();
@@ -133,11 +129,13 @@ function AddCardScreen({ navigation }: { navigation: any }) {
 
     const saveCard = () => {
 
+        let formatNumber = numero.value.replace(/\s+/g, '');
+
         setModalVisible(true);
         addCardRequest(
             account.compte.idCompte,
             user.idLoginClient,
-            numero.value, getCurrentDate(),
+            formatNumber, getCurrentDate(),
             getDatePlusTwoYears(),
             pin.value,
             user.client.id,
@@ -157,7 +155,7 @@ function AddCardScreen({ navigation }: { navigation: any }) {
         }).catch((error: any) => {
 
 
-            console.log(error.response.data);
+           //console.log(error.response.data);
 
             if (error.response.data.message == "Card Dejà utilisé") {
                 Toast.show({
@@ -198,7 +196,6 @@ function AddCardScreen({ navigation }: { navigation: any }) {
     };
 
 
-
     const getClient = () => {
 
         searchClientByPhoneRequest(user.login).then((response: any) => {
@@ -213,25 +210,22 @@ function AddCardScreen({ navigation }: { navigation: any }) {
 
     const fetchAccount = (parmUser: any) => {
 
+        let allAccount = [];
+
         const mainAccount = parmUser.client.comptes.find((account: any) => {
-            if (account.typeCompte.idTypeCompte == 6) {
+            if (account.typeCompte.idTypeCompte === 6) {
+                //console.log('compte principal', account.devise);
                 return true;
             }
         });
 
-
         const otherAccounts = parmUser.client.comptes.filter((account: any) => {
-
-            if (account.typeCompte.idTypeCompte != 6 && account.typeCompte.idTypeCompte != 2) {
-
+            if (account.typeCompte.idTypeCompte !== 6 && account.typeCompte.idTypeCompte !== 2) {
                 return account;
             }
-
         });
 
 
-
-        let allAccount = [];
         allAccount.push(mainAccount);
 
         for (const acc of otherAccounts) {
@@ -242,42 +236,54 @@ function AddCardScreen({ navigation }: { navigation: any }) {
         const newAccountsList = allAccount.map((account: any) => {
 
 
-            if (account.typeCompte.idTypeCompte == 6) {
+            if (account.typeCompte.idTypeCompte === 6) {
                 return {
                     id: account.typeCompte.idTypeCompte,
                     icon: require('../../assets/cad.png'),
+                    emoji: account.pays.emoji,
                     compte: account,
                 };
             }
 
-            else if (account.typeCompte.idTypeCompte == 1) {
+
+            else if (account.devise === 'CAD') {
+                return {
+                    id: account.typeCompte.idTypeCompte,
+                    icon: require('../../assets/cad.png'),
+                    emoji: '🇨🇦',
+                    compte: account,
+                };
+            }
+
+            else if (account.devise === 'USD') {
                 return {
                     id: account.typeCompte.idTypeCompte,
                     icon: require('../../assets/us.png'),
+                    emoji: '🇺🇸',
                     compte: account,
                 };
             }
 
-            else if (account.typeCompte.idTypeCompte == 4) {
+
+            else if (account.devise === 'EUR') {
                 return {
                     id: account.typeCompte.idTypeCompte,
                     icon: require('../../assets/ue.png'),
+                    emoji: '🇪🇺',
                     compte: account,
                 };
             }
 
-
-            else if (account.typeCompte.idTypeCompte == 5) {
+            else if (account.devise === 'GBP') {
                 return {
                     id: account.typeCompte.idTypeCompte,
                     icon: require('../../assets/gb.png'),
+                    emoji: '🇬🇧',
                     compte: account,
                 };
             }
 
-
         });
-
 
 
         let newCompte = newAccountsList.find((acc: any) => {
@@ -397,7 +403,7 @@ function AddCardScreen({ navigation }: { navigation: any }) {
                     <View style={{ flex: 1, alignContent: 'flex-start', justifyContent: 'flex-start' }}>
                         <Text style={styles.inputTitleText}>{t('account.Cardnumber')}*</Text>
                         <View style={{ flexDirection: 'row', width: '100%' }}>
-                            <TextInput
+                            {/*<TextInput
                                 label={t('account.Enterthecardnumber')}
                                 //returnKeyType="next"
                                 value={numero.value}
@@ -408,7 +414,26 @@ function AddCardScreen({ navigation }: { navigation: any }) {
                                 autoCapitalize="none"
                                 maxLength={16}
                                 description={undefined}
+                            />*/}
+
+                            <TextInput
+                                label={t('account.Enterthecardnumber')}
+                                value={numero.value}
+                                inputMode="numeric"
+                                onChangeText={(text: string) => setNumero({ value: text, error: '' })}
+                                error={!!numero.error}
+                                errorText={numero.error}
+                                autoCapitalize="none"
+                                //maxLength={16}
+                                description={undefined}
+                                render={props =>
+                                    <TextInputMask
+                                        {...props}
+                                        type={'credit-card'}
+                                    />
+                                }
                             />
+
                         </View>
                     </View>
 
@@ -429,6 +454,7 @@ function AddCardScreen({ navigation }: { navigation: any }) {
                                 right={<Input.Icon icon={!pinShow ? 'eye-off' : 'eye'} onPress={() => { setPinShow(!pinShow) }} />}
                                 description={undefined}
                             />
+
                         </View>
                     </View>
 
@@ -537,6 +563,16 @@ const styles = StyleSheet.create({
         overflow: 'hidden',
         borderWidth: 1,
         borderRadius: 20,
+    },
+
+    maskedInput: {
+        borderWidth: 0.5,
+        borderRadius: 5,
+        width: '100%',
+        padding: 10,
+        color: 'black',
+        fontSize: 18,
+        marginBottom: 0,
     },
 
 

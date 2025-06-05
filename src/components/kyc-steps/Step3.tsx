@@ -59,7 +59,8 @@ const Step3 = ({ data, setData, step, setStep }: { data: any, setData: any, step
     const [documentNumber, setDocumentNumber] = React.useState({ value: '', error: '' });
     const [date_exp, setDate_exp] = React.useState<{ value: Date | undefined, error: string }>({ value: undefined, error: '' });
     const [documentFrontUri, setDocumentFrontUri] = React.useState<string | null | undefined>(null);
-    const [documentBackUri, setDocumentBackUri] = React.useState < string | null | undefined>(null);
+    const [documentBackUri, setDocumentBackUri] = React.useState<string | null | undefined>(null);
+    const minDate = new Date(); // Month is 0-based
 
 
     const identityTypes = [
@@ -324,10 +325,6 @@ const Step3 = ({ data, setData, step, setStep }: { data: any, setData: any, step
 
 
 
-
-    
-
-
     return (
         <ScrollView style={styles.main}>
             <KeyboardAvoidingView
@@ -410,11 +407,14 @@ const Step3 = ({ data, setData, step, setStep }: { data: any, setData: any, step
 
                             <View style={{ flexDirection: 'row', marginVertical: 1, }}>
                                 <DateInput
-                                     label={t('kyc.expirationdate')}
+                                    label={t('kyc.expirationdate')}
                                     value={date_exp.value}
                                     onChange={(d: Date | undefined) => setDate_exp({ value: d, error: '' })}
                                     hasError={!!date_exp.error}
                                     errorText={date_exp.error}
+                                    validRange={{
+                                        startDate: minDate,
+                                    }}
                                 />
                             </View>
                         </View>

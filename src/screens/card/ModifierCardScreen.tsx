@@ -38,7 +38,7 @@ import { NetworkInfo } from 'react-native-network-info';
 
 function numeroValidator(numero: string) {
     if (!numero) return "signupscreen.requiredvalue";
-    if (numero.length < 16) return "account.numerolessthan16";
+    if (numero.length < 19) return "account.numerolessthan16";
     if (numero.slice(0, 2) !== "57") return "account.mustStartwith57";
     return '';
 }
@@ -115,8 +115,7 @@ function ModifierCardScreen({ navigation }: { navigation: any }) {
             return;
         }
 
-        if (numero.value.length !== 16) {
-
+        if (numero.value.length !== 19) {
             return;
 
         } else if (numero.value.slice(0, 2) !== "57") {
@@ -126,7 +125,7 @@ function ModifierCardScreen({ navigation }: { navigation: any }) {
         }
         else {
 
-            saveCard();
+          //  saveCard();
 
         }
 

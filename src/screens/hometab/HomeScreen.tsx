@@ -1,4 +1,6 @@
-﻿/* eslint-disable no-lone-blocks */
+﻿/* eslint-disable quotes */
+/* eslint-disable comma-dangle */
+/* eslint-disable no-lone-blocks */
 /* eslint-disable curly */
 /* eslint-disable dot-notation */
 /* eslint-disable react-hooks/exhaustive-deps */
@@ -21,6 +23,7 @@ import {
     ActivityIndicator,
     Platform,
     Alert,
+    Dimensions
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { saveAccount, signIn, saveBenefs, savenotReadMessage } from '../../store/profilSlice';
@@ -37,6 +40,9 @@ import { formatDate, formatHeure } from '../../helpers/functions';
 import { RESULTS, requestNotifications } from 'react-native-permissions';
 import messaging from '@react-native-firebase/messaging';
 import { client } from '../../services/axiosClient';
+import {
+    BarChart,
+} from "react-native-chart-kit";
 
 
 function HomeScreen({ navigation, user }: { navigation: any, user: any }) {
@@ -60,7 +66,7 @@ function HomeScreen({ navigation, user }: { navigation: any, user: any }) {
     const getPlatformVersion = () => Number(Platform.Version);
     const notReadMessage = useSelector<number>((state: any) => state.profil.notReadMessage);
     const [icon, setIcon] = React.useState('');
-
+    const [chartData, setChartData] = React.useState<any[]>([]);
 
 
     const requestNotificationsPermission = (onGranted: () => void, onBlocked: () => void) => {
@@ -235,7 +241,6 @@ function HomeScreen({ navigation, user }: { navigation: any, user: any }) {
         let devises: any[] = [];
         let montant: number = 0;
 
-
         if (accounts.length > 0) {
 
            // devises.push(accounts[1]?.compte.devise);
@@ -247,36 +252,51 @@ function HomeScreen({ navigation, user }: { navigation: any, user: any }) {
 
             fetchRatesRequest(accounts[0]?.compte.devise, devises).then((response) => {
 
+                console.log(response.data);
+
+                const hpayRateCAD = response.data['CAD']?.hpayRate ?? 1;
+                const hpayRateUSD = response.data['USD']?.hpayRate ?? 1;
+                const hpayRateEUR = response.data['EUR']?.hpayRate ?? 1;
+                const hpayRateGBP = response.data['GBP']?.hpayRate ?? 1;
+
+                setChartData(
+                    [
+                        Number(1 / hpayRateCAD).toFixed(2),
+                        Number(1 / hpayRateUSD).toFixed(2),
+                        Number(1 / hpayRateEUR).toFixed(2),
+                        Number(1 / hpayRateGBP).toFixed(2),
+                    ]
+                );
+
 
                 montant = accounts[0]?.compte.solde;
 
-                console.log(accounts);
+               // console.log(accounts);
+
 
                 for (let j = 1; j < accounts.length; j++){
 
 
 
                     if (accounts[j].compte.devise === 'CAD') {
-                        console.log(response.data['CAD']?.hpayRate);
-                       montant = montant + accounts[j]?.compte.solde / response.data['CAD']?.hpayRate;
+                        montant = montant + accounts[j]?.compte.solde / hpayRateCAD;
                    }
 
                     if (accounts[j].compte.devise  === 'USD') {
-                         montant = montant + accounts[j]?.compte.solde / response.data['USD']?.hpayRate;
+                        montant = montant + accounts[j]?.compte.solde / hpayRateUSD;
                     }
 
 
                     else if (accounts[j].compte.devise === 'EUR') {
-                        montant = montant + accounts[j]?.compte.solde / response.data['EUR']?.hpayRate;
+                        montant = montant + accounts[j]?.compte.solde / hpayRateEUR;
                     }
 
 
                     else if (accounts[j].compte.devise  === 'GBP') {
-                        montant = montant + accounts[j]?.compte.solde / response.data['GBP']?.hpayRate;
+                        montant = montant + accounts[j]?.compte.solde / hpayRateGBP;
                     }
 
                 }
-
 
                 setMontantTotal(montant);
             }).catch((error) => {
@@ -743,6 +763,53 @@ function HomeScreen({ navigation, user }: { navigation: any, user: any }) {
                             </View>
 
                         </View>
+
+
+                        {chartData.length > 0 &&
+                            <View>
+                                <Text style={{ fontSize: 22, marginBottom: 10, fontWeight: 'bold', color: Colors.text }}>{t('homescreen.currentexchangerate')}{accounts[0]?.compte.devise}</Text>
+
+                                <BarChart
+                                    data={{
+                                        labels: ["CAD", "USD", "EUR", "GBP"],
+                                        datasets: [
+                                            {
+                                                data: chartData
+                                            }
+                                        ]
+                                    }}
+                                    width={Dimensions.get("window").width - 40} // from react-native
+                                    height={180}
+                                    //yAxisLabel={accounts[0]?.compte.devise + " "}
+                                    //yAxisSuffix="k"
+
+                                    yAxisInterval={1} // optional, defaults to 1
+                                    chartConfig={{
+                                        backgroundColor: Colors.primary,
+                                        backgroundGradientFrom: Colors.primary,
+                                        backgroundGradientTo: "#ffa726",
+                                        decimalPlaces: 2, // optional, defaults to 2dp
+                                        color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                                        labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                                        style: {
+                                            borderRadius: 16
+                                        },
+                                        propsForDots: {
+                                            r: "6",
+                                            strokeWidth: "2",
+                                            stroke: "#ffa726"
+                                        }
+                                    }}
+                                    showValuesOnTopOfBars={true}
+                                    style={{
+                                        marginVertical: 8,
+                                        borderRadius: 16,
+                                    }}
+                            />
+                            </View>
+                        }
+
+
 
 
                         <View style={{ marginTop: 10, marginBottom:30 }}>

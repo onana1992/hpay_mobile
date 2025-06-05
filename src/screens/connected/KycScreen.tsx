@@ -146,7 +146,7 @@ function KycScreen({ navigation, user }: { navigation: any, user: any }) {
 
             setModalVisible(false);
 
-            console.log(response)
+          //  console.log(response)
 
 
         }).catch((_error: any) => {
