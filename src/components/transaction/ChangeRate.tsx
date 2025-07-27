@@ -1,3 +1,6 @@
+/* eslint-disable react/self-closing-comp */
+/* eslint-disable react-native/no-inline-styles */
+/* eslint-disable prettier/prettier */
 import React from 'react';
 import {
     StyleSheet,
@@ -25,14 +28,19 @@ const SendRate: React.FC<MyComponentProps> = ({ rate }) => {
                 <View style={{
                     height: 14,
                     width: 14,
-                    backgroundColor: "#dcffdb",
+                    backgroundColor: '#dcffdb',
                     borderRadius: 7,
                     alignItems: 'center',
                     justifyContent: 'center',
                     marginHorizontal: 4,
-                    marginTop: 2
+                    marginTop: 2,
                 }}>
-                    <View style={{ height: 6, width: 6, backgroundColor: "green", borderRadius: 3 }}></View>
+                    <View style={{
+                        height: 6,
+                        width: 6,
+                        backgroundColor: 'green',
+                        borderRadius: 3,
+                    }}></View>
                 </View>
                 <View style={{ alignItems: 'flex-start', justifyContent: 'flex-start' }} >
                     <Text style={{ color: Colors.gray, fontSize: 12 }}>{rate}</Text>

@@ -117,32 +117,48 @@ function ActivationCarteScreen({ navigation }: { navigation: any }) {
 
             if (isSwitchOn) {
 
-                Toast.show({
+                /*Toast.show({
                     type: 'success',
                     text1: t('success') ,
                     text2: t('account.carddesactivated'),
                     position: 'top',
+                });*/
+
+                Toast.show({
+                    type: 'succesMessage',
+                    props: { text: t('account.carddesactivated') },
                 });
 
             } else {
-                Toast.show({
+                /*Toast.show({
                     type: 'success',
                     text1: t('success'),
                     text2: t('account.cardactivated'),
                     position: 'top',
+                });*/
+
+                Toast.show({
+                    type: 'succesMessage',
+                    props: { text: t('account.cardactivated') },
                 });
             }
 
         }).catch((error: any) => {
 
-            Toast.show({
+            /*Toast.show({
                 type: 'error',
                 text1: 'Echec',
                 text2: "Card non enregistrée",
                 position: 'top',
+            });*/
+
+            Toast.show({
+                type: 'errorMessage',
+                props: { text: "Card non enregistrée" },
             });
+
             setModalVisible(false);
-            console.log(error.response.data);
+            //console.log(error.response.data);
         });
 
     };

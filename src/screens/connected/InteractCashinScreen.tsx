@@ -38,7 +38,7 @@ function CashInScreen({ navigation }: { navigation: any }) {
 
     const confirmCancel = () => {
         navigation.goBack();
-    }
+    };
 
 
     const EmptyCard = () => {

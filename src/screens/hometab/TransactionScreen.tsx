@@ -21,6 +21,8 @@ import Feather from 'react-native-vector-icons/Feather';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { ScrollView } from 'react-native-virtualized-view';
 import AvartarButton from '../../components/connected/AvartarButton';
+import Toast from 'react-native-toast-message';
+import { ApiContext } from '../../../App';
 
 
 
@@ -32,6 +34,11 @@ export default function TransactionScreen({ navigation }: { navigation: any}) {
     const [isPanelActive, setIsPanelActive] = React.useState(false);
     const [filePath, setFilePath] = React.useState(null);
     const user = useSelector((state: any) => state.profil.user);
+    const { photoUrl } = React.useContext(ApiContext);
+
+    const getPhotoUrl = (name: string) => {
+        return photoUrl + '/' + name;
+    };
 
     const EmptyCard = () => {
         return (
@@ -41,13 +48,23 @@ export default function TransactionScreen({ navigation }: { navigation: any}) {
         );
     };
 
+
     const protectedNavigation = (screen: string) => {
 
         if (user.client.valider === '1') {
             navigation.navigate(screen);
         } else {
+
+            if (user.client.valider === '2') {
+                Toast.show({
+                    type: 'alertMessage',
+                    props: { text: t('homescreen.completeregistrationmessage') }
+                });
+            }
+
             navigation.navigate('kyc');
         }
+
     };
 
 
@@ -57,7 +74,7 @@ export default function TransactionScreen({ navigation }: { navigation: any}) {
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', }} >
                 <AvartarButton
                     prenom={user.client.prenoms}
-                    profilUrl={user.client.photoClient}
+                    profilUrl={getPhotoUrl(user.client.photoClient)}
                 />
 
                 <View >
@@ -159,7 +176,22 @@ export default function TransactionScreen({ navigation }: { navigation: any}) {
                         </View>
 
                         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-
+                            <TouchableOpacity style={{
+                                height: 130,
+                                width: '90%',
+                                borderRadius: 25,
+                                backgroundColor: '#e6e4e0',
+                                padding: 15,
+                            }}
+                                onPress={() => { protectedNavigation('BuyScreen'); }}
+                            >
+                                <View style={{}}>
+                                    <Feather name="shopping-cart" size={26} color={Colors.primary} />
+                                </View>
+                                <View style={{}}>
+                                    <Text style={{ color: 'black', fontWeight: 'bold', marginTop: 5, }}>Hpay Store</Text>
+                                </View>
+                            </TouchableOpacity>
                         </View>
 
                         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>

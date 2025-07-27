@@ -45,7 +45,7 @@ export default function LangageModal({ isVisible, onClose }: PropType) {
                 </View>
 
                 <View style={{}}>
-                    <Text style={{ color: Colors.text, fontSize: 26, fontWeight: 'bold', paddingVertical: 10 }}> {t('changethelangage')}  </Text>
+                    <Text style={{ color: Colors.text, fontSize: 26, fontWeight: 'bold', paddingVertical: 10 }}> {t('changethelangage')}</Text>
                 </View>
 
                 <Pressable style={styles.item} onPress={() => { changeLangage('fr'); }} >
@@ -122,6 +122,7 @@ export default function LangageModal({ isVisible, onClose }: PropType) {
                     }}>
                         <Ionicons name="chevron-forward-outline" size={16} color={Colors.text} />
                     </View>
+
                 </Pressable>
             </SafeAreaView>
         </Modal>

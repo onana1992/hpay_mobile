@@ -23,8 +23,10 @@ import {
     ActivityIndicator,
     Platform,
     Alert,
-    Dimensions
+    Dimensions,
+    useContext
 } from 'react-native';
+
 import { useSelector, useDispatch } from 'react-redux';
 import { saveAccount, signIn, saveBenefs, savenotReadMessage } from '../../store/profilSlice';
 import Colors from '../../themes/Colors';
@@ -40,9 +42,11 @@ import { formatDate, formatHeure } from '../../helpers/functions';
 import { RESULTS, requestNotifications } from 'react-native-permissions';
 import messaging from '@react-native-firebase/messaging';
 import { client } from '../../services/axiosClient';
+import Toast from 'react-native-toast-message';
 import {
     BarChart,
 } from "react-native-chart-kit";
+import { ApiContext } from '../../../App';
 
 
 function HomeScreen({ navigation, user }: { navigation: any, user: any }) {
@@ -67,6 +71,8 @@ function HomeScreen({ navigation, user }: { navigation: any, user: any }) {
     const notReadMessage = useSelector<number>((state: any) => state.profil.notReadMessage);
     const [icon, setIcon] = React.useState('');
     const [chartData, setChartData] = React.useState<any[]>([]);
+    const { photoUrl, setPhotoUrl } = React.useContext(ApiContext);
+
 
 
     const requestNotificationsPermission = (onGranted: () => void, onBlocked: () => void) => {
@@ -106,6 +112,14 @@ function HomeScreen({ navigation, user }: { navigation: any, user: any }) {
         if (user.client.valider === '1') {
             navigation.navigate(screen);
         } else {
+
+            if (user.client.valider === '2') {
+                Toast.show({
+                    type: 'alertMessage',
+                    props: { text: t('homescreen.completeregistrationmessage') }
+                });
+            }
+
             navigation.navigate('kyc');
         }
 
@@ -202,7 +216,7 @@ function HomeScreen({ navigation, user }: { navigation: any, user: any }) {
     const getBeneficiaries = () => {
 
         fetchBeficiariesRequest(user.login).then((response: any) => {
-            console.log(response.data.response.data);
+            //console.log(response.data.response.data);
             dispatch(saveBenefs(response.data.response.data));
 
         }).catch((error: any) => {
@@ -217,7 +231,7 @@ function HomeScreen({ navigation, user }: { navigation: any, user: any }) {
         saveFCMTokenRequest(idClient, token).then(() => {
         }).catch((error) => {
 
-            console.log(error);
+          //  console.log(error);
         });
     };
 
@@ -252,7 +266,7 @@ function HomeScreen({ navigation, user }: { navigation: any, user: any }) {
 
             fetchRatesRequest(accounts[0]?.compte.devise, devises).then((response) => {
 
-                console.log(response.data);
+                // console.log(response.data);
 
                 const hpayRateCAD = response.data['CAD']?.hpayRate ?? 1;
                 const hpayRateUSD = response.data['USD']?.hpayRate ?? 1;
@@ -322,7 +336,8 @@ function HomeScreen({ navigation, user }: { navigation: any, user: any }) {
             8
         ).then((response) => {
 
-            console.log(response.data.content);
+            /*console.log("");
+            console.log(response.data.content);*/
             const grouped: any = {};
             setSize(response.data.numberOfElements);
             setTotalElement(response.data.totalElements);
@@ -399,7 +414,7 @@ function HomeScreen({ navigation, user }: { navigation: any, user: any }) {
 
         const newAccountsList = allAccount.map((account: any) => {
 
-            setIcon(account.pays.emoji);
+           setIcon(account.pays.emoji);
 
            if (account.typeCompte.idTypeCompte === 6) {
                 return {
@@ -576,6 +591,11 @@ function HomeScreen({ navigation, user }: { navigation: any, user: any }) {
 
     };
 
+    const getPhotoUrl = (name: string) => {
+        //console.log(photoUrl, "/", name);
+
+        return photoUrl + "/" + name;
+    };
 
 
     return (
@@ -590,7 +610,7 @@ function HomeScreen({ navigation, user }: { navigation: any, user: any }) {
 
                         <AvartarButton
                             prenom={user?.client.prenoms}
-                            profilUrl={user?.client.photoClient}
+                            profilUrl={getPhotoUrl(user?.client.photoClient)}
                         />
 
                         <View style={{ flexDirection: 'row' }}>
@@ -725,7 +745,7 @@ function HomeScreen({ navigation, user }: { navigation: any, user: any }) {
                             </View>
 
 
-                            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                            {/*<View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
                                 <TouchableOpacity style={{
                                     height: 60,
                                     width: 60,
@@ -741,6 +761,25 @@ function HomeScreen({ navigation, user }: { navigation: any, user: any }) {
                                 </TouchableOpacity>
                                 <View style={{ height: 50 }}>
                                     <Text style={{ color: 'black', fontWeight: 'bold', marginTop: 5, textAlign: 'center' }}>{t('homescreen.pay')}</Text>
+                                </View>
+                            </View>*/}
+
+                            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                                <TouchableOpacity
+                                    style={{
+                                        height: 60,
+                                        width: 60,
+                                        borderRadius: 25,
+                                        backgroundColor: '#e6e4e0',
+                                        justifyContent: 'center',
+                                        alignItems: 'center',
+                                    }}
+                                    onPress={() => { protectedNavigation('BuyScreen'); }}
+                                >
+                                    <Feather name="shopping-cart" size={26} color={Colors.text} />
+                                </TouchableOpacity>
+                                <View style={{ height: 50 }}>
+                                    <Text style={{ color: 'black', fontWeight: 'bold', marginTop: 5, textAlign: 'center' }}>Hpay Store</Text>
                                 </View>
                             </View>
 
@@ -761,15 +800,14 @@ function HomeScreen({ navigation, user }: { navigation: any, user: any }) {
                                     <Text style={{ color: 'black', fontWeight: 'bold', marginTop: 5, textAlign: 'center' }}>{t('homescreen.all')}</Text>
                                 </View>
                             </View>
-
                         </View>
 
 
                         {chartData.length > 0 &&
                             <View>
-                                <Text style={{ fontSize: 22, marginBottom: 10, fontWeight: 'bold', color: Colors.text }}>{t('homescreen.currentexchangerate')}{accounts[0]?.compte.devise}</Text>
-
-                                <BarChart
+                                {/*<Text style={{ fontSize: 22, marginBottom: 10, fontWeight: 'bold', color: Colors.text }}>{t('homescreen.currentexchangerate')}{accounts[0]?.compte.devise}</Text>
+                                */}
+                                {/*<BarChart
                                     data={{
                                         labels: ["CAD", "USD", "EUR", "GBP"],
                                         datasets: [
@@ -805,7 +843,7 @@ function HomeScreen({ navigation, user }: { navigation: any, user: any }) {
                                         marginVertical: 8,
                                         borderRadius: 16,
                                     }}
-                            />
+                            />*/}
                             </View>
                         }
 
@@ -814,7 +852,6 @@ function HomeScreen({ navigation, user }: { navigation: any, user: any }) {
 
                         <View style={{ marginTop: 10, marginBottom:30 }}>
                             <Text style={{ fontSize: 22, fontWeight: 'bold', color: Colors.text }}>{t('homescreen.recenttransactions')}</Text>
-
                             <SectionList
                                 sections={histories}
                                 keyExtractor={(item) => item.id.toString()}

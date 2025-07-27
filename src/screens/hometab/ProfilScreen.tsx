@@ -18,7 +18,7 @@ import {
     Platform,
     PermissionsAndroid,
     Rationale,
-    Alert
+    Alert,
 } from 'react-native';
 import { signOut } from '../../store/profilSlice';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -34,6 +34,9 @@ import { signIn} from '../../store/profilSlice';
 import axios from 'axios';
 import { useTranslation } from 'react-i18next';
 import LangageModal from '../../components/LangageModal';
+import LockOptionModal from '../../components/profil/LockOptionModal';
+import { saveProfilImage } from '../../services/request';
+import { ApiContext } from '../../../App';
 
 
 function ProfilScreen({ navigation }: { navigation: any }) {
@@ -42,18 +45,22 @@ function ProfilScreen({ navigation }: { navigation: any }) {
     const dispatch = useDispatch();
     const [visible, setVisible] = React.useState(false);
     const [langageModalvisible, setLangageModalvisible] = React.useState(false);
+    const [lockModalvisible, setLockModalvisible] = React.useState(false);
     const [fileName, setFileName] = React.useState(null);
     const [filePath, setFilePath] = React.useState<string>('');
     const BASE_URL = 'http://10.0.0.133:5000/api';
-
     const user = useSelector((state: any) => state.profil.user);
-    //console.log(user);
+    const accessCode = useSelector((state: any) => state.profil.accessCode);
+    const { photoUrl, setPhotoUrl } = React.useContext(ApiContext);
 
-   // console.log(user.client.photoClient);
+    React.useEffect(() => {
+        console.log(user.client.photoClient);
+        setFilePath(user.client.photoClient);
+    }, []);
 
-   React.useEffect(() => {
-       setFilePath(user.client.photoClient);
-   }, []);
+    const getPhotoUrl = (name: string) => {
+        return photoUrl + '/' + name;
+    };
 
 
     const logout = () => {
@@ -147,30 +154,20 @@ function ProfilScreen({ navigation }: { navigation: any }) {
                     });*/
                     return;
                 }
-                /*console.log('base64 -> ', response.base64);
-                console.log('uri -> ', response.uri);
-                console.log('width -> ', response.width);
-                console.log('height -> ', response.height);
-                console.log('fileSize -> ', response.fileSize);
-                console.log('type -> ', response.type);
-                console.log('fileName -> ', response.fileName);*/
-                //console.log('fileName -> ', response.assets[0].uri)
 
                 setFilePath(response.assets[0].uri);
-                setFileName(response.assets[0].fileName);
-                //setVisible(false);
-                sendpicture(response.assets[0].uri);
+                sendpicture(response.assets[0]);
 
             });
         }
-    }
+    };
 
 
 
     const chooseFile = (/*type*/) => {
 
         let options = {
-            mediaType: 'image',
+            mediaType: 'photo',
             maxWidth: 600,
             maxHeight: 650,
             quality: 1,
@@ -183,21 +180,21 @@ function ProfilScreen({ navigation }: { navigation: any }) {
             if (response.didCancel) {
                 //alert('User cancelled camera picker');
                 return;
-            } else if (response.errorCode == 'camera_unavailable') {
+            } else if (response.errorCode === 'camera_unavailable') {
                 /*Toast.show({
                     type: 'message',
                     props: { message: I18n.t('cameranotavailableondevice') },
                     position: 'bottom'
                 });*/
                 return;
-            } else if (response.errorCode == 'permission') {
+            } else if (response.errorCode === 'permission') {
                 /*Toast.show({
                     type: 'message',
                     props: { message: I18n.t('permissionnotsatisfied') },
                     position: 'bottom'
                 });*/
                 return;
-            } else if (response.errorCode == 'others') {
+            } else if (response.errorCode === 'others') {
                 /*Toast.show({
                     type: 'message',
                     props: { message: I18n.t('permissionnotsatisfied') },
@@ -216,61 +213,40 @@ function ProfilScreen({ navigation }: { navigation: any }) {
             console.log('fileName -> ', response.assets[0].fileName);*/
 
             // setFile(response?.assets[0]);
-            setFilePath(response.assets[0].uri);
-            setFileName(response.assets[0].fileName);
-           // setVisible(false);
-            sendpicture(response.assets[0].uri);
+            //setFilePath(response.assets[0].uri);
+            //setFileName(response.assets[0].fileName);
 
-            //console.log(response.assets[0].uri);
+            setFilePath(response.assets[0].uri);
+            sendpicture(response.assets[0]);
+
 
         });
 
-    }
+    };
 
-
-    const sendpicture = async (path:string) => {
+    const sendpicture = async (image:any) => {
 
         let form_data = new FormData();
-        let filename = path?.split('/').pop();
-        let match = /\.(\w+)$/.exec(filename);
-        let type = match ? `image/${match[1]}` : 'image';
-
-        //console.log(path)
-       // console.log(filename)
-        //console.log(type)
-
         form_data.append('photo',
             {
-                uri: filePath,
-                name: filename,
-                type: type
+                uri: image.uri,
+                type: image.type,
+                name: image.fileName,
             }
         );
 
-       // setModalVisible(true);
 
-       // console.log(`${BASE_URL}/auth/upload-photo/${user.idLoginClient}`);
+        saveProfilImage(form_data, user.idLoginClient).then(response => {
 
-        axios.post(`${BASE_URL}/auth/upload-photo/${user.idLoginClient}`, form_data, {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-            },
-        }).then(response => {
-
-           // console.log('success')
-           // console.log(response.data.response.data.client.photoClient);
+            setVisible(false);
             dispatch(signIn(response.data.response.data));
-            
-            //setModalVisible(false);
-           // navigation.navigate('ParrainageScreen', { phone: phone, idclient: idclient })
 
         }).catch(function (error) {
-            // setModalVisible(false);
-            console.log('error')
-            console.log(error.response)
+
+            console.log(error);
+            setVisible(false);
 
         });
-
 
     };
 
@@ -285,7 +261,7 @@ function ProfilScreen({ navigation }: { navigation: any }) {
                 <View style={styles.avatar}>
                     {filePath ?
                         <Image
-                            source={filePath ? { uri: filePath } : require('../../assets/avatar.jpg')}
+                            source={{ uri: getPhotoUrl(user?.client.photoClient) }} 
                             style={styles.avatarImage}
                         />
                         :
@@ -303,12 +279,11 @@ function ProfilScreen({ navigation }: { navigation: any }) {
 
                 <View style={{ justifyContent: 'center', alignItems: 'center', }}>
                     <Text style={{ color: Colors.text, textAlign:'center', paddingTop: 10, fontSize: 26, fontWeight: 'bold' }}> {user.client.prenoms}{' '}{user.client.nom} </Text>
-                    <Text style={{ color: Colors.text, paddingTop: 0 ,marginTop:3,fontSize: 16 }}> {user.login}</Text>
+                    <Text style={{ color: Colors.text, paddingTop: 0 ,marginTop:3,fontSize: 16 }}>  {user.login}</Text>
                 </View >
             </View>
         );
     };
-
 
 
     return (
@@ -352,9 +327,9 @@ function ProfilScreen({ navigation }: { navigation: any }) {
                         <ListItem.Content>
                             <ListItem.Title style={{ fontSize: 14, }}>{t('profil.kyccompliance')}</ListItem.Title>
                         </ListItem.Content>
-
                         <ListItem.Chevron />
                     </ListItem>
+
 
                     <ListItem bottomDivider onPress={() => navigation.navigate('MyHistoriesScreen')} >
                         <MaterialIcons name="history" size={24} color={Colors.text} />
@@ -398,6 +373,14 @@ function ProfilScreen({ navigation }: { navigation: any }) {
                         <ListItem.Chevron />
                     </ListItem>
 
+                    <ListItem bottomDivider onPress={() => setLockModalvisible(true)} >
+                        <Ionicons name="shield-checkmark-outline" size={22} color={Colors.text} />
+                        <ListItem.Content>
+                            <ListItem.Title style={{ fontSize: 14, }}>{t('profil.lockscreen')}</ListItem.Title>
+                        </ListItem.Content>
+                        <ListItem.Chevron />
+                    </ListItem>
+
                     <ListItem bottomDivider onPress={() => alert()} >
                         <AntDesign name="key" size={22} color={Colors.text} />
                         <ListItem.Content>
@@ -421,7 +404,6 @@ function ProfilScreen({ navigation }: { navigation: any }) {
                         <ListItem.Content>
                             <ListItem.Title style={{ fontSize: 14 }}>{t('profil.language')}</ListItem.Title>
                         </ListItem.Content>
-
                         <ListItem.Chevron />
                     </ListItem>
 
@@ -453,12 +435,18 @@ function ProfilScreen({ navigation }: { navigation: any }) {
                     chooseFile={chooseFile}
                 />
 
-                
-
                 <LangageModal
                     isVisible={langageModalvisible}
                     onClose={() => setLangageModalvisible(false)}
                 />
+
+
+                <LockOptionModal
+                    isVisible={lockModalvisible}
+                    onClose={() => setLockModalvisible(false)}
+                    accessCode={accessCode}
+                />
+
 
             </ScrollView>
 

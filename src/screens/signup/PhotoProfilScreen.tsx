@@ -47,12 +47,11 @@ function PhotoProfilScreen({ navigation }: { navigation: any }) {
     const [visible, setVisible] = React.useState(false);
     const { phone, idclient } = route.params;
 
-    //   { phone: "4388833001", idclient: "115" }     ;
+
+    //{ phone: '4388833759', idclient: "107" };
 
     const [modalVisible, setModalVisible] = React.useState(false);
    
-
-
 
     const requestCameraPermission = async () => {
 
@@ -227,6 +226,7 @@ function PhotoProfilScreen({ navigation }: { navigation: any }) {
 
         saveProfilImage(form_data, idclient).then((response) => {
 
+           //console.log("success");
             setModalVisible(false);
             navigation.navigate('ParrainageScreen', { phone: phone, idclient: idclient })
 
@@ -235,11 +235,16 @@ function PhotoProfilScreen({ navigation }: { navigation: any }) {
             setModalVisible(false);
             console.log(error.response.data)
 
-            Toast.show({
+            /*Toast.show({
                 type: 'error',
                 text1: t('error'),
                 text2: t('signupscreen.photonotsave'),
                 position: 'top'
+            });*/
+
+            Toast.show({
+                type: 'errorMessage',
+                props: { text: t('signupscreen.photonotsave') }
             });
 
         })

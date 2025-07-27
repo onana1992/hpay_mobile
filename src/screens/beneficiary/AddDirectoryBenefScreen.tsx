@@ -18,6 +18,7 @@ import {
     Text,
     FlatList,
     KeyboardAvoidingView,
+    Platform,
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Colors } from '../../themes';
@@ -28,6 +29,8 @@ import { Checkbox } from 'react-native-paper';
 import { addBenefListRequest } from '../../services/request';
 import Toast from 'react-native-toast-message';
 import { saveNewClients } from '../../store/profilSlice';
+import { ApiContext } from '../../../App';
+import AvartarButton from '../../components/connected/AvartarButton';
 
 
 function AddDirectoryBenefScreen({ navigation }: { navigation: any }) {
@@ -43,6 +46,11 @@ function AddDirectoryBenefScreen({ navigation }: { navigation: any }) {
     const [allChecked, setAllChecked] = React.useState<boolean>(false);
     const benefs = useSelector((state: any) => state.profil.benefs);
     const [filteredData, setFilteredData] = React.useState(benefs);
+    const { photoUrl } = React.useContext(ApiContext);
+
+    const getPhotoUrl = (name: string) => {
+        return photoUrl + '/' + name;
+    };
 
 
     const filterBenef = (query:string) => {
@@ -153,24 +161,29 @@ function AddDirectoryBenefScreen({ navigation }: { navigation: any }) {
 
         //console.log(getListId());
 
-        if(getListId().length > 0){
+        if (getListId().length > 0){
 
-             addBenefListRequest(user.idLoginClient, getListId()).then((response: any) => {
+          addBenefListRequest(user.idLoginClient, getListId()).then((response: any) => {
 
-           console.log(response.data);
-           Toast.show({
-                type: 'success',
-                text1: t('success'),
-                text2: t('benef.addlistsuccess'),
-                position: 'top',
-           });
+            //console.log(response.data);
+               /*Toast.show({
+                    type: 'success',
+                    text1: t('success'),
+                    text2: t('benef.addlistsuccess'),
+                    position: 'top',
+               });*/
 
-           navigation.goBack();
+              Toast.show({
+                  type: 'succesMessage',
+                  props: { text: t('benef.addlistsuccess') },
+              });
+
+               navigation.goBack();
 
         }).catch((_error: any) => {
 
 
-            console.log(_error);
+            //console.log(_error);
 
 
         });
@@ -287,9 +300,10 @@ function AddDirectoryBenefScreen({ navigation }: { navigation: any }) {
 
                             <View style={{ flex: 1, }}>
                                 <View style={styles.benefavatar}>
-                                    {filePath ?
+
+                                    {item.photo != null ?
                                         <Image
-                                            source={filePath ? { uri: filePath } : require('../../assets/avatar.jpg')}
+                                            source={{ uri: getPhotoUrl(item.photo) }}
                                             style={styles.avatarImage}
                                         />
                                         :
@@ -303,7 +317,8 @@ function AddDirectoryBenefScreen({ navigation }: { navigation: any }) {
 
                             <View style={{ flex: 3 }}>
                                 <Text style={styles.name}>{item.prenoms} {item.nom} </Text>
-                                <Text style={styles.phone}>{item.telephone}</Text>
+                                <Text style={styles.phone}>{item.photoClient} {item.telephone}</Text>
+
                             </View>
 
                             <View style={{ flex: 1, alignItems: 'flex-end', justifyContent: 'center' }}>
@@ -430,8 +445,8 @@ const styles = StyleSheet.create({
     },
 
     avatarImage: {
-        height: 100,
-        width: 100,
+        width: 50,
+        height: 50,
         overflow: 'hidden',
         borderColor: Colors.primary,
         borderWidth: 1,

@@ -67,12 +67,18 @@ function EmailScreen({ navigation}: {navigation:any}) {
             //console.log(_error.response.data.message);
             if (_error.response.data.message === 'email already used') {
                 setEmail({ ...email, error: t('emailscreen.emailalreadyused') })
-                 Toast.show({
+                 /*Toast.show({
                     type: 'error',
                     text1: t('failure'),
                     text2: t('emailscreen.emailalreadyused'),
                     position: 'top'
+                });*/
+
+                Toast.show({
+                    type: 'errorMessage',
+                    props: { text: t('emailscreen.emailalreadyused') }
                 });
+
             }
 
             setModalVisible(false);

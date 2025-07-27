@@ -29,7 +29,6 @@ import { COUNTRIES }  from '../../assets/country/countries_fr';
 function CountryScreen({ navigation }: {navigation:any}) {
 
 
-   
     const { t } = useTranslation();
     const [modalVisible, setModalVisible] = React.useState(false);
     const [country, setCountry] = React.useState({ label: '🇨🇦 Canada', value: 'ca', indicator: "1" });
@@ -104,8 +103,8 @@ function CountryScreen({ navigation }: {navigation:any}) {
         fetchCities(choosecountry?.id);
     }
 
+
   
-     
     return (
    
         <View
@@ -307,7 +306,6 @@ const styles = StyleSheet.create({
     },
 
 });
-
 
 
 

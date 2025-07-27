@@ -1,4 +1,5 @@
-﻿/* eslint-disable curly */
+﻿/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable curly */
 /* eslint-disable no-alert */
 /* eslint-disable react/no-unstable-nested-components */
 /* eslint-disable @typescript-eslint/no-unused-vars */
@@ -22,12 +23,17 @@ import {
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { Colors } from '../../themes';
 import { useSelector, useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import QrCodeModal from '../../components/QrCodeModal';
 import AvartarButton from '../../components/connected/AvartarButton';
 import { Share, Button } from 'react-native';
+import { getParrainees } from '../../services/request';
+import RefereeModal from '../../components/RefereeModal';
+import { ApiContext } from '../../../App';
 
 
 function ParrainageScreen({ navigation }: { navigation: any }) {
@@ -39,23 +45,61 @@ function ParrainageScreen({ navigation }: { navigation: any }) {
     const user = useSelector((state: any) => state.profil.user);
     const [filePath, setFilePath] = React.useState(null);
     const [code, setCode] = React.useState(user.client.parrainCode.codeParrainage);
+    const [point, setPoint] = React.useState(0);
+    const [nber, setNbre] = React.useState(0);
+    const [referees, setReferees] = React.useState([]);
+    const [modal1Visible, setModal1Visible] = React.useState(false);
+    const { photoUrl } = React.useContext(ApiContext);
 
     const handleCopy = () => {
         Clipboard.setString(code); // Copy the text to clipboard
     };
 
+    const getPhotoUrl = (name: string) => {
+        return photoUrl + '/' + name;
+    };
+
+
+    React.useEffect(() => {
+        const HPayAccount = user.client.comptes.find((compte: { typeCompte: { idTypeCompte: number; }; }) =>
+            compte.typeCompte && compte.typeCompte.idTypeCompte === 2
+        );
+        setPoint(HPayAccount.solde);
+
+    }, []);
+
+
+
+    React.useEffect(() => {
+
+        getParrainees(user.client.id).then((response) => {
+
+            setNbre(response.data.length);
+            setReferees(response.data);
+
+        }).then((error) => {
+
+
+        });
+
+
+    }, []);
+
+
+
 
     const shareDeepLink = async () => {
         try {
             const result = await Share.share({
-                message: 'Open this link: myapp://open/screen1',
+                message: `Telécharger l'application HPay https://play.google.com/store/apps/details?id=com.hpay.cash&pcampaignid=web_share et utilisé mon code de parrainage ${code} pour  beneficier d'un bonus de ....`
+,
             });
 
             if (result.action === Share.sharedAction) {
-                console.log('Link shared');
+               // console.log('Link shared');
             }
         } catch (error) {
-            console.error(error.message);
+            //console.error(error.message);
         }
     };
 
@@ -64,32 +108,19 @@ function ParrainageScreen({ navigation }: { navigation: any }) {
     const whatsappShare = async () => {
 
         const message = encodeURIComponent(
-            `Telécharger l'application HPay hpayapp://open/screen1 et utilisé mon code de parrainage HPAY_45453 et beneficier d'un bonus de 10$`
+            `Telécharger l'application HPay https://play.google.com/store/apps/details?id=com.hpay.cash&pcampaignid=web_share et utilisé mon code de parrainage ${code} pour  beneficier d'un bonus de ....`
         );
 
         const url = `whatsapp://send?text=${message}`;
         Linking.openURL(url);
-
-
-
-        /*const shareOptions = {
-            title: 'Share via',
-            message: 'some message',
-            url: 'some share url',
-            social: Share.Social.WHATSAPP,
-            whatsAppNumber: "9199999999",  // country code + phone number
-            filename: 'test', // only for base64 file in Android
-        };
-
-        try {
-            const result = await Share.shareSingle(shareOptions);
-            console.log('Share success:', result);
-        } catch (error) {
-            console.log('Error =>', error);
-        }*/
     };
 
 
+    const shareBySMS = () => {
+        const message = `Telécharger l'application HPay https://play.google.com/store/apps/details?id=com.hpay.cash&pcampaignid=web_share et utilisé mon code de parrainage ${code} pour  beneficier d'un bonus de ....`;
+        const url = `sms:?body=${encodeURIComponent(message)}`;
+        Linking.openURL(url);
+    };
 
 
     return (
@@ -98,7 +129,7 @@ function ParrainageScreen({ navigation }: { navigation: any }) {
             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }} >
                 <AvartarButton
                     prenom={user.client.prenoms}
-                    profilUrl={user.client.photoClient}
+                    profilUrl={getPhotoUrl(user.client.photoClient)}
                 />
 
                 <View >
@@ -142,11 +173,11 @@ function ParrainageScreen({ navigation }: { navigation: any }) {
 
                     <View style={{ flexDirection: 'row', marginTop: 20, justifyContent:'center' }}>
 
-                        <TouchableOpacity style={[styles.shareButton, { backgroundColor: '#25d366' }]} onPress={() => { whatsappShare(); } }>
+                        <TouchableOpacity style={[styles.shareButton, { backgroundColor: '#25d366' }]} onPress={() => { whatsappShare(); }}>
                             <Ionicons name="logo-whatsapp" size={25} color="#ffffff" />
                         </TouchableOpacity>
 
-                        <TouchableOpacity style={[styles.shareButton, { backgroundColor: '#003366' }]}>
+                        <TouchableOpacity style={[styles.shareButton, { backgroundColor: '#003366' }]} onPress={() => { shareBySMS(); }}>
                             <MaterialCommunityIcons name="message-text-outline" size={25} color="#ffffff" />
                         </TouchableOpacity>
 
@@ -163,13 +194,52 @@ function ParrainageScreen({ navigation }: { navigation: any }) {
 
                 </View>
 
+
+                <TouchableOpacity
+                    style={{
+                        flexDirection: 'row',
+                        width: '100%',
+                        marginTop: 40,
+                        marginBottom: 10,
+                        borderWidth: 0.8,
+                        borderColor: Colors.text,
+                        height: 70,
+                        padding: 10,
+                        alignItems: 'center',
+                        borderRadius: 10,
+                    }}
+                    disabled={nber === 0}
+                    onPress={() => { setModal1Visible(true);}}
+                >
+                    <View style={{ flex: 1, }}>
+                        <View style={{
+                            backgroundColor: Colors.background,
+                            height: 40,
+                            width: 40,
+                            borderRadius: 20,
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                        }}>
+                            <FontAwesome name="users" color={Colors.text} size={22} />
+                        </View>
+                    </View>
+
+                    <View style={{ flex: 5, flexDirection: 'row', justifyContent: 'space-between' }}>
+                        {nber > 1 && <Text style={{ color: Colors.text, fontSize: 16, fontWeight: 'bold' }}> {nber} {t('sponsorTab.referredcustomers')}</Text>}
+                        { (nber === 0 || nber === 1)  && <Text style={{ color: Colors.text, fontSize: 16, fontWeight: 'bold' }}> {nber} {t('sponsorTab.referredcustomer')}</Text>}
+                        <Text style={{ color: Colors.text, fontSize: 16 }} > <MaterialIcons name="chevron-right" color={Colors.text} size={22} /> </Text>
+                    </View>
+
+
+                </TouchableOpacity>
+
                 <View style={{
                     flexDirection: 'row',
                     width: '100%',
-                    marginTop: 40,
+                    marginTop: 10,
                     marginBottom: 20,
                     borderWidth: 0.8,
-                    borderColor: Colors.background,
+                    borderColor: Colors.text,
                     height: 70,
                     padding: 10,
                     alignItems: 'center',
@@ -180,7 +250,7 @@ function ParrainageScreen({ navigation }: { navigation: any }) {
                             backgroundColor: Colors.background,
                             height: 40,
                             width: 40,
-                            borderRadius:20,
+                            borderRadius: 20,
                             alignItems: 'center',
                             justifyContent: 'center',
                         }}>
@@ -189,9 +259,10 @@ function ParrainageScreen({ navigation }: { navigation: any }) {
                     </View>
 
                     <View style={{ flex: 5, flexDirection: 'row', justifyContent: 'space-between' }}>
-                        <Text style={{ color: Colors.text, fontSize:16, fontWeight:'bold' }}>Total gagné</Text>
-                        <Text style={{ color: Colors.text, fontSize: 16 }} >0.0 HPC</Text>
+                        <Text style={{ color: Colors.text, fontSize: 16, fontWeight: 'bold' }}>{t('sponsorTab.totalwon')}</Text>
+                        <Text style={{ color: Colors.text, fontSize: 16 }} > {point.toFixed(2)} HPC</Text>
                     </View>
+
                 </View>
 
             </ScrollView>
@@ -201,6 +272,12 @@ function ParrainageScreen({ navigation }: { navigation: any }) {
                 isVisible={modalVisible}
                 onClose={() => setModalVisible(false)}
                 qrcode={user.client.parrainCode.qrcode}
+            />
+
+            <RefereeModal
+                isVisible={modal1Visible}
+                onClose={() => setModal1Visible(false)}
+                referees={referees}
             />
 
         </View>

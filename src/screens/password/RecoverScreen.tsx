@@ -31,7 +31,6 @@ function RecoverScreen({ navigation }: { navigation: any }) {
    
 
     const onLoginPressed = () => {
-
        
         const phoneError = telValidator(telephone.value);
 
@@ -42,9 +41,9 @@ function RecoverScreen({ navigation }: { navigation: any }) {
 
         setModalVisible(true);
 
-        passforgotCodeRequest(telephone.value).then((response: any) => {
+        passforgotCodeRequest(telephone.value).then((response) => {
 
-            console.log(response.data.response)
+           
 
             if (response.data.statusCode === 200) {
                 setModalVisible(false);
@@ -54,23 +53,26 @@ function RecoverScreen({ navigation }: { navigation: any }) {
 
         }).catch((error: any) => {
 
-            //console.log(error.response.data) 
+            //console.log(error);
             
             if (error.response.data.statusCode) {
 
                 setModalVisible(false);
-                Toast.show({
+                /*Toast.show({
                     type: 'error',
                     text1: t('passwordRecover.failure'),
                     text2: t('passwordRecover.noaccoundfound'),
                     position: 'top'
+                });*/
+
+                Toast.show({
+                    type: 'errorMessage',
+                    props: { text: t('passwordRecover.noaccoundfound') }
                 });
 
             }
 
         })
-
-        
     }
 
 
@@ -111,7 +113,6 @@ function RecoverScreen({ navigation }: { navigation: any }) {
                                     autoCapitalize="none"
                                     autoCompleteType="tel"
                                     description={undefined}
-                                    
                                 />
                             </View>
 
@@ -119,7 +120,7 @@ function RecoverScreen({ navigation }: { navigation: any }) {
                     </View>
                     
                     <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'flex-end' }}>
-                        <View style={{ flexDirection: 'row', marginTop: 30, width: "100%" }}>
+                        <View style={{ flexDirection: 'row', marginTop: 30, width: '100%' }}>
                             <Button
                                 mode="contained"
                                 onPress={() => { onLoginPressed() }}>

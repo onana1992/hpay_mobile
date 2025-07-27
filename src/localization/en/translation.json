@@ -128,7 +128,7 @@
     "veriftitle": "Let's verify your email address",
     "verifmsg": "We sended you an verification code by email. Please enter this code to verify your email adress",
     "emailalreadyused": "Email address already used"
-     
+
 
   },
 
@@ -163,7 +163,7 @@
 
   "passwordRecover": {
     "title": "Your phone number",
-    "titlemsg": "Please enter your  phone number used during the authentication",
+    "titlemsg": "Please enter your  phone number (without indicator) used during the authentication",
     "id": "Email/Phone",
     "youremail": "Your Phone/email",
     "submit": "Submit",
@@ -186,8 +186,8 @@
   "photoProfilScreen": {
     "title": "Add a profil photo",
     "titlemsg": "Please choose a profile photo to allow your correspondents to identify you",
-    "submit": "Submit",
-    
+    "submit": "Submit"
+
   },
 
 
@@ -256,7 +256,15 @@
     "parameters": "Parameters",
     "language": "Language",
     "notificationparameters": "Notification parameters",
-    "logout": "Log out"
+    "logout": "Log out",
+    "lockscreen": "Lock screen",
+    "enablethepasscodelockscreen": "Enable the passcode lock screen",
+    "enablebiometriclockscreen": "Enable the biometric unlock screen",
+    "removethelockscreen": "remove the lock screen ",
+    "togglebiometriclockscreen": "Toggle biometric lock screen",
+    "togglethepasscodelockscreen": "Toggle to passcode lock screen",
+    "disablethelockscreen": "Disable screen lock"
+
   },
 
 
@@ -379,7 +387,44 @@
 
   "sponsorTab": {
     "sponsorship": "Sponsorship",
-    "shareyourcode": "Share your code"
+    "shareyourcode": "Share your code",
+    "totalwon": "Total won",
+    "referredcustomers": "referred customers",
+    "referredcustomer": "referred customer",
+    "yourreferralcode": "Your referral code",
+    "inviteyourfriends": "Invite your friends to scan your QR code to download the Hpay app and earn points for each of their top-ups.",
+    "yoursponsoredcustomers": "Your sponsored customers"
+  },
+
+  "passcodeSetScreen": {
+    "pleasechooseanaccesscode": "please choose an access code",
+    "pleaseconfirmyouraccesscode": "Please confirm your access code",
+    "nomatchcode": "Le code de confirmation ne correspond pas au code saisi",
+    "close": "Close",
+    "welldone": "Bravo",
+    "accesscodesaved": "Your access code has been saved."
+
+  },
+
+  "BuyScreen": {
+    "Purchaseandsubscription": "Purchase and subscription",
+    "buyService": "Purchase services and subscriptions worldwide via HPay",
+    "country": "Country",
+    "selectacountry": "Select a country",
+    "search": "Search",
+    "operator": "operator",
+    "selecttheoperator": "Select the operator",
+    "service": "Service",
+    "selecttheservice": "Select the service",
+    "beneficiary": "Beneficiary (Phone/Account Id)",
+    "accountandamount": "Account and amount",
+    "fixed": "fixed",
+    "incorrectNumber": "incorrect Number",
+    "purchasesummary": "Purchase summary",
+    "amount": "Amount",
+    "confirm": "confirm",
+    "beneficiary2": "Beneficiary \n (Phone/Account Id)",
+    "submit": "Soumettre"
   },
 
 

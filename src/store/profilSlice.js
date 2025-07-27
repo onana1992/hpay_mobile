@@ -7,7 +7,9 @@ const initialState = {
     newClients: [],
     accounts: [],
     benef: null,
-    notReadMessage:0,
+    notReadMessage: 0,
+    accessCode: null,
+    lockMode:0,
 };
 
 
@@ -57,13 +59,25 @@ const profilSlice = createSlice({
         state.notReadMessage = action.payload;
     },
 
+    saveAccesCode: (state, action) => {
+        state.accessCode = action.payload;
+      },
+
+    deleteAccesCode: (state, action) => {
+          state.accessCode = null;
+    },
+
+    setLockMode: (state, action) => {
+        state.accessCode = action.payload;
+    }
+
   },
 });
 
 
-export const { signIn, signOut, saveToken,
+export const {  signIn, signOut, saveToken,
                 saveBenefs, saveNewClients,
-                saveAccount, saveBenef,
-                savenotReadMessage } = profilSlice.actions;
+                saveAccount, saveBenef, saveAccesCode, deleteAccesCode,
+                savenotReadMessage, setLockMode } = profilSlice.actions;
 
 export default profilSlice.reducer;

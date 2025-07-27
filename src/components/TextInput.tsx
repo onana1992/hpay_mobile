@@ -43,7 +43,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#ffff',
         marginTop: 0,
         color: 'red',
-
     },
 
     description: {

@@ -32,6 +32,7 @@ import { fetchBeficiariesRequest, fetchBeficiariesInMyContactRequest } from '../
 import { saveBenefs, saveNewClients } from '../../store/profilSlice';
 import Contacts from 'react-native-contacts';
 import AvartarButton from '../../components/connected/AvartarButton';
+import { ApiContext } from '../../../App';
 
 
 function BeneficiariesScreen({ navigation }: { navigation: any }) {
@@ -47,6 +48,7 @@ function BeneficiariesScreen({ navigation }: { navigation: any }) {
     const [isRefreshing, setIsRefreshing] = React.useState(false);
     const [hasPermission, setHasPermission] = React.useState(false);
     const [contacts, setContacts] = React.useState<number[]>([]);
+    const { photoUrl } = React.useContext(ApiContext);
 
 
     useFocusEffect(
@@ -61,6 +63,10 @@ function BeneficiariesScreen({ navigation }: { navigation: any }) {
 
         }, [])
     );
+
+    const getPhotoUrl = (name: string) => {
+        return photoUrl + '/' + name;
+    };
 
 
     function getInitials(phrase: string) {
@@ -78,7 +84,7 @@ function BeneficiariesScreen({ navigation }: { navigation: any }) {
 
     const getBeneficiaries = () => {
 
-       // alert(user.idLoginClient); 
+        // alert(user.idLoginClient);
 
         fetchBeficiariesRequest(user.idLoginClient).then((response: any) => {
             dispatch(saveBenefs(response.data.response.data));
@@ -282,11 +288,9 @@ function BeneficiariesScreen({ navigation }: { navigation: any }) {
 
                     }
 
-
                     <View style={{ marginTop: 20 }}>
                         <Text style={{ fontWeight: 'bold', color: Colors.text, fontSize: 22 }}>{t('benef.registeredbeneficiaries')}</Text>
                     </View>
-
 
                 </View>
 
@@ -305,7 +309,7 @@ function BeneficiariesScreen({ navigation }: { navigation: any }) {
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', }} >
                 <AvartarButton
                     prenom={user.client.prenoms}
-                    profilUrl={user.client.photoClient}
+                    profilUrl={getPhotoUrl(user.client.photoClient)}
                 />
 
                 <View >
@@ -327,7 +331,7 @@ function BeneficiariesScreen({ navigation }: { navigation: any }) {
                                 <View style={styles.benefavatar}>
                                     {item.photo != null  ?
                                         <Image
-                                            source={{ uri: item.photo }}
+                                            source={{ uri: getPhotoUrl(item.photo) }}
                                             style={styles.avatarImage}
                                         />
                                         :
@@ -354,7 +358,6 @@ function BeneficiariesScreen({ navigation }: { navigation: any }) {
                 )}
 
                 ListEmptyComponent={ <EmptyCard/> }
-
                 refreshControl={
                     <RefreshControl
                         refreshing={isRefreshing}
@@ -377,7 +380,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#ffffff',
         padding: 20,
         paddingBottom: 0,
-        paddingVertical: 10 
+        paddingVertical: 10,
     },
 
     title: {
@@ -467,9 +470,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
-
-
-
 });
 
 

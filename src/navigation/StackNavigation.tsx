@@ -43,6 +43,10 @@ import MyHistoriesScreen from '../screens/connected/MyHistoriesScreen';
 import ChangePasswordScreen from '../screens/connected/ChangePasswordScreen';
 import ActivationCarteScreen from '../screens/card/ActivationCarteScreen';
 import { navigationRef } from '../../NavigationService';
+import PasscodeSetScreen from '../screens/profil/PasscodeSetScreen';
+import BuyScreen from '../screens/store/BuyScreen';
+import BuyRecapScreen from '../screens/store/BuyRecapScreen';
+
 
 const Stack = createNativeStackNavigator();
 
@@ -61,7 +65,7 @@ export default function StackNavigation() {
                     <Stack.Screen
                         name="Tab"
                         component={TabNavigator}
-                        options={{ headerShown: false }} 
+                        options={{ headerShown: false }}
                     />
 
                     <Stack.Screen
@@ -232,6 +236,25 @@ export default function StackNavigation() {
                         options={{ headerShown: false }} 
                     />
 
+                    <Stack.Screen
+                        name="PasscodeSetScreen"
+                        component={PasscodeSetScreen}
+                        options={{ headerShown: false }}
+                    />
+
+                    <Stack.Screen
+                        name="BuyScreen"
+                        component={BuyScreen}
+                        options={{ headerShown: false }}
+                    />
+
+                    <Stack.Screen
+                        name="BuyRecapScreen"
+                        component={BuyRecapScreen}
+                        options={{ headerShown: false }}
+                    />
+
+
                 </Stack.Navigator>
 
                 :
@@ -314,11 +337,15 @@ export default function StackNavigation() {
                         options={{ headerShown: false }}
                     />
 
+
                     <Stack.Screen
                         name="ParrainageScreen"
                         component={ParrainageScreen}
                         options={{ headerShown: false }}
                     />
+
+
+                   
 
 
                 </Stack.Navigator>

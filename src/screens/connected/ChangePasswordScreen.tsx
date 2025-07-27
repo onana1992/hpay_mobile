@@ -62,22 +62,23 @@ function ChangePasswordScreen({ navigation }: { navigation: any }) {
 
     const onLoginPressed = () => {
 
-      
+
         const passwordError = passwordValidator(password.value);
         const passwordConfirmationError = confirmPasswordValidator(password.value, confirmPassword.value);
 
 
-        if ( passwordError || passwordConfirmationError) {
-          
+        if (passwordError || passwordConfirmationError) {
+
             setPassword({
                 ...password,
-                error: t(`${passwordError}`)
-            })
+                error: t(`${passwordError}`),
+            });
+
             setConfirmPassword({
                 ...confirmPassword,
-                error: t(`${passwordConfirmationError}`)
-            })
-            return
+                error: t(`${passwordConfirmationError}`),
+            });
+            return;
         }
 
         setModalVisible(true);
@@ -86,11 +87,16 @@ function ChangePasswordScreen({ navigation }: { navigation: any }) {
             if (response.data.statusCode === 201) {
 
                 setModalVisible(false);
-                Toast.show({
+                /*Toast.show({
                     type: 'error',
                     text1: t('passwordRecover.passwordchanged'),
                     text2: t('passwordRecover.passwordchangedmsg'),
-                    position: 'top'
+                    position: 'top',
+                });*/
+
+                Toast.show({
+                    type: 'errorMessage',
+                    props: { text: t('passwordRecover.passwordchangedmsg') },
                 });
 
                 navigation.popToTop();
@@ -104,12 +110,10 @@ function ChangePasswordScreen({ navigation }: { navigation: any }) {
 
             }
 
-        })
+        });
 
 
-    }
-  
-
+    };
 
 
     return (

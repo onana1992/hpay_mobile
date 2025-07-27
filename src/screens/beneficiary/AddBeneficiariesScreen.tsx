@@ -26,6 +26,7 @@ import { Searchbar } from 'react-native-paper';
 import { addBenefRequest, searchClientByPhoneRequest } from '../../services/request';
 import LoadingModal from '../../components/LoadingModal';
 import Toast from 'react-native-toast-message';
+import { ApiContext } from '../../../App';
 
 
 
@@ -39,6 +40,11 @@ function AddBeneficiariesScreen({ navigation }: { navigation: any }) {
     const [client, setClient] = React.useState<null | any>(null);
     const [modalVisible, setModalVisible] = React.useState<boolean>(false);
     const [messageVisible, setmessageVisible] = React.useState<boolean>(true);
+    const { photoUrl } = React.useContext(ApiContext);
+
+    const getPhotoUrl = (name: string) => {
+        return photoUrl + '/' + name;
+    };
 
 
     const lauchSearch = () => {
@@ -56,13 +62,19 @@ function AddBeneficiariesScreen({ navigation }: { navigation: any }) {
             setModalVisible(false);
 
            if (_error.response.status === 404) {
-                Toast.show({
+                /*Toast.show({
                     type: 'error',
                     text1: 'Non trouvé',
                     text2: 'Aucun utlisateur HPay ne correspond à ce numéro.',
                     position: 'top',
-                });
-            } 
+                });*/
+
+               Toast.show({
+                   type: 'errorMessage',
+                   props: { text: 'Aucun utlisateur HPay ne correspond à ce numéro.' },
+               });
+
+            }
 
         });
 
@@ -73,11 +85,16 @@ function AddBeneficiariesScreen({ navigation }: { navigation: any }) {
 
         if (user.idLoginClient == client.idLoginClient) {
 
-            Toast.show({
+           /* Toast.show({
                 type: 'error',
                 text1: 'Erreur',
                 text2: "Impossible d'ajouter. Ce compte ce compte correspond au votre",
                 position: 'top',
+            });*/
+
+            Toast.show({
+                type: 'errorMessage',
+                props: { text: "Impossible d'ajouter. Ce compte ce compte correspond au votre" },
             });
 
         } else {
@@ -85,14 +102,21 @@ function AddBeneficiariesScreen({ navigation }: { navigation: any }) {
             setModalVisible(true);
             addBenefRequest(user.idLoginClient, client.idLoginClient).then((response: any) => {
 
-                console.log(response.data);
+                //console.log(response.data);
 
-                Toast.show({
+                /*Toast.show({
                     type: 'success',
                     text1: t('success'),
                     text2: t('benef.addsuccess'),
                     position: 'top',
+                });*/
+
+                Toast.show({
+                    type: 'succesMessage',
+                    props: { text: t('benef.addsuccess') },
                 });
+
+
 
                 setModalVisible(false);
                 setClient(null);
@@ -104,12 +128,18 @@ function AddBeneficiariesScreen({ navigation }: { navigation: any }) {
                 setClient(null);
                 setSearchQuery('');
                 if (_error.response.status === 404) {
-                    Toast.show({
+                    /*Toast.show({
                         type: 'error',
                         text1: t('Error'),
                         text2: t('benef.alreadyinyourbeneficiaries'),
                         position: 'top',
+                    });*/
+
+                    Toast.show({
+                        type: 'errorMessage',
+                        props: { text: t('benef.alreadyinyourbeneficiaries') },
                     });
+
                 } else {
 
                 }
@@ -234,7 +264,7 @@ function AddBeneficiariesScreen({ navigation }: { navigation: any }) {
                                 <View style={styles.avatar}>
                                         { client.client.photoClient != null ?
                                             <Image
-                                                source={{ uri: client.client.photoClient} }
+                                                source={{ uri: getPhotoUrl(client.client.photoClient)} }
                                                 style={styles.avatarImage}
                                             />
                                             :

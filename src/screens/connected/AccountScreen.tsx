@@ -28,6 +28,7 @@ import Feather from 'react-native-vector-icons/Feather';
 import { getHistory } from '../../services/request';
 import { formatDate, formatHeure } from '../../helpers/functions';
 import HistoryItem from '../../components/HistoryItem';
+import Toast from 'react-native-toast-message';
 
 
 
@@ -47,7 +48,7 @@ function AccountScreen({ navigation }: { navigation: any }) {
     const [totalElement, setTotalElement] = React.useState<number>(0);
     const [histories, setHistories] = React.useState<any[]>([]);
 
-    //console.log(account.compte.idCompte);
+
 
 
     React.useEffect(() => {
@@ -55,11 +56,19 @@ function AccountScreen({ navigation }: { navigation: any }) {
     }, []);
 
 
-    const protectedNavigation = (screen: string, accountParm:any) => {
+    const protectedNavigation = (screen: string) => {
 
         if (user.client.valider === '1') {
-            navigation.navigate(screen, { accountParm: accountParm });
+            navigation.navigate(screen);
         } else {
+
+            if (user.client.valider === '2') {
+                Toast.show({
+                    type: 'alertMessage',
+                    props: { text: t('homescreen.completeregistrationmessage') }
+                });
+            }
+
             navigation.navigate('kyc');
         }
 

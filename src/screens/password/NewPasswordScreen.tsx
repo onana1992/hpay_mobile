@@ -50,10 +50,8 @@ function NewPasswordScreen({ navigation }: { navigation: any }) {
 
     const submit = () => {
 
-
         const passwordError = passwordValidator(password.value);
         const passwordConfirmationError = confirmPasswordValidator(password.value, confirmPassword.value);
-
 
         if ( passwordError || passwordConfirmationError) {
 
@@ -67,17 +65,21 @@ function NewPasswordScreen({ navigation }: { navigation: any }) {
         setModalVisible(true);
 
 
-
         passforgotUpdatePasswordRequest(phone, password.value).then((response: any) => {
            
             if (response.data.statusCode === 201) {
 
                 setModalVisible(false);
-                Toast.show({
+                /*Toast.show({
                     type: 'error',
                     text1: t('passwordRecover.passwordchanged'),
                     text2: t('passwordRecover.passwordchangedmsg'),
                     position: 'top'
+                });*/
+
+                Toast.show({
+                    type: 'errorMessage',
+                    props: { text: t('passwordRecover.passwordchangedmsg') }
                 });
 
                 navigation.popToTop();

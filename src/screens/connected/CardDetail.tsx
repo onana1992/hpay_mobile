@@ -107,12 +107,17 @@ function CardDetail({ navigation }: { navigation: any }) {
 
         }).catch((error: any) => {
 
-            console.log(error.response.data);
-            Toast.show({
+            //console.log(error.response.data);
+            /*Toast.show({
                 type: 'error',
                 text1: t('Error'),
                 text2: t('account.deletionfailed'),
                 position: 'top',
+            });*/
+
+            Toast.show({
+                type: 'errorMessage',
+                props: { text: t('account.deletionfailed') },
             });
 
             setModalVisible(false);

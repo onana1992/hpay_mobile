@@ -108,11 +108,16 @@ function ModifyCardPinScreen({ navigation }: { navigation: any }) {
 
         }).catch((error: any) => {
 
-            Toast.show({
+            /*Toast.show({
                 type: 'error',
                 text1: 'EChec',
                 text2: "Card non enregistrée",
                 position: 'top',
+            });*/
+
+            Toast.show({
+                type: 'errorMessage',
+                props: { text: "Card non enregistrée" },
             });
             setModalVisible(false);
             //console.log(error);
@@ -127,12 +132,19 @@ function ModifyCardPinScreen({ navigation }: { navigation: any }) {
         searchClientByPhoneRequest(user.login).then((response: any) => {
             dispatch(signIn(response.data.response.data));
             fetchAccount(response.data.response.data);
-            Toast.show({
+
+            /*Toast.show({
                 type: 'success',
                 text1: 'Succès',
                 text2: "Code pin modifié",
                 position: 'top',
+            });*/
+
+            Toast.show({
+                type: 'succesMessage',
+                props: { text: "Code pin modifié" },
             });
+
         }).catch((error: any) => {
 
         });

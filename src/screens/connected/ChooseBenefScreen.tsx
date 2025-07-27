@@ -31,6 +31,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import { fetchBeficiariesRequest, fetchBeficiariesInMyContactRequest } from '../../services/request';
 import { saveBenef, saveBenefs, saveNewClients } from '../../store/profilSlice';
 import Contacts from 'react-native-contacts';
+import { ApiContext } from '../../../App';
 
 
 function ChooseBenefScreen() {
@@ -47,6 +48,11 @@ function ChooseBenefScreen() {
     const [isRefreshing, setIsRefreshing] = React.useState(false);
     const [hasPermission, setHasPermission] = React.useState(false);
     const [contacts, setContacts] = React.useState<number[]>([]);
+    const { photoUrl } = React.useContext(ApiContext);
+
+    const getPhotoUrl = (name: string) => {
+        return photoUrl + '/' + name;
+    };
 
 
     useFocusEffect(
@@ -67,6 +73,8 @@ function ChooseBenefScreen() {
         dispatch(saveBenef(client));
         navigation.goBack();
     };
+
+
 
     function getInitials(phrase: string) {
         const words = phrase.split(' '); // Divise la phrase en mots
@@ -149,8 +157,6 @@ function ChooseBenefScreen() {
 
 
     const getClientInMyContact = (contactList) => {
-
-        console.log(contactList);
 
         fetchBeficiariesInMyContactRequest(Number(user.idLoginClient), contactList).then((response: any) => {
             console.log(response.data.response.data);
@@ -333,7 +339,7 @@ function ChooseBenefScreen() {
                                 <View style={styles.benefavatar}>
                                     {item.photo != null  ?
                                         <Image
-                                            source={{ uri: item.photo }}
+                                            source={{ uri: getPhotoUrl(item.photo) }}
                                             style={styles.avatarImage}
                                         />
                                         :

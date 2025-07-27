@@ -77,7 +77,7 @@ function SignUpScreen({ navigation}: {navigation:any, route: any}) {
 
         if (checked) {
 
-            console.log(telephone.value);
+            //console.log(telephone.value);
 
             setModalVisible(true);
             signUpRequest(telephone.value, password.value, country.id, city.id).then((response: any) => {
@@ -94,12 +94,18 @@ function SignUpScreen({ navigation}: {navigation:any, route: any}) {
 
 
                 if (_error.response.status === 409) {
-                    Toast.show({
+                    /*Toast.show({
                         type: 'error',
                         text1: t('signupscreen.registrationfailure'),
                         text2: t('signupscreen.accountalreadyexist'),
                         position: 'top'
+                    });*/
+
+                    Toast.show({
+                        type: 'errorMessage',
+                        props: { text: t('signupscreen.accountalreadyexist') }
                     });
+
                 } else {
 
 
@@ -108,11 +114,16 @@ function SignUpScreen({ navigation}: {navigation:any, route: any}) {
 
         } else {
 
-            Toast.show({
+            /*Toast.show({
                 type: 'info',
                 text1: t('info'),
                 text2: t('signupscreen.youmustaccepttermsandcondition'),
                 position: 'top'
+            });*/
+
+            Toast.show({
+                type: 'alertMessage',
+                props: { text: t('signupscreen.youmustaccepttermsandcondition') }
             });
 
         }

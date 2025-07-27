@@ -42,7 +42,6 @@ function CashInScreen({ navigation }: { navigation: any }) {
 
     }, []);
 
-    
 
     const cancel = () => {
         Alert.alert('', 'Voulez-vou vraiment annuler cette transaction ?', [
@@ -57,7 +56,7 @@ function CashInScreen({ navigation }: { navigation: any }) {
 
     const confirmCancel = () => {
         navigation.goBack();
-    }
+    };
 
 
     const EmptyCard = () => {

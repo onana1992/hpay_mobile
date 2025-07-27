@@ -171,7 +171,21 @@ function ConfirmTransfertBetweenAccount({ navigation }: { navigation: any }) {
 
                 <Text style={styles.title}>{t('transaction.Summaryofyourtransfer')}</Text>
 
-                <View style={{ marginTop: 30, borderBottomColor: Colors.background, borderBottomWidth: 1, paddingVertical: 20 }}>
+                <View style={{ marginTop: 10, borderBottomColor: Colors.background, borderBottomWidth: 1, paddingVertical: 20 }}>
+                    <TotalToPay
+                        amount={(Number(amount) + Number(amount) * 0 / 100).toFixed(2).toString()}
+                        currency={account.compte.devise}
+                    />
+                </View>
+
+                <View style={{ marginTop: 0, borderBottomColor: Colors.background, borderBottomWidth: 1, paddingVertical: 20 }}>
+                    <TransactionFee
+                        amount={(Number(amount) * 0 / 100).toFixed(2).toString()}
+                        currency={account.compte.devise}
+                    />
+                </View>
+
+                <View style={{ marginTop: 0, borderBottomColor: Colors.background, borderBottomWidth: 1, paddingVertical: 20 }}>
 
                     <View style={{
                         flexDirection: 'row',
@@ -201,27 +215,18 @@ function ConfirmTransfertBetweenAccount({ navigation }: { navigation: any }) {
                         </View>
 
                         <View>
-                            <Text style={{ color: Colors.text, fontWeight: 'bold' }}>{amount} {benefAccount.compte.devise}</Text>
+
+                            <Text style={{ color: Colors.text, fontWeight: 'bold' }}>{Number((Number(amount) * Number(rate.hpayRate)).toFixed(2)).toString()} {benefAccount.compte.devise}</Text>
                         </View>
 
                     </View>
 
                 </View>
 
-                <View style={{ marginTop: 0, borderBottomColor: Colors.background, borderBottomWidth: 1, paddingVertical: 20 }}>
-                    <TransactionFee
-                        amount={(Number(amount) * 0 / 100).toFixed(2).toString()}
-                        currency={account.compte.devise}
-                    />
-                </View>
+                
 
 
-                <View style={{ marginTop: 0, borderBottomColor: Colors.background, borderBottomWidth: 1, paddingVertical: 20 }}>
-                    <TotalToPay
-                        amount={(Number(amount) + Number(amount) * 0 / 100).toFixed(2).toString()}
-                        currency={account.compte.devise}
-                    />
-                </View>
+                
 
 
             </ScrollView>

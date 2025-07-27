@@ -113,7 +113,7 @@ function StartScreen({ navigation }: {navigation:any}) {
 
         </View>
     );
-}
+};
 
 const styles = StyleSheet.create({
 

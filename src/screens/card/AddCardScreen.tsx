@@ -142,11 +142,16 @@ function AddCardScreen({ navigation }: { navigation: any }) {
             ipAdress
         ).then((response: any) => {
 
-            Toast.show({
+            /*Toast.show({
                 type: 'success',
                 text1: t('success'),
                 text2: t('account.cardaddedsucceffuly'),
                 position: 'top',
+            });*/
+
+            Toast.show({
+                type: 'succesMessage',
+                props: { text: t('account.cardaddedsucceffuly') },
             });
 
             getClient();
@@ -158,33 +163,49 @@ function AddCardScreen({ navigation }: { navigation: any }) {
            //console.log(error.response.data);
 
             if (error.response.data.message == "Card Dejà utilisé") {
-                Toast.show({
+
+                /*Toast.show({
                     type: 'error',
                     text1: t('Error'),
                     text2: t('account.CardAlreadyUsed') ,
                     position: 'top',
+                });*/
+
+                Toast.show({
+                    type: 'errorMessage',
+                    props: { text: t('account.CardAlreadyUsed') },
                 });
 
             }
 
 
             if (error.response.data.message == "Card not found") {
-                Toast.show({
+                /*Toast.show({
                     type: 'error',
                     text1: t('Error'),
                     text2: t('account.CardAlreadyUsed'),
                     position: 'top',
+                });*/
+
+                Toast.show({
+                    type: 'errorMessage',
+                    props: { text: t('account.CardAlreadyUsed') },
                 });
 
             }
 
 
             if (error.response.data.message == "not valid code pin") {
-                Toast.show({
+                /*Toast.show({
                     type: 'error',
                     text1: t('Error'),
                     text2: t('account.invalidcodepin'),
                     position: 'top',
+                });*/
+
+                Toast.show({
+                    type: 'errorMessage',
+                    props: { text: t('account.invalidcodepin') },
                 });
 
             }

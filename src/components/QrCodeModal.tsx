@@ -8,6 +8,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import Modal from 'react-native-modal';
 import { Colors } from '../themes';
 import { useTranslation } from 'react-i18next';
+import { ApiContext } from '../../App';
 
 
 
@@ -20,9 +21,12 @@ type PropType = {
 
 export default function QrCodeModal({ isVisible, onClose, qrcode }: PropType) {
 
-    const { t, i18n } = useTranslation();
-
+    const {t} = useTranslation();
     console.log(qrcode);
+
+    const getPhotoUrl = (name: string) => {
+        return "https://devmanager.hpaytest.cash/CLIENT/pages/parrainage/qrcodes/" + '/' + name;
+    };
 
 
     return (
@@ -55,18 +59,18 @@ export default function QrCodeModal({ isVisible, onClose, qrcode }: PropType) {
                 </View>*/}
 
                 <View style={{ marginTop: 10 }}>
-                    <Text style={styles.title}>Votre code QR de parrainnage</Text>
+                    <Text style={styles.title}>{t('sponsorTab.yourreferralcode')}</Text>
                 </View>
 
                 <View style={{ alignContent: 'center', alignItems: 'center', marginTop:20 }}>
                     <Image
-                        source={{ uri: qrcode }}
+                        source={{ uri: getPhotoUrl(qrcode) }}
                         style={styles.QRImage}
                     />
                 </View>
 
                 <View style={{ marginTop: 10, alignItems: 'center' }}>
-                    <Text style={{ textAlign: 'center', fontSize: 16, color: Colors.text }}>Invitez vos amis à scanner votre code QR pour télécharger l'application Hpay et beneficiez des points à chacune de leur recharges.</Text>
+                    <Text style={{ textAlign: 'center', fontSize: 16, color: Colors.text }}>{t('sponsorTab.inviteyourfriends')}</Text>
                 </View>
 
 

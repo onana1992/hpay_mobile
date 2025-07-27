@@ -18,7 +18,7 @@ import {
     RefreshControl,
     Platform,
     PermissionsAndroid,
-    KeyboardAvoidingView
+    KeyboardAvoidingView,
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -32,6 +32,7 @@ import { fetchBeficiariesRequest, fetchBeficiariesInMyContactRequest } from '../
 import { saveBenefs, saveNewClients } from '../../store/profilSlice';
 import Contacts from 'react-native-contacts';
 import AvartarButton from '../../components/connected/AvartarButton';
+import { ApiContext } from '../../../App';
 
 
 function FilterBeneficiaireScreen({ navigation }: { navigation: any }) {
@@ -49,7 +50,12 @@ function FilterBeneficiaireScreen({ navigation }: { navigation: any }) {
     const [hasPermission, setHasPermission] = React.useState(false);
     const [contacts, setContacts] = React.useState<number[]>([]);
     const [searchQuery, setSearchQuery] = React.useState('');
+    const { photoUrl } = React.useContext(ApiContext);
 
+
+    const getPhotoUrl = (name: string) => {
+        return photoUrl + '/' + name;
+    };
 
     React.useEffect(() => {
         // Focus on the input when the screen is loaded
@@ -207,9 +213,9 @@ function FilterBeneficiaireScreen({ navigation }: { navigation: any }) {
 
                             <View style={{ flex: 1 }}>
                                 <View style={styles.benefavatar}>
-                                    {filePath ?
+                                    {item.photo != null ?
                                         <Image
-                                            source={filePath ? { uri: filePath } : require('../../assets/avatar.jpg')}
+                                            source={{ uri: getPhotoUrl(item.photo) }}
                                             style={styles.avatarImage}
                                         />
                                         :
@@ -322,15 +328,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#ffffff',
     },
 
-    avatarImage: {
-        height: 100,
-        width: 100,
-        overflow: 'hidden',
-        borderColor: Colors.primary,
-        borderWidth: 1,
-        borderRadius: 30,
-    },
-
     emptycard: {
         backgroundColor: '#e6e4e0',
         padding: 20,
@@ -338,6 +335,15 @@ const styles = StyleSheet.create({
         height: 160,
         alignItems: 'center',
         justifyContent: 'center',
+    },
+
+    avatarImage: {
+        width: 50,
+        height: 50,
+        overflow: 'hidden',
+        borderColor: Colors.primary,
+        borderWidth: 1,
+        borderRadius: 30,
     },
 
 

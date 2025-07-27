@@ -109,6 +109,7 @@ const AmountCurrencyInput: React.FC<MyComponentProps> = ({ amount, setAmount, ac
                 backgroundColor: '#e6e4e0',
                 alignItems: 'center',
                 justifyContent: 'center',
+  
             }}>
                 <Text style={{ fontSize: 22, color: 'white' }}>
                     {item?.emoji}
@@ -217,6 +218,7 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         justifyContent: 'space-between',
         flexWrap: 'nowrap',
+        width:'100%',
     },
 
     modal: {

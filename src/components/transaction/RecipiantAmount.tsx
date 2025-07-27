@@ -1,8 +1,10 @@
+/* eslint-disable react-native/no-inline-styles */
+/* eslint-disable prettier/prettier */
 import React from 'react';
 import {
     StyleSheet,
     View,
-    Text
+    Text,
 } from 'react-native';
 import { Colors } from '../../themes';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
@@ -59,6 +61,7 @@ const styles = StyleSheet.create({
     main: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        alignItems: 'center'
-    }
+        alignItems: 'center',
+    },
+
 });

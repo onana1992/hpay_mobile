@@ -6,6 +6,7 @@ import React from 'react';
 import {  Text, StyleSheet, View, Image } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { Colors } from '../themes';
+import { ApiContext } from '../../App';
 
 
 type PropType = {
@@ -30,6 +31,8 @@ type PropType = {
 export default function HistoryItem({user, clientFrom, clientTo, compteFrom, compteTo, montant, montantFrom, montantTo, devise, heure, index,size, taux }: PropType) {
 
     const { t } = useTranslation();
+    const { photoUrl, setPhotoUrl } = React.useContext(ApiContext);
+
     const getInitials = (phrase: string) => {
         const words = phrase.split(' '); // Divise la phrase en mots
         if (words.length < 2) {
@@ -39,6 +42,10 @@ export default function HistoryItem({user, clientFrom, clientTo, compteFrom, com
 
         // Retourne les initiales des deux premiers mots en majuscule
         return words[0][0].toUpperCase() + words[1][0].toUpperCase();
+    };
+
+    const getPhotoUrl = (name: string) => {
+        return photoUrl + '/' + name;
     };
 
     /*const currencyIcon = (dev:string) => {
@@ -77,12 +84,12 @@ export default function HistoryItem({user, clientFrom, clientTo, compteFrom, com
                         <View style={styles.avatar} >
                             {clientTo.photoClient != null ?
                                 <Image
-                                    source={{ uri: clientTo.photoClient }}
+                                    source={{ uri: getPhotoUrl(clientTo.photoClient) }}
                                     style={styles.avatarImage}
                                 />
                                 :
                                 <View style={{}}>
-                                    <Text style={{ color: Colors.text, fontWeight: 'bold', fontSize: 16 }}>{getInitials(clientTo.prenoms)} </Text>
+                                    <Text style={{ color: Colors.text, fontWeight: 'bold', fontSize: 16 }}>{getInitials(clientTo.prenoms)}</Text>
                                 </View>
 
                             }
@@ -94,7 +101,6 @@ export default function HistoryItem({user, clientFrom, clientTo, compteFrom, com
                                 style={styles.currencyImage}
                             />
                         </View> 
-
                         */}
                     </View>
 
@@ -127,16 +133,17 @@ export default function HistoryItem({user, clientFrom, clientTo, compteFrom, com
                         <View style={styles.avatar} >
                             {clientFrom.photoClient != null ?
                                 <Image
-                                    source={{ uri: clientFrom.photoClient }}
+                                    source={{ uri: getPhotoUrl(clientFrom.photoClient) }}
                                     style={styles.avatarImage}
                                 />
                                 :
                                 <View style={{}}>
-                                    <Text style={{ color: Colors.text, fontWeight: 'bold', fontSize: 16 }}>{getInitials(clientFrom.prenoms)} </Text>
+                                    <Text style={{ color: Colors.text, fontWeight: 'bold', fontSize: 16 }}>{getInitials(clientFrom.prenoms)}</Text>
                                 </View>
 
                             }
                         </View>
+
                         {/*
                             <View style={{}} >
                                 <Image
@@ -144,8 +151,7 @@ export default function HistoryItem({user, clientFrom, clientTo, compteFrom, com
                                     style={styles.currencyImage}
                                 />
                             </View>
-                            */
-                        }
+                         */}
 
                     </View>
 
@@ -160,6 +166,7 @@ export default function HistoryItem({user, clientFrom, clientTo, compteFrom, com
                 <View style={{ flex: 3, alignItems: 'flex-end' }}>
                     <Text style={{ lineHeight: 20, fontSize: 14, color: 'green' }} >+ {Number(montantTo).toFixed(2)} {compteTo.devise}</Text>
                 </View>
+
             </View>
         );
     }
@@ -179,7 +186,7 @@ export default function HistoryItem({user, clientFrom, clientTo, compteFrom, com
                         <View style={styles.avatar} >
                             {clientFrom.photoClient != null ?
                                 <Image
-                                    source={{ uri: clientFrom?.photoClient }}
+                                    source={{ uri: getPhotoUrl(clientFrom?.photoClient) }}
                                     style={styles.avatarImage}
                                 />
                                 :

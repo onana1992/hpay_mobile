@@ -55,6 +55,9 @@ interface VirementDataType {
     agent: string | null;
     montantCompteTo: number | null;
     montantCompteFrom: number | null;
+    realRate: number | null;
+    hpayRate: number | null;
+    cadRate: number | null;
 
 }
 
@@ -72,7 +75,7 @@ function TransfertBetweenAccount({ navigation }: { navigation: any }) {
     const [account, setAccount] = React.useState<any>(accounts[0]);
     const [benefAccount, setBenefAccount] = React.useState<any>(accounts[1]);
     const [benefaccounts, setBenefAccounts] = React.useState<any[]>([]);
-    const [rate, setRate] = React.useState<number>(1);
+    const [rate, setRate] = React.useState<{ hpayRate: string, realRate: string }>({ hpayRate: '1', realRate: '1' });
     const [benefAmount, setBenefAmount] = React.useState<string>('0.00');
     const [ipAdress, setIpAddress] = React.useState<string | null>("");
     const [agent, setAgent] = React.useState<string | null>("");
@@ -100,6 +103,10 @@ function TransfertBetweenAccount({ navigation }: { navigation: any }) {
         agent: null,
         montantCompteTo: null,
         montantCompteFrom: null,
+        realRate: null,
+        hpayRate: null,
+        cadRate: null,
+
     });
 
     React.useEffect(() => {
@@ -153,28 +160,29 @@ function TransfertBetweenAccount({ navigation }: { navigation: any }) {
 
         setBenefAccounts(filterAccounts);
         getRate(account?.compte.devise, filterAccounts[0]?.compte.devise);
-        getCADRate(account?.compte.devise);
+        getCADRate(benefAccount?.compte.devise);
         setBenefAccount(filterAccounts[0]);
     };
+
 
 
     const getRate = async (currencyFrom: string, currencyTo: string) => {
 
         currencyRateRequest(currencyFrom, currencyTo).then((response: any) => {
 
-            //console.log("le taux applicable", response.data.realRate);
-            setRate(response.data.realRate);
+            //console.log("le taux applicable", response.data);
+            setRate(response.data);
 
         }).catch((error: any) => {
-
 
         });
     };
 
 
-    const getCADRate = async (currencyFrom: string) => {
 
-        currencyRateRequest(currencyFrom, 'CAD').then((response: any) => {
+    const getCADRate = async (currencyTo: string) => {
+
+        currencyRateRequest(currencyTo, 'CAD').then((response: any) => {
 
             //console.log("le taux applicable", response.data.realRate);
             setCADRate(response.data.realRate);
@@ -186,12 +194,13 @@ function TransfertBetweenAccount({ navigation }: { navigation: any }) {
     };
 
 
+
     const send = () => {
 
 
         setData({
             ...data,
-            montant: Number((Number(amount) * CADRate).toFixed(2)),
+            montant: Number(Number(amount).toFixed(2)),
             frais: '0',
             fraisMontant: 0,
             idClientFrom: user.client.id,
@@ -203,14 +212,17 @@ function TransfertBetweenAccount({ navigation }: { navigation: any }) {
             programmer: '0',
             deviseFrom: account.compte.devise,
             deviseTo: benefAccount.compte.devise,
-            total: Number((Number(amount) * CADRate).toFixed(2)),
+            total: Number(Number(amount).toFixed(2)), // pas de frais additionel
             tauxConversion: CADRate,
             gainHpayCAD: 0,
             gainHpay: 0,
             ip: ipAdress,
             agent: agent,
-            montantCompteTo: Number((Number(amount) * rate).toFixed(2)),
+            montantCompteTo: Number((Number(amount) * Number(rate.hpayRate)).toFixed(2)),
             montantCompteFrom: Number(Number(amount).toFixed(2)),
+            realRate: Number(rate.realRate),
+            hpayRate: Number(rate.hpayRate),
+            cadRate: Number(CADRate),
         });
 
 
@@ -224,7 +236,7 @@ function TransfertBetweenAccount({ navigation }: { navigation: any }) {
                 rate: rate,
                 data: {
                     ...data,
-                    montant: Number((Number(amount) * CADRate).toFixed(2)),
+                    montant: Number(Number(amount).toFixed(2)),
                     frais: '0',
                     fraisMontant: 0,
                     idClientFrom: user.client.id,
@@ -236,14 +248,16 @@ function TransfertBetweenAccount({ navigation }: { navigation: any }) {
                     programmer: '0',
                     deviseFrom: account.compte.devise,
                     deviseTo: benefAccount.compte.devise,
-                    total: Number((Number(amount) * CADRate).toFixed(2)),
-                    tauxConversion: CADRate,
+                    total: Number(Number(amount).toFixed(2)), // pas de frais additionel
+                    tauxConversion: rate.hpayRate,
                     gainHpayCAD: 0,
                     gainHpay: 0,
                     ip: ipAdress,
-                    agent: agent,
-                    montantCompteTo: Number((Number(amount) * rate).toFixed(2)),
+                    montantCompteTo: Number((Number(amount) * Number(rate.hpayRate)).toFixed(2)),
                     montantCompteFrom: Number(Number(amount).toFixed(2)),
+                    realRate: Number(rate.realRate),
+                    hpayRate: Number(rate.hpayRate),
+                    cadRate: Number(CADRate),
                 },
             }
         );
@@ -259,7 +273,7 @@ function TransfertBetweenAccount({ navigation }: { navigation: any }) {
     React.useEffect(() => {
 
         getRate(account?.compte.devise, benefAccount?.compte.devise);
-        getCADRate(account?.compte.devise);
+        getCADRate(benefAccount?.compte.devise);
 
     }, [benefAccount]);
 
@@ -303,7 +317,7 @@ function TransfertBetweenAccount({ navigation }: { navigation: any }) {
                 {
                     benefAccount != null &&
                     <ChangeRate
-                        rate={Number(rate).toFixed(2).toString()}
+                        rate={Number(rate.hpayRate).toFixed(2).toString()}
                     />
                 }
 
@@ -313,14 +327,14 @@ function TransfertBetweenAccount({ navigation }: { navigation: any }) {
                     <View style={{ marginTop: 20 }}>
 
                         <Text style={{ fontSize: 16, color: Colors.text, fontWeight: 600 }}>{t('transaction.theamounttransferredwillbe')} </Text>
-                        <AmountCurrencyInput
-                            amount={(Number(amount) * rate).toFixed(2).toString()}
-                            setAmount={setBenefAmount}
-                            account={benefAccount}
-                            setAccount={setBenefAccount}
-                            accounts={benefaccounts}
-                            title={t('transaction.whichaccountwouldyouliketosendto')}
-                        />
+                            <AmountCurrencyInput
+                                amount={(Number(amount) * rate.hpayRate).toFixed(2).toString()}
+                                setAmount={setBenefAmount}
+                                account={benefAccount}
+                                setAccount={setBenefAccount}
+                                accounts={benefaccounts}
+                                title={t('transaction.whichaccountwouldyouliketosendto')}
+                            />
                     </View>
 
                 }
@@ -351,7 +365,7 @@ function TransfertBetweenAccount({ navigation }: { navigation: any }) {
             </ScrollView>
 
 
-            <View style={{ justifyContent: 'flex-end', marginBottom: 0, }}>
+            <View style={{ justifyContent: 'flex-end', marginBottom: 0 }}>
                 {
                     benefAccount == null &&
                     <View style={{ flexDirection: 'row', width: '100%' }}>

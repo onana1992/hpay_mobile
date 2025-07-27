@@ -34,6 +34,7 @@ import TotalToPay from '../../components/transaction/TotalToPay';
 import { currencyRateRequest, sendTransfertRequest } from '../../services/request';
 import { NetworkInfo } from 'react-native-network-info';
 import UserAgent from 'react-native-user-agent';
+import RecipiantAmount from '../../components/transaction/RecipiantAmount';
 
 interface VirementDataType {
     montant: number | null;
@@ -56,6 +57,9 @@ interface VirementDataType {
     agent: string | null;
     montantCompteTo: number | null;
     montantCompteFrom: number | null;
+    realRate: number | null;
+    hpayRate: number | null;
+    cadRate: number | null;
 }
 
 
@@ -74,13 +78,12 @@ function TransfertScreen({ navigation }: { navigation: any }) {
     const [account, setAccount] = React.useState<any>(accounts[0]);
     const [benefAccount, setBenefAccount] = React.useState<any>(null);
     const [benefaccounts, setBenefAccounts] = React.useState<any[]>([]);
-    const [rate, setRate] = React.useState<number>(1);
+    const [rate, setRate] = React.useState<{ hpayRate: string, realRate: string }>({ hpayRate: "1", realRate: "1" });
     const [CADRate, setCADRate] = React.useState<number>(1);
     const [benefAmount, setBenefAmount] = React.useState<string>('0.00');
     const [ipAdress, setIpAddress] = React.useState<string | null>("");
     const [agent, setAgent] = React.useState<string | null>("");
 
-    console.log(accounts);
 
 
     const [data, setData] = React.useState<VirementDataType>({
@@ -104,6 +107,10 @@ function TransfertScreen({ navigation }: { navigation: any }) {
         agent: null,
         montantCompteTo: null,
         montantCompteFrom: null,
+        realRate: null,
+        hpayRate:  null,
+        cadRate:  null,
+
     });
 
 
@@ -131,7 +138,7 @@ function TransfertScreen({ navigation }: { navigation: any }) {
 
         setData({
             ...data,
-            montant: Number((Number(amount) * CADRate).toFixed(2)),
+            montant: Number(Number(amount).toFixed(2)),
             frais: '0',
             fraisMontant: 0,
             idClientFrom: user.client.id,
@@ -143,14 +150,17 @@ function TransfertScreen({ navigation }: { navigation: any }) {
             programmer: '0',
             deviseFrom: account.compte.devise,
             deviseTo: benefAccount.compte.devise,
-            total: Number((Number(amount) * CADRate).toFixed(2)),
-            tauxConversion: CADRate,
+            total: Number(Number(amount).toFixed(2)), // pas de frais additionel
+            tauxConversion: Number(rate.hpayRate),
             gainHpayCAD: 0,
             gainHpay: 0,
             ip: ipAdress,
             agent: agent,
-            montantCompteTo: Number((Number(amount) * rate).toFixed(2)),
+            montantCompteTo: Number((Number(amount) * Number(rate.hpayRate)).toFixed(2)),
             montantCompteFrom: Number(Number(amount).toFixed(2)),
+            realRate: Number(rate.realRate),
+            hpayRate: Number(rate.hpayRate),
+            cadRate: Number(CADRate),
         });
 
 
@@ -165,7 +175,7 @@ function TransfertScreen({ navigation }: { navigation: any }) {
                 rate: rate,
                 data: {
                     ...data,
-                    montant: Number((Number(amount) * CADRate).toFixed(2)),
+                    montant: Number(Number(amount).toFixed(2)),
                     frais: '0',
                     fraisMontant: 0,
                     idClientFrom: user.client.id,
@@ -177,14 +187,17 @@ function TransfertScreen({ navigation }: { navigation: any }) {
                     programmer: '0',
                     deviseFrom: account.compte.devise,
                     deviseTo: benefAccount.compte.devise,
-                    total: Number((Number(amount) * CADRate).toFixed(2)),
-                    tauxConversion: CADRate,
+                    total: Number(Number(amount).toFixed(2)), // pas de frais additionel
+                    tauxConversion: rate.hpayRate,
                     gainHpayCAD: 0,
                     gainHpay: 0,
                     ip: ipAdress,
                     agent: agent,
-                    montantCompteTo: Number((Number(amount) * rate).toFixed(2)),
+                    montantCompteTo: Number((Number(amount) * Number(rate.hpayRate)).toFixed(2)),
                     montantCompteFrom: Number(Number(amount).toFixed(2)),
+                    realRate: Number(rate.realRate),
+                    hpayRate:Number(rate.hpayRate),
+                    cadRate: Number(CADRate),
                 },
             }
         );
@@ -317,20 +330,17 @@ function TransfertScreen({ navigation }: { navigation: any }) {
     const getRate = async (currencyFrom: string, currencyTo: string) => {
 
         currencyRateRequest(currencyFrom, currencyTo).then((response: any) => {
-
-            //console.log("le taux applicable", response.data.realRate);
-            setRate(response.data.realRate);
-
+            //console.log("le taux applicable", response.data);
+            setRate(response.data);
         }).catch((error: any) => {
-
 
         });
     };
 
 
-    const getCADRate = async (currencyFrom: string) => {
+    const getCADRate = async (currencyTo: string) => {
 
-        currencyRateRequest(currencyFrom, 'CAD').then((response: any) => {
+        currencyRateRequest(currencyTo, 'CAD').then((response: any) => {
 
             //console.log("le taux applicable", response.data.realRate);
             setCADRate(response.data.realRate);
@@ -352,7 +362,7 @@ function TransfertScreen({ navigation }: { navigation: any }) {
         }
 
         getRate(benefAccount?.compte.devise, account?.compte.devise);
-        getCADRate(account?.compte.devise);
+        getCADRate(benefAccount?.compte.devise);
 
     }, [benef]);
 
@@ -362,7 +372,7 @@ function TransfertScreen({ navigation }: { navigation: any }) {
         //console.log(benefAccount?.compte.devise);
         //console.log(account?.compte.devise);
         getRate(account?.compte.devise, benefAccount?.compte.devise,);
-        getCADRate(account?.compte.devise);
+        getCADRate(benefAccount?.compte.devise);
 
     }, [account, benefAccount]);
 
@@ -408,7 +418,7 @@ function TransfertScreen({ navigation }: { navigation: any }) {
                 {
                     benefAccount != null &&
                     <ChangeRate
-                        rate={Number(rate).toFixed(2).toString()}
+                        rate={Number(rate.hpayRate).toFixed(2).toString()}
                     />
                 }
 
@@ -424,7 +434,7 @@ function TransfertScreen({ navigation }: { navigation: any }) {
                                     fontWeight: 600,
                                 }}> {benef?.prenoms} {t('transaction.willreceive')} </Text>
                             <AmountCurrencyInput
-                                amount={(Number(amount) * rate).toFixed(2).toString()}
+                                amount={(Number(amount) * rate.hpayRate).toFixed(2).toString()}
                                 setAmount={setBenefAmount}
                                 account={benefAccount}
                                 setAccount={setBenefAccount}
@@ -454,6 +464,17 @@ function TransfertScreen({ navigation }: { navigation: any }) {
                             amount={(Number(amount) + Number(amount) * 0 / 10).toFixed(2).toString()}
                             currency={account.compte.devise}
                         />
+                    </View>
+                }
+
+                {
+                    benefAccount != null &&
+                    <View style={{ marginTop: 0, borderBottomColor: Colors.background, borderBottomWidth: 1, paddingVertical: 20 }}>
+                            <RecipiantAmount
+                                name={benef?.prenoms}
+                                amount={(Number(amount) * rate.hpayRate).toFixed(2).toString()}
+                                currency={benefAccount.compte.devise}
+                            />
                     </View>
                 }
 

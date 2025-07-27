@@ -76,6 +76,7 @@ export default function ImagePickerModal({title, isVisible, onClose, captureImag
                     }}>
                         <Ionicons name="chevron-forward-outline" size={16} color={Colors.text} />
                     </View>
+
                </Pressable>
 
                <Pressable style={styles.item}  onPress={() => { chooseFile('photo'); }}>

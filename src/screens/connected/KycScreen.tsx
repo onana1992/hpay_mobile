@@ -58,7 +58,7 @@ function KycScreen({ navigation, user }: { navigation: any, user: any }) {
         nom: user.client.nom,
         prenoms: user.client.prenoms,
         lieu_naissane: user.client.lieu_naissane,
-        telephone: user.username,
+        telephone: user.login,
         telephone2: null, //user.telephone2,
         sexe: user.client.sexe,
         statut_mat: 'C', // user.date_naissance,
@@ -153,12 +153,17 @@ function KycScreen({ navigation, user }: { navigation: any, user: any }) {
 
             setModalVisible(false);
             //setIsloading(false);
-            console.log(_error);
-            Toast.show({
+            //console.log(_error);
+            /*Toast.show({
                 type: 'error',
                 text1: t('failure'),
                 text2: t('kyc.idnumberalreadyused'),
                 position: 'top'
+            });*/
+
+            Toast.show({
+                type: 'errorMessage',
+                props: { text: t('kyc.idnumberalreadyused') }
             });
 
         });

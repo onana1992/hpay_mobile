@@ -26,6 +26,9 @@ import { removeClientRequest } from '../../services/request';
 import { useRoute } from '@react-navigation/native';
 import { saveBenef} from '../../store/profilSlice';
 import { useTranslation } from 'react-i18next';
+import Toast from 'react-native-toast-message';
+import { ApiContext } from '../../../App';
+
 
 function ProfilBenefScreen({ navigation }: { navigation: any }) {
 
@@ -34,9 +37,7 @@ function ProfilBenefScreen({ navigation }: { navigation: any }) {
     const user = useSelector((state: any) => state.profil.user);
     const dispatch = useDispatch();
     const { t } = useTranslation();
-
-    //console.log(client);
-
+    const { photoUrl } = React.useContext(ApiContext);
 
     const devises = [
         { id: '1',  icon: require('../../assets/cad.png'), currency: 'CAD'},
@@ -44,6 +45,10 @@ function ProfilBenefScreen({ navigation }: { navigation: any }) {
         { id: '3',  icon: require('../../assets/gb.png'), currency: 'GBP' },
         { id: '4',  icon: require('../../assets/ue.png'), currency: 'EUR'},
     ];
+
+    const getPhotoUrl = (name: string) => {
+        return photoUrl + '/' + name;
+    };
 
 
     function getInitials(phrase: string) {
@@ -90,10 +95,16 @@ function ProfilBenefScreen({ navigation }: { navigation: any }) {
             dispatch(saveBenef(client));
             navigation.navigate('TransfertScreen');
         } else {
+
+            if (user.client.valider === '2') {
+                Toast.show({
+                    type: 'alertMessage',
+                    props: { text: t('homescreen.completeregistrationmessage') }
+                });
+            }
             navigation.navigate('kyc');
         }
     };
-
 
 
     const Header = () => {
@@ -106,7 +117,7 @@ function ProfilBenefScreen({ navigation }: { navigation: any }) {
                     <View style={styles.avatar}>
                         {client.photo != null ?
                             <Image
-                                source={{ uri: client.photo }}
+                                source={{ uri: getPhotoUrl(client.photo) }}
                                 style={styles.avatarImage}
                             />
                             :

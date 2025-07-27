@@ -1,4 +1,4 @@
-import { client, client2 } from "./axiosClient";
+import { client, client2, clientSochitelProd, clientSochitelTest } from "./axiosClient";
 
 
 // sign in request
@@ -135,6 +135,8 @@ export function addParrain(parrainee,parrain) {
 export function getPaysRequest() {
     return client.get(`/pays`);
 }
+
+
 
 
 // fetch all the country with no cities
@@ -368,7 +370,11 @@ export function postKycRequest(data) {
 
 export function sendTransfertRequest(data) {
 
+    console.log("real rate"+data.realRate)
+
     return client.post(`/virement/enregistrer`,
+
+
 
         {
             "montant": data.montant,
@@ -390,7 +396,10 @@ export function sendTransfertRequest(data) {
             "ip": data.ip,
             "agent": data.agent,
             "montantCompteTo": data.montantCompteTo,
-            "montantCompteFrom": data.montantCompteFrom
+            "montantCompteFrom": data.montantCompteFrom,
+            "realRate": data.realRate,
+            "hpayRate": data.hpayRate,
+            "cadRate": data.cadRate
 
         }
 
@@ -446,14 +455,11 @@ export function readMessage(idMessage) {
 
 
 export function markAsReadRequest(idClient) {
-
     return client.post(`/messages/lire-tous?idclient=${idClient}`,
-
         {
 
         }
     );
-
 };
 
 
@@ -482,6 +488,87 @@ export function sendCreationAccountConfirmEmail(idLoginClient) {
         {
             "idClient": idLoginClient,
         }
+
+    );
+};
+
+export function getParrainees(idClient) {
+    return client.get(`/parrainages/parrain/${idClient}`);
+};
+
+
+
+
+export function getSochitelCountry() {
+    return clientSochitelProd.post(`getCountry/`,
+        {
+            "commande": "getCountriesList"
+        }
+    );
+};
+
+
+
+export function getSochitelOperator(countryId) {
+    return clientSochitelProd.post(`getOperatorsByCountry/`,
+
+        {
+            "commande": "getOperatorsByCountry",
+            "country_id": countryId
+        }
+
+    );
+};
+
+
+
+export function getSochitelService(operatorId) {
+    return clientSochitelProd.post(`getOperatorProduct/`,
+
+        {
+            "operator_id": operatorId
+        }
+
+    );
+};
+
+export function executeSochitelTransaction(operatorId, productId, amount, accountId, ref) {
+
+    console.log({
+        "operator_id": operatorId,
+        "product_id": productId,
+        "amount": Number(amount),
+        "account_id": accountId,
+        "ref": ref,
+        "simulate": 1,
+        "extra": "null"
+    });
+
+    //console.log("https://api.hpaytest.cash/sochitel/executeTransaction/");
+
+    return clientSochitelTest.post(`executeTransaction/`,
+
+        {
+
+            "operator_id": operatorId,
+            "product_id": productId,
+            "amount": Number(amount),
+            "account_id": accountId,
+            "ref": ref,
+            "simulate": 1,
+            "extra": "null"
+        }
+
+        /*{
+            "operator_id": "2704",
+            "product_id": "15696",
+            "amount": 2600.00,
+            "account_id": "2250709992903",
+            "ref": "123456789",
+            "simulate": 1,
+            "extra": "null"	
+
+        }*/
 
     );
 };

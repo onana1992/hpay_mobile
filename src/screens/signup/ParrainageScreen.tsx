@@ -92,12 +92,17 @@ function ParrainageScreen({ navigation}: {navigation:any}) {
             setModalVisible(false);
 
             if (_error.response.status === 404) {
-
+/*
                 Toast.show({
                     type : 'error',
                     text1 : t('sponsorship.failure'),
                     text2 : t('sponsorship.clientnotfound'),
                     position : 'top'
+                });*/
+
+                Toast.show({
+                    type: 'errorMessage',
+                    props: { text: t('sponsorship.clientnotfound') }
                 });
 
             } else {

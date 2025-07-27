@@ -313,11 +313,6 @@ const Step3 = ({ data, setData, step, setStep }: { data: any, setData: any, step
             }
             setVisible(false);
 
-            /*setTimeout(() => {
-
-                sendpicture(response.assets[0].fileName, response.assets[0].uri);
-
-            }, 1000)*/
             
         });
 

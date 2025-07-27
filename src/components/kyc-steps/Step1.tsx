@@ -130,7 +130,6 @@ const Step1 = ({ data, setData, step, setStep }: { data:any, setData:any, step:a
         const dateNaissError = dateNaissValidator(formatDateToYMD(date_naissance.value));
         const nationalityError = nationalityValidator(nationality.value);
 
-    
 
         if (firstNameError || familyNameError || nationalityError || dateNaissError) {
 
@@ -339,6 +338,10 @@ const Step1 = ({ data, setData, step, setStep }: { data:any, setData:any, step:a
                                             onChange={(d: Date | undefined) => setDate_naissance({ value: d, error: '' })}
                                             hasError={!!date_naissance.error}
                                             errorText={date_naissance.error}
+                                            maximumDate={new Date()}
+                                            validRange={{
+                                                endDate: new Date()
+                                            }}
                                         />
                               
                                </View>

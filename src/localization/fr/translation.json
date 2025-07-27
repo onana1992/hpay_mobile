@@ -12,7 +12,7 @@
 
 
   "homescreen": {
-    "notransactionmade": "No transaction made",
+    "notransactionmade": "Aucune transaction effectué",
     "loadinginprogress": "Loading in progress ...",
     "seealltransactions": "Voir toutes les transactions",
     "all": "Tout",
@@ -21,7 +21,8 @@
     "add": "Ajouter",
     "recenttransactions": "Transaction récentes",
     "totalamount": "Solde Total",
-    "currentexchangerate": "Taux de change actuel "
+    "currentexchangerate": "Taux de change actuel ",
+    "completeregistrationmessage": "L'inscription doit être complétée avant de pouvoir réaliser toute opération."
   },
 
 
@@ -167,7 +168,7 @@
 
   "passwordRecover": {
     "title": "Votre numéro de téléphone",
-    "titlemsg": "Veuillez entrer votre numéro de télephone utilisé lors de l'inscription",
+    "titlemsg": "Veuillez entrer votre numéro de télephone (sans indicatif) utilisé lors de l'inscription",
     "id": "Telephone",
     "youremail": "Votre Telephone/email",
     "submit": "Soumettre",
@@ -263,7 +264,14 @@
     "parameters": "Paramètres",
     "language": "Langue",
     "notificationparameters": "Paramètres de notification",
-    "logout": "Se déconnecter"
+    "logout": "Se déconnecter",
+    "lockscreen": "Écran de vérouillage",
+    "enablethepasscodelockscreen": "Activer l'écran de verrouillage par code d'accès",
+    "enablebiometriclockscreen": "Activer l'écran de déverrouillage biométrique",
+    "removethelockscreen": "supprimer l'écran de verrouillage",
+    "togglebiometriclockscreen": "Basculer vers l'écran de verrouillage biométrique",
+    "togglethepasscodelockscreen": "Basculer  vers l'écran de verrouillage par code d'accès",
+    "disablethelockscreen": "Désactivez le vérouillage de l'écran"
   },
 
 
@@ -384,9 +392,47 @@
 
   "sponsorTab": {
     "sponsorship": "Parrainage",
-    "shareyourcode": "Partagez votre code"
+    "shareyourcode": "Partagez votre code",
+    "totalwon": "Total gagné",
+    "referredcustomers": "clients parrainés",
+    "referredcustomer": "client parrainé",
+    "yourreferralcode": "Votre code de parrainage",
+    "inviteyourfriends": "Invitez vos amis à scanner votre code QR pour télécharger l'application Hpay et beneficier des points à chacune de leurs recharges.",
+    "yoursponsoredcustomers": "Vos clients parrainées"
   },
 
+  "passcodeSetScreen": {
+    "pleasechooseanaccesscode": "Veuillez choisir un code d'accès",
+    "pleaseconfirmyouraccesscode": "Veuillez confimer votre  code d'accès",
+    "nomatchcode": "The confirmation code does not match the code entered",
+    "close": "Fermez",
+    "welldone": "Bravo",
+    "accesscodesaved": "Votre code d'accès a été enregistré."
+
+  },
+
+  "BuyScreen": {
+
+    "Purchaseandsubscription": "Achat et abonnement",
+    "buyService": "Achetez les services et abonnements à travers le monde via HPay",
+    "country": "Pays",
+    "selectacountry": "Selectionez un pays",
+    "search": "Rechercher",
+    "operator": "Operateur",
+    "selecttheoperator": "Sélectionnez l'opérateur",
+    "service": "Service",
+    "selecttheservice": "Selectionez le service",
+    "beneficiary": "Bénéficiaire (numéro de téléphone/identifiant de compte)",
+    "accountandamount": "Compte et montant",
+    "fixed": "fixe",
+    "incorrectNumber": "Numéro incorrect",
+    "purchasesummary": "Récapitulatif de l'achat",
+    "amount": "Montnant",
+    "confirm": "confirmez",
+    "beneficiary2": "Bénéficiaire \n(Tel/Id du compte)",
+    "submit": "Soumettre"
+
+  },
 
 
   "loading": "Veuillez patienter ...",
@@ -410,7 +456,7 @@
   "changethelangage": "Changez de langue",
   "requiredDocument": "Document requis",
   "send": "Envoyer",
-  "delete": "Supprimer",
-  
+  "delete": "Supprimer"
+
 
 }

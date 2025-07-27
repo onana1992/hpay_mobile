@@ -42,9 +42,10 @@ function SignInScreen({ navigation }: {navigation:any}){
     const [password, setPassword] = React.useState({ value: '', error: '' })
     const [passwordShow, setPasswordShow] = React.useState(false)
     const [snackVisible, setSnackVisible] = React.useState(false);
+    const onDismissSnackBar = () => setSnackVisible(false);
     const { t } = useTranslation();
     const dispatch = useDispatch();
-    const onDismissSnackBar = () => setSnackVisible(false);
+    
 
 
 
@@ -63,7 +64,7 @@ function SignInScreen({ navigation }: {navigation:any}){
         signInRequest(telephone.value, password.value).then((response: any) => {
 
 
-            //console.log(response.data)
+           // console.log(response.data)
 
             if (response.data.statusCode === 200) {
 
@@ -99,11 +100,11 @@ function SignInScreen({ navigation }: {navigation:any}){
             
         }).catch((error: any) => {
 
-           // console.log(error.response.data)
+            //console.log(error.response.data)
 
             if (error.response.data.statusCode === 401) {
 
-                
+
 
                 if (error.response.data.message === 'Account not activated') {
 
@@ -111,15 +112,26 @@ function SignInScreen({ navigation }: {navigation:any}){
 
                 } else {
 
-                    
-                    Toast.show({
+                    /*Toast.show({
                         type: 'error',
                         text1: t('signinscreen.connexionfailure'),
                         text2: t('signinscreen.loginorpasswordinvalid'),
                         position: 'top'
+                    });*/
+
+                    Toast.show({
+                        type: 'errorMessage',
+                        props: { text: t('signinscreen.loginorpasswordinvalid') }
                     });
+
                 }
 
+            } else {
+
+                Toast.show({
+                    type: 'errorMessage',
+                    props: { text: t('signinscreen.loginorpasswordinvalid') }
+                });
             }
 
             //console.log(error)
@@ -128,6 +140,7 @@ function SignInScreen({ navigation }: {navigation:any}){
 
  
     }
+
 
     // effacement du token
     React.useEffect(() => {
@@ -218,9 +231,6 @@ function SignInScreen({ navigation }: {navigation:any}){
                         </View>
 
                     </View>
-
-                    
-                    
                 </Pressable>
             
             

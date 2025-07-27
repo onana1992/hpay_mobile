@@ -57,7 +57,7 @@ function VerificationScreen({ navigation }: { navigation: any }) {
 
                 if (response.data.statusCode === 200) {
                     setModalVisible(false);
-                    console.log('okay');
+                    //console.log('okay');
                     navigation.navigate('NewPassword', {phone:phone});
                 }
 
@@ -69,11 +69,16 @@ function VerificationScreen({ navigation }: { navigation: any }) {
                 if (error.response.data.statusCode) {
 
                     setModalVisible(false);
-                    Toast.show({
+                    /*Toast.show({
                         type: 'error',
                         text1: t('passwordRecover.failure'),
                         text2: t('passwordRecover.incorrectverificationcode'),
                         position: 'top'
+                    });*/
+
+                    Toast.show({
+                        type: 'errorMessage',
+                        props: { text:  t('passwordRecover.incorrectverificationcode') }
                     });
 
                 }
@@ -104,13 +109,17 @@ function VerificationScreen({ navigation }: { navigation: any }) {
             if (error.response.data.statusCode) {
 
                 setModalVisible(false);
-                Toast.show({
+                /*Toast.show({
                     type: 'error',
                     text1: t('passwordRecover.failure'),
                     text2: t('passwordRecover.noaccoundfound'),
                     position: 'top'
-                });
+                });*/
 
+                Toast.show({
+                    type: 'errorMessage',
+                    props: { text: t('passwordRecover.noaccoundfound') }
+                });
             }
            
         })

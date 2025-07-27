@@ -35,6 +35,7 @@ import Toast from 'react-native-toast-message';
 import { Checkbox } from 'react-native-paper';
 import Modal from 'react-native-modal';
 import Feather from 'react-native-vector-icons/Feather';
+import ChangeRate1 from '../../components/transaction/ChangeRate1';
 
 
 function ConfirmTransfert({ navigation }: { navigation: any }) {
@@ -77,7 +78,6 @@ function ConfirmTransfert({ navigation }: { navigation: any }) {
 
     const confirmSend = () => {
 
-        console.log(data);
        setModalVisible(true);
        sendTransfertRequest(data).then((response) => {
 
@@ -90,7 +90,7 @@ function ConfirmTransfert({ navigation }: { navigation: any }) {
 
         }).catch((error) => {
 
-           // console.log(error.response.data);
+            //console.log(error.response.data);
             setTitle('transaction.transferfailed');
             setStatut(false);
             setModalVisible(false);
@@ -150,7 +150,6 @@ function ConfirmTransfert({ navigation }: { navigation: any }) {
                     setMessage('transaction.Dailytransferlimitreached');
                 }
 
-
             }
 
 
@@ -183,10 +182,9 @@ function ConfirmTransfert({ navigation }: { navigation: any }) {
                 <Text style={styles.title}>{t('transaction.Summaryofyourtransfer')}</Text>
 
                     <View style={{ marginTop: 30, borderBottomColor: Colors.background, borderBottomWidth: 1, paddingVertical: 20 }}>
-                        <RecipiantAmount
-                            name={benef?.prenoms}
-                            amount={(Number(amount) * rate).toFixed(2).toString()}
-                            currency={benefAccount.compte.devise}
+                        <TotalToPay
+                            amount={(Number(amount) + Number(amount) * 0 / 100).toFixed(2).toString()}
+                            currency={account.compte.devise}
                         />
                     </View>
 
@@ -197,26 +195,21 @@ function ConfirmTransfert({ navigation }: { navigation: any }) {
                         />
                     </View>
 
-
                     <View style={{ marginTop: 0, borderBottomColor: Colors.background, borderBottomWidth: 1, paddingVertical: 20 }}>
-                        <TotalToPay
-                            amount={(Number(amount) + Number(amount) * 0 / 100).toFixed(2).toString()}
-                            currency={account.compte.devise}
+                        <ChangeRate1
+                            value={Number(rate.hpayRate).toFixed(2).toString()}
                         />
                     </View>
 
-                    {/*<View style={{ marginTop: 30, flex: 1, flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'flex-start' }}>
-                            <Checkbox
-                                status={checked ? 'checked' : 'unchecked'}
-                                onPress={() => {
-                                    setChecked(!checked);
-                                }}
-                                color={Colors.primary}
-                            />
 
-                        <Text style={{ color: Colors.text }}>{t('transaction.confirmmsg')} </Text>
+                    <View style={{ marginTop: 0, borderBottomColor: Colors.background, borderBottomWidth: 1, paddingVertical: 20 }}>
+                        <RecipiantAmount
+                            name={benef?.prenoms}
+                            amount={Number((Number(amount) * Number(rate.hpayRate)).toFixed(2)).toString()}
+                            currency={benefAccount.compte.devise}
+                        />
+                    </View>
 
-                    </View>*/}
 
 
             </ScrollView>
@@ -225,12 +218,11 @@ function ConfirmTransfert({ navigation }: { navigation: any }) {
             <View style={{ justifyContent: 'flex-end', marginBottom: 0, }}>
                 <View style={{ flexDirection: 'row', width: '100%' }}>
                     <View style={{ flex: 1 }}>
-                    <TouchableOpacity style={styles.addbutton} onPress={() => { send(); }}>
-                        <Text style={styles.addbuttonText}>{t('transaction.Confirmthetransfer')}</Text>
+                        <TouchableOpacity style={styles.addbutton} onPress={() => { send(); }}>
+                            <Text style={styles.addbuttonText}>{t('transaction.Confirmthetransfer')}</Text>
                         </TouchableOpacity>
-                 </View>
+                    </View>
                 </View>
-
             </View>
 
 
@@ -281,11 +273,11 @@ const styles = StyleSheet.create({
         marginTop: 10,
     },
 
-
     rightButton: {
         marginRight: 0,
         marginLeft: 10,
     },
+
 
     input: {
         height: '100%',
@@ -319,7 +311,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
-
 
     cancelbuttonText: {
         color: Colors.text,

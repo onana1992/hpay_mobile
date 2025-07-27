@@ -53,11 +53,16 @@ function TelVerificationScreen({ navigation}: {navigation:any,}) {
 
             if (response.data.statusCode === 200) {
 
-                Toast.show({
+                /*Toast.show({
                     type: 'success',
                     text1: t('telVerificationcreen.coderenewtitle'),
                     text2: t('telVerificationcreen.coderenewmessage'),
                     position: 'top'
+                });*/
+
+                Toast.show({
+                    type: 'succesMessage',
+                    props: { text: t('telVerificationcreen.coderenewmessage') }
                 });
 
             } else {
@@ -70,12 +75,18 @@ function TelVerificationScreen({ navigation}: {navigation:any,}) {
             console.log(_error.response.data)
             setModalVisible(false)
             if (_error.response.status === 401) {
-                Toast.show({
+                /*Toast.show({
                     type: 'error',
                     text1: t('telVerificationcreen.telverificationfailure'),
                     text2: t('telVerificationcreen.novalidcode'),
                     position: 'top'
+                });*/
+
+                Toast.show({
+                    type: 'errorMessage',
+                    props: { text: t('telVerificationcreen.novalidcode') }
                 });
+
             } else {
 
 
@@ -115,12 +126,17 @@ function TelVerificationScreen({ navigation}: {navigation:any,}) {
                 console.log(_error.response.data)
                 setModalVisible(false)
                 if (_error.response.status === 401) {
-                    Toast.show({
+                    /*Toast.show({
                         type: 'error',
                         text1: t('telVerificationcreen.telverificationfailure'),
                         text2: t('telVerificationcreen.novalidcode'),
                         position: 'top'
+                    });*/
+                    Toast.show({
+                        type: 'errorMessage',
+                        props: { text: t('telVerificationcreen.novalidcode') }
                     });
+
                 } else {
 
 
