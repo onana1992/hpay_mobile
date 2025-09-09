@@ -21,10 +21,7 @@ import {
     FlatList,
     SectionList,
     ActivityIndicator,
-    Platform,
-    Alert,
-    Dimensions,
-    useContext
+    Platform
 } from 'react-native';
 
 import { useSelector, useDispatch } from 'react-redux';
@@ -51,7 +48,6 @@ import { ApiContext } from '../../../App';
 
 function HomeScreen({ navigation, user }: { navigation: any, user: any }) {
 
-    //console.log(user.comptes);
 
     const { t } = useTranslation();
     const dispatch = useDispatch();
@@ -592,9 +588,12 @@ function HomeScreen({ navigation, user }: { navigation: any, user: any }) {
     };
 
     const getPhotoUrl = (name: string) => {
-        //console.log(photoUrl, "/", name);
+       
 
-        return photoUrl + "/" + name;
+        const url = photoUrl + name;
+        console.log(url);
+
+        return photoUrl + name;
     };
 
 

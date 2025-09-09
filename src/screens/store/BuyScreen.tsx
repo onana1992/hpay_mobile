@@ -21,10 +21,11 @@ import { Colors } from '../../themes';
 import { useTranslation } from 'react-i18next';
 import LoadingModal from '../../components/LoadingModal';
 import { Dropdown } from 'react-native-element-dropdown';
-import { currencyRateRequest, getSochitelCountry, getSochitelOperator, getSochitelService } from '../../services/request';
+import { currencyRateRequest, getSochitelCountry, getSochitelOperator, getSochitelRate, getSochitelService } from '../../services/request';
 import { useSelector } from 'react-redux';
 import { TextInput as Input } from 'react-native-paper';
 import AmountCurrencyInput2 from '../../components/transaction/AmountCurrencyInput2';
+import AmountCurrencyInput3 from '../../components/transaction/AmountCurrencyInput3';
 import TextInput2 from '../../components/TextInput2';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
@@ -37,7 +38,7 @@ function BuyScreen({ navigation }: { navigation: any }) {
 
     const { t } = useTranslation();
     const [modalVisible, setModalVisible] = React.useState(false);
-    const [country, setCountry] = React.useState(null);
+    const [country, setCountry] = React.useState<null|any>(null);
     const [operator, setOperator] = React.useState(null);
     const [service, setService] = React.useState(null);
     const [operators, setOperators] = React.useState([]);
@@ -49,8 +50,9 @@ function BuyScreen({ navigation }: { navigation: any }) {
     const [account, setAccount] = React.useState<any>(accounts[0]);
     const [telephone, setTelephone] = React.useState<string>('');
     const [fixedAmount, setFixedAmount] = React.useState<boolean>(false);
-    const [rate, setRate] = React.useState<{ hpayRate: string, realRate: string }>({ hpayRate: '1', realRate: '1' });
+    const [rate, setRate] = React.useState<null|any>(null);
     const [idRequired, setIdRequired] = React.useState<boolean>(false);
+    const [currency, setCurrency] = React.useState<string>('');
 
     const servicesWithId = [
         'Mobile Top Up',
@@ -210,6 +212,7 @@ function BuyScreen({ navigation }: { navigation: any }) {
 
 
     const changeCountry = (item: any) => {
+
         setCountry(item);
         setOperators([]);
         setOperator(null);
@@ -242,10 +245,7 @@ function BuyScreen({ navigation }: { navigation: any }) {
         setService(item);
         if (item.price_type === 'fixed') {
             setFixedAmount(true);
-           // setAmount(Number((Number(item.price_min_operator) * Number(rate.realRate)).toString()).toFixed(2));
-            setSamount(item.price_min_operator);
-            setAmount((Number(item.price_min_operator) * Number(rate.realRate)).toFixed(2).toString())
-              //  parseFloat(((parseFloat((item.price_min_operator) * parseFloat((rate.realRate))).toFixed(2).toString());
+            setAmount(item.price_min_operator);
 
         } else {
             setAmount('0.00');
@@ -255,7 +255,25 @@ function BuyScreen({ navigation }: { navigation: any }) {
     }
 
 
-    const getRate = async (currencyFrom: string, currencyTo: string) => {
+    const getRate = (currency_from: string, currency_to: string, buyAmount: number) => {
+
+        getSochitelRate(currency_from, currency_to, buyAmount, 2).then((response) => {
+
+
+            console.log('rate', response.data);
+
+            setRate(response.data);
+            //setFrais(Number(response.data?.hpay_rate) * 2 / 100);
+            // setSochitelRate(response.data);
+
+        }).catch((error) => {
+
+
+        });
+
+    };
+
+   /* const getRate = async (currencyFrom: string, currencyTo: string) => {
 
         currencyRateRequest(currencyFrom, currencyTo).then((response: any) => {
             //console.log("le taux applicable", response.data);
@@ -274,7 +292,7 @@ function BuyScreen({ navigation }: { navigation: any }) {
         }).catch((error: any) => {
 
         });
-    };
+    };*/
 
 
 
@@ -298,9 +316,19 @@ function BuyScreen({ navigation }: { navigation: any }) {
 
 
     React.useEffect(() => {
-        getRate(country?.country_currency, account?.compte.devise,);
+       // getRate(country?.country_currency, account?.compte.devise,);
         //getCADRate(account?.compte.devise);
     }, [account, country]);
+
+
+
+    React.useEffect(() => {
+
+        if (country !== null && amount != null ) {
+            getRate(country?.country_currency, account?.compte.devise,Number(amount))
+        }
+        
+    }, [country, amount,account]);
 
 
     return (
@@ -416,22 +444,38 @@ function BuyScreen({ navigation }: { navigation: any }) {
                         </View>
                     </View>
 
-                    
+
+
+                    <View style={{ alignContent: 'flex-end', justifyContent: 'flex-end', marginTop: 20 }}>
+                        <Text style={styles.inputTitleText}>{t('BuyScreen.amount')}*</Text>
+                        <View style={{ flexDirection: 'row', width: '100%', }}>
+                            <AmountCurrencyInput3
+                                amount={amount}
+                                setAmount={setAmount}
+                                currency={country?.country_currency}
+                                disabled={fixedAmount}
+                            />
+                        </View>
+                    </View>
+
+
 
                     <View style={{ alignContent: 'flex-end', justifyContent: 'flex-end', marginTop: 20 }}>
                         <Text style={styles.inputTitleText}>{t('BuyScreen.accountandamount')}*</Text>
                         <View style={{ flexDirection: 'row', width: '100%', }}>
                             <AmountCurrencyInput2
-                                amount={amount}
+                                amount={String(rate?.amountConverted?.toFixed(2)) == "undefined" ? "0.00" : String(rate?.amountConverted?.toFixed(2)) }
                                 setAmount={setAmount}
                                 account={account}
                                 setAccount={setAccount}
                                 accounts={accounts}
                                 title={t('transaction.whichaccountdoyouwanttosendfrom')}
-                                disabled={fixedAmount}
+                                disabled={true}
                             />
                         </View>
-                        {country &&
+
+
+                        {/*country &&
                             <View>
                                 {fixedAmount ?
                                     <Text style={[styles.inputTitleText, { marginTop: -5 }]}> {samount} {service?.currency_operator}</Text>
@@ -439,8 +483,12 @@ function BuyScreen({ navigation }: { navigation: any }) {
                                     <Text style={[styles.inputTitleText, { marginTop: -5 }]}> {(amount / rate.realRate).toFixed(2)} {service?.currency_operator}</Text>
                                 }
                             </View>
-                        }
+                        */}
+
                     </View>
+
+
+
 
                     {
                         idRequired &&

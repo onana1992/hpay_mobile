@@ -380,7 +380,10 @@
     "makeadeposit": "Make a deposit",
     "payatthemerchant": "Payment to the Seller",
     "Dailytransferlimitreached": "Daily transfer limit reached",
-    "limithasbeenreached": "The daily transferable amount limit has been reached"
+    "limithasbeenreached": "The daily transferable amount limit has been reached",
+    "cashin": "Cash in",
+    "cashout": "Cash out",
+    "loadinginprogress": "Loading ..."
   },
 
 
@@ -417,14 +420,26 @@
     "service": "Service",
     "selecttheservice": "Select the service",
     "beneficiary": "Beneficiary (Phone/Account Id)",
-    "accountandamount": "Account and amount",
+    "accountandamount": "Account and total to pay",
     "fixed": "fixed",
     "incorrectNumber": "incorrect Number",
     "purchasesummary": "Purchase summary",
     "amount": "Amount",
     "confirm": "confirm",
     "beneficiary2": "Beneficiary \n (Phone/Account Id)",
-    "submit": "Soumettre"
+    "submit": "Submit",
+    "totaltopay" :  "Total to pay"
+  },
+
+
+  "history": {
+
+    "internaltransfer": "Internal transfer",
+    "hpaystorepurchases": "hpay store purchases",
+    "cashin": "Cash in",
+    "cashout": "Cash out",
+    "seemore": "See more"
+
   },
 
 

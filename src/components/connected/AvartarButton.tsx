@@ -17,7 +17,7 @@ import { useNavigation } from '@react-navigation/native';
 interface MyComponentProps {
     profilUrl: null | any;
     prenom: string;
-}
+};
 
 
 
@@ -100,6 +100,5 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#e6e4e0',
     },
-
 
 });

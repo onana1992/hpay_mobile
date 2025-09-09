@@ -78,6 +78,8 @@ function ConfirmTransfert({ navigation }: { navigation: any }) {
 
     const confirmSend = () => {
 
+       //console.log(data);
+
        setModalVisible(true);
        sendTransfertRequest(data).then((response) => {
 
@@ -86,8 +88,6 @@ function ConfirmTransfert({ navigation }: { navigation: any }) {
             setStatut(true);
             setModalVisible(false);
             setCompleteModalOpen(true);
-
-
         }).catch((error) => {
 
             //console.log(error.response.data);
@@ -99,46 +99,27 @@ function ConfirmTransfert({ navigation }: { navigation: any }) {
             if (error.response.data.statusCode === 401) {
 
                 if (error.response.data.message === 'insufficient balance') {
-                    /*Toast.show({
-                        type: 'error',
-                        text1: t('Error'),
-                        text2: t('transaction.transfercompletedsuccessfully'),
-                        position: 'top',
-                    });*/
+
                     setMessage('transaction.insufficientbalance');
                 }
 
                 else if (error.response.data.message === 'client to not found') {
-                    /*Toast.show({
-                        type: 'error',
-                        text1: t('Error'),
-                        text2: t('transaction.customeraccountisnotvalidated'),
-                        position: 'top',
-                    });*/
+
                     setMessage('transaction.customeraccountisnotvalidated');
                 }
 
                 else if (error.response.data.message === 'compte from not found') {
-                    /*Toast.show({
-                        type: 'error',
-                        text1: t('Error'),
-                        text2: t('transaction.issueraccoundclosed'),
-                        position: 'top',
-                    });*/
+
                     setMessage('transaction.issueraccoundclosed');
                 }
 
                 else if (error.response.data.message === 'compte to not found') {
-                    /*Toast.show({
-                        type: 'error',
-                        text1: t('Error'),
-                        text2: t('transaction.benefclosedaccount'),
-                        position: 'top',
-                    });*/
+
                     setMessage('transaction.benefclosedaccount');
                 }
 
                 else if (error.response.data.message === 'montant limite par transfert dépassé') {
+
                     setMessage('transaction.amountexceedsauthorizedlimit');
                 }
 
@@ -153,7 +134,7 @@ function ConfirmTransfert({ navigation }: { navigation: any }) {
             }
 
 
-        });
+       });
     };
 
 

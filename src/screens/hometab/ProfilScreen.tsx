@@ -59,7 +59,7 @@ function ProfilScreen({ navigation }: { navigation: any }) {
     }, []);
 
     const getPhotoUrl = (name: string) => {
-        return photoUrl + '/' + name;
+        return photoUrl + name;
     };
 
 
@@ -361,6 +361,7 @@ function ProfilScreen({ navigation }: { navigation: any }) {
 
 
                 <View style={{ backgroundColor: '#ffff', marginHorizontal: 10, borderRadius: 20, paddingTop: 15, paddingBottom: 15 }}>
+
                     <View style={{ paddingHorizontal: 10 }}>
                         <Text style={{ color: Colors.text, fontSize: 22, fontWeight: 'bold', paddingVertical: 10 }}>{t('profil.securityandconfidentiality')}</Text>
                     </View>
@@ -373,21 +374,21 @@ function ProfilScreen({ navigation }: { navigation: any }) {
                         <ListItem.Chevron />
                     </ListItem>
 
-                    <ListItem bottomDivider onPress={() => setLockModalvisible(true)} >
+                    {/*<ListItem bottomDivider onPress={() => setLockModalvisible(true)} >
                         <Ionicons name="shield-checkmark-outline" size={22} color={Colors.text} />
                         <ListItem.Content>
                             <ListItem.Title style={{ fontSize: 14, }}>{t('profil.lockscreen')}</ListItem.Title>
                         </ListItem.Content>
                         <ListItem.Chevron />
-                    </ListItem>
+                    </ListItem>*/}
 
-                    <ListItem bottomDivider onPress={() => alert()} >
+                    {/*<ListItem bottomDivider onPress={() => alert()} >
                         <AntDesign name="key" size={22} color={Colors.text} />
                         <ListItem.Content>
                             <ListItem.Title style={{ fontSize: 14, }}>{t('profil.2faAuthentication')}</ListItem.Title>
                         </ListItem.Content>
                         <ListItem.Chevron />
-                    </ListItem>
+                    </ListItem>*/}
 
                 </View>
 

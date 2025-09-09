@@ -534,7 +534,7 @@ export function getSochitelService(operatorId) {
 
 export function executeSochitelTransaction(operatorId, productId, amount, accountId, ref) {
 
-    console.log({
+    /*console.log({
         "operator_id": operatorId,
         "product_id": productId,
         "amount": Number(amount),
@@ -542,14 +542,13 @@ export function executeSochitelTransaction(operatorId, productId, amount, accoun
         "ref": ref,
         "simulate": 1,
         "extra": "null"
-    });
+    });*/
 
     //console.log("https://api.hpaytest.cash/sochitel/executeTransaction/");
 
     return clientSochitelTest.post(`executeTransaction/`,
 
         {
-
             "operator_id": operatorId,
             "product_id": productId,
             "amount": Number(amount),
@@ -573,3 +572,63 @@ export function executeSochitelTransaction(operatorId, productId, amount, accoun
     );
 };
 
+
+export function getCashInHistory(idClient, idCompte, sortDirection, page, size, dateStart, dateEnd) {
+
+    //alert()
+    //console.log("Le client ",idClient);
+
+    if (dateStart != null && dateEnd != null) {
+        return client.get(`/depot-retrait/search-depots?idClient=${idClient}&idCompte=${idCompte}&sortDirection=${sortDirection}&page=${page}&size=${size}&dateStart=${dateStart}&dateEnd=${dateEnd}`);
+    } else {
+        return client.get(`/depot-retrait/search-depots?idClient=${idClient}&idCompte=${idCompte}&sortDirection=${sortDirection}&page=${page}&size=${size}`);
+    }
+
+
+};
+
+export function getCashOutHistory(idClient, idCompte, sortDirection, page, size, dateStart, dateEnd) {
+
+    if (dateStart != null && dateEnd != null) {
+        return client.get(`/depot-retrait/search-retraits?idClient=${idClient}&idCompte=${idCompte}&sortDirection=${sortDirection}&page=${page}&size=${size}&dateStart=${dateStart}&dateEnd=${dateEnd}`);
+    } else {
+        return client.get(`/depot-retrait/search-retraits?idClient=${idClient}&idCompte=${idCompte}&sortDirection=${sortDirection}&page=${page}&size=${size}`);
+    }
+};
+
+export function getPurchaseHistory (idClient, idCompte, sortDirection, page, size, dateStart, dateEnd) {
+
+    if (dateStart != null && dateEnd != null) {
+        return client.get(`/sochitel/transactions?idClient=${idClient}&idCompte=${idCompte}&sortDirection=${sortDirection}&page=${page}&size=${size}&dateStart=${dateStart}&dateEnd=${dateEnd}`);
+    } else {
+        return client.get(`/sochitel/transactions?idClient=3&idCompte=${idCompte}&sortDirection=${sortDirection}&page=${page}&size=${size}`);
+    }
+};
+
+
+
+export function saveSochitel(data) {
+    return client.post(`/sochitel/insert`,data
+
+    );
+};
+
+
+
+export function getSochitelRate(currency_from, currency_to, amount, hpay_commission) {
+    return clientSochitelProd.post(`https://api.hpaytest.cash/sochitel/rate/`,
+
+        {
+            "currency_from": currency_from,
+            "currency_to": currency_to,
+            "amount": amount,
+            "hpay_commission": hpay_commission
+        }
+
+    );
+};
+
+
+export function getAccount(idCompte) {
+    return client.get(`/compte/${idCompte}`);
+};

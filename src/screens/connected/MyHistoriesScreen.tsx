@@ -1,4 +1,6 @@
-﻿/* eslint-disable curly */
+﻿/* eslint-disable eqeqeq */
+/* eslint-disable curly */
+/* eslint-disable curly */
 /* eslint-disable no-alert */
 /* eslint-disable react/no-unstable-nested-components */
 /* eslint-disable @typescript-eslint/no-unused-vars */
@@ -21,11 +23,18 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import { getHistory } from '../../services/request';
+import { getHistory, getCashInHistory, getCashOutHistory,getPurchaseHistory } from '../../services/request';
 import { saveBenefs, saveNewClients } from '../../store/profilSlice';
 import { formatDate, formatHeure } from '../../helpers/functions';
 import HistoryItem from '../../components/HistoryItem';
 import { ActivityIndicator } from 'react-native';
+import { Item } from 'react-native-paper/lib/typescript/components/List/List';
+import VirementHistory from '../../components/history/VirementHistory';
+import CashInItem from '../../components/history/CashInItem';
+import CashOutHistory from '../../components/history/CashOutHistory';
+import CashinHistory from '../../components/history/CashinHistory';
+import HpayStoreHistory from '../../components/history/HpayStoreHistory';
+
 
 
 function MyHistoriesScreen({ navigation }: { navigation: any }) {
@@ -41,190 +50,52 @@ function MyHistoriesScreen({ navigation }: { navigation: any }) {
     const [size, setSize] = React.useState<number>(8);
     const [totalElement, setTotalElement] = React.useState<number>(0);
     const [histories, setHistories] = React.useState<any[]>([]);
+    const [purchasesHistories, setPurchasesHistories] = React.useState<any[]>([]);
+    const [type, setType] = React.useState('1');
 
-    React.useEffect(() => {
+    const types = [
+        {
+            id: '1',
+            name: t('history.internaltransfer') ,
+        },
 
-        fetchHistory(user?.client?.id,'','desc',page,size);
+        {
+            id: '2',
+            name: t('history.hpaystorepurchases'),
 
-    }, []);
+        },
 
+        {
+            id: '3',
+            name: t('history.cashin'),
+        },
 
-    const fetchHistory = (
-        idClient: string,
-        idCompte: string,
-        sortDirection: string,
-        pageN: number,
-        sizeN:number) => {
+        {
+            id: '4',
+            name: t('history.cashout'),
+        },
 
-        getHistory(
-            idClient,
-            idCompte,
-            sortDirection,
-            pageN,
-            sizeN
-        ).then((response) => {
+    ];
 
-            //console.log(response.data.content);
-            const grouped: any = {};
-            setSize(response.data.numberOfElements);
-            setTotalElement(response.data.totalElements);
-            setTotalPages(response.data.totalPages);
+    const changeType = (item: any) => {
 
-            setContent([...content, ...response.data.content]);
-            const newContent = [...content, ...response.data.content];
+        setType(item.id);
 
-            newContent.forEach(item => {
-                const date = formatDate(item.dateInitiale);
-                const heure = formatHeure(item.dateInitiale);
+        if (item.id == '1') {
+           // fetchHistory(user?.client?.id, '', 'desc', page, size);
+        }
 
-                if (!grouped[date]) {
-                    grouped[date] = [];
-                }
+        if (item.id == '2') {
+           // fetchSochitel(user?.client?.id, '', 'desc', page, size, null, null);
+        }
 
-                grouped[date].push({
-                    id: item.idVirementInterne,
-                    montant: item.montant,
-                    total: item.total,
-                    devise: item.deviseFrom,
-                    raison: item.virementRaison,
-                    clientFrom: item.clientFrom,
-                    clientTo: item.clientTo,
-                    compteFrom: item.compteFrom,
-                    compteTo: item.compteTo,
-                    numVirement: item.virementNum,
-                    heure: heure,
-                    tauxConversion: item.tauxConversion,
-                    montantTo: item.montantTo,
-                    montantFrom: item.montantFrom,
-                });
-            });
+        else if (item.id == '3') {
+           // fetchCashIn(user?.client?.id, '', 'desc', page, size, null, null);
+        }
 
-            const DATA = Object.keys(grouped).map(date => ({
-                title: date,
-                data: grouped[date],
-            }));
-
-            setHistories(DATA);
-            setLoading(false);
-
-
-        }).catch((error) => {
-
-            console.log(error.response);
-            setLoading(false);
-        });
-
-    };
-
-
-    const fetchMore = () => {
-        setPage((prev) => prev + 1);
-        fetchHistory(user?.client?.id, '', 'desc', page + 1, size);
-    };
-
-
-
-    const EmptyCard = () => {
-
-        return (
-            <View style={styles.emptycard}>
-                {
-                    loading ?
-                    <View>
-                            <ActivityIndicator size="small" color={Colors.primary} />
-                            <Text style={{ color: Colors.text }}>Chargement en cours ...</Text>
-                    </View>
-                    :
-                    <Text style={{ color: Colors.text }}>Aucune transaction effectué</Text>
-                }
-            </View>
-        );
-
-    };
-
-
-    const Footer = () => {
-
-        return (
-            <View>
-                {
-                    totalPages > page + 1 &&
-                    < View style={{ flexDirection: 'row', width: '100%', marginTop: 20 }}>
-                        <View style={{ flex: 1 }}>
-                                <TouchableOpacity style={styles.morebutton} onPress={() => { fetchMore(); }}>
-                                <Text style={styles.morebuttonText}> Voir plus </Text>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-                }
-            </View>
-        );
-
-    };
-
-
-
-    const Header = () => {
-
-        return (
-            <View style={{}}>
-                <Text style={styles.title}>Historiques des transactions </Text>
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 10, marginTop:10 }}>
-                    <View>
-                        <TouchableOpacity
-                            style={{
-                                flexDirection: 'row',
-                                justifyContent: 'space-evenly',
-                                borderWidth: 2,
-                                borderColor: Colors.primary,
-                                padding:10,
-                                width: 120,
-                                borderRadius: 10,
-
-
-                            }}
-                        >
-                            <View>
-                                <Fontisto name="equalizer" size={18} color={Colors.primary}/>
-                            </View>
-
-                            <View>
-                                <Text style={{ color: Colors.primary, fontWeight: 600, fontSize:18 }}>Filtre</Text>
-                            </View>
-                        </TouchableOpacity>
-                    </View>
-
-                    <View>
-                        <TouchableOpacity
-                            style={{
-                                flexDirection: 'row',
-                                justifyContent: 'space-evenly',
-                                borderWidth: 2,
-                                borderColor: Colors.primary,
-                                padding: 10,
-                                width: 120,
-                                borderRadius: 10,
-
-
-                            }}
-                        >
-                            <View>
-                                <FontAwesome name="sort-amount-asc" size={18} color={Colors.primary} />
-                            </View>
-
-                            <View>
-                                <Text style={{
-                                    color: Colors.primary,
-                                    fontWeight: 600,
-                                    fontSize: 18,
-                                }}>DESC</Text>
-                            </View>
-                        </TouchableOpacity>
-                    </View>
-                </View>
-            </View>
-        );
-
+        else if (item.id == '4') {
+           // fetchCashOut(user?.client?.id, '', 'desc', page, size, null, null);
+        }
     };
 
 
@@ -247,35 +118,61 @@ function MyHistoriesScreen({ navigation }: { navigation: any }) {
                 </TouchableOpacity>
             </View>
 
-            <SectionList
-                sections={histories}
-                keyExtractor={(item) => item.id.toString()}
-                renderItem={({ item, index }) => (
+            <View>
+                <Text style={styles.title}>Historiques des transactions</Text>
+            </View>
 
-                    <HistoryItem
-                        user={user}
-                        clientFrom={item.clientFrom}
-                        clientTo={item.clientTo}
-                        compteFrom={item.compteFrom}
-                        compteTo={item.compteTo}
-                        montant={item.montant}
-                        devise={item.devise}
-                        heure={item.heure}
-                        index={index}
-                        size={size}
-                        taux={item.tauxConversion}
-                        montantFrom={item.montantFrom}
-                        montantTo={item.montantTo}
-                    />
-                )}
-                renderSectionHeader={({ section: { title } }) => (
-                    <Text style={{ fontWeight: 'bold', fontSize: 16, color: Colors.text, marginTop: 20 }}>{title}</Text>
-                )}
+            <View style={{
+                flexDirection: 'row',
+                flexWrap: 'wrap',
+                padding: 0,
+            }}>
+                {types.map((item) => (
+                    <TouchableOpacity
+                        key={item.id}
+                        style={{
+                            borderWidth: 1,
+                            borderColor: item.id == type ? Colors.primary : Colors.text,
+                            padding: 10,
+                            marginHorizontal: 10,
+                            marginLeft: 0,
+                            marginTop: 10,
+                            borderRadius: 5,
+                        }}
+                        onPress={() => { changeType(item); }}
+                    >
+                        <Text style={{ color: Colors.text }}>{item.name}</Text>
+                    </TouchableOpacity>
+                ))}
+            </View>
 
-                ListEmptyComponent={EmptyCard}
-                ListFooterComponent={Footer}
-                ListHeaderComponent={Header}
-            />
+
+                {
+                    type == '1' &&
+                    <VirementHistory/>
+
+                }
+
+                {
+                    type == '2' &&
+                    <HpayStoreHistory />
+
+                }
+
+
+                {
+                    type == '3' &&
+                    <CashinHistory/>
+                }
+
+
+                {
+                   type == '4' &&
+                    <CashOutHistory />
+                }
+
+
+
 
         </View>
     );

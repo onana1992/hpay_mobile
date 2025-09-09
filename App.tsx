@@ -37,9 +37,9 @@ function App(): JSX.Element {
 
     const persistor = persistStore(store);
     const { t } = useTranslation();
-    const rnBiometrics = new ReactNativeBiometrics();
+   // const rnBiometrics = new ReactNativeBiometrics();
 
-   // const [photoUrl, setPhotoUrl] = useState("http://10.0.0.133:5000/api/auth/photos"); // valeur initiale
+   //const [photoUrl, setPhotoUrl] = useState("http://10.0.0.133:5000/api/auth/photos/"); // valeur initiale
    const [photoUrl, setPhotoUrl] = useState("https://devmanager.hpaytest.cash/CAISSE/photo/");
 
    // const { biometryType } = await rnBiometrics.isSensorAvailable();
@@ -49,7 +49,7 @@ function App(): JSX.Element {
         //console.log('Message handled in the background!', remoteMessage);
     });
 
-    useEffect(() => {
+   /* useEffect(() => {
         rnBiometrics.isSensorAvailable()
             .then(resultObject => {
                 const { available, biometryType } = resultObject;
@@ -77,10 +77,10 @@ function App(): JSX.Element {
                     console.log('Biometric authentication not supported');
                 }
             });
-    }, []);
+    }, []);*/
 
 
-    const handleBiometricAuth = () => {
+    /*const handleBiometricAuth = () => {
         rnBiometrics.simplePrompt({ promptMessage: 'Authentifiez-vous' })
         .then(resultObject => {
             const { success } = resultObject;
@@ -94,7 +94,7 @@ function App(): JSX.Element {
         .catch(() => {
             console.log('Erreur', 'Erreur durant l\'authentification');
         });
-    };
+    };*/
 
 
     React.useEffect(() => {
@@ -135,6 +135,7 @@ function App(): JSX.Element {
             //Linking.removeAllListeners();
             //removeEventListener('url', handleDeepLink);
         };
+
     }, []);
 
 

@@ -56,7 +56,7 @@ function ParrainageScreen({ navigation }: { navigation: any }) {
     };
 
     const getPhotoUrl = (name: string) => {
-        return photoUrl + '/' + name;
+        return photoUrl + name;
     };
 
 

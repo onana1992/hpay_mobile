@@ -110,7 +110,6 @@ function TransfertScreen({ navigation }: { navigation: any }) {
         realRate: null,
         hpayRate:  null,
         cadRate:  null,
-
     });
 
 
@@ -338,10 +337,11 @@ function TransfertScreen({ navigation }: { navigation: any }) {
     };
 
 
-    const getCADRate = async (currencyTo: string) => {
+    const getCADRate = async (currencyFrom: string) => {
 
-        currencyRateRequest(currencyTo, 'CAD').then((response: any) => {
+        currencyRateRequest(currencyFrom, 'CAD').then((response: any) => {
 
+            //alert(response.data.realRate);
             //console.log("le taux applicable", response.data.realRate);
             setCADRate(response.data.realRate);
 
@@ -361,8 +361,8 @@ function TransfertScreen({ navigation }: { navigation: any }) {
             setBenefAccounts(fetchAccount(benef));
         }
 
-        getRate(benefAccount?.compte.devise, account?.compte.devise);
-        getCADRate(benefAccount?.compte.devise);
+        getRate(account?.compte.devise, benefAccount?.compte.devise);
+        getCADRate(account?.compte.devise);
 
     }, [benef]);
 
@@ -372,7 +372,7 @@ function TransfertScreen({ navigation }: { navigation: any }) {
         //console.log(benefAccount?.compte.devise);
         //console.log(account?.compte.devise);
         getRate(account?.compte.devise, benefAccount?.compte.devise,);
-        getCADRate(benefAccount?.compte.devise);
+        getCADRate(account?.compte.devise);
 
     }, [account, benefAccount]);
 
@@ -418,7 +418,7 @@ function TransfertScreen({ navigation }: { navigation: any }) {
                 {
                     benefAccount != null &&
                     <ChangeRate
-                        rate={Number(rate.hpayRate).toFixed(2).toString()}
+                        rate={Number(rate.hpayRate).toFixed(4).toString()}
                     />
                 }
 

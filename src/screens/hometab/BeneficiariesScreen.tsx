@@ -65,7 +65,7 @@ function BeneficiariesScreen({ navigation }: { navigation: any }) {
     );
 
     const getPhotoUrl = (name: string) => {
-        return photoUrl + '/' + name;
+        return photoUrl + name;
     };
 
 

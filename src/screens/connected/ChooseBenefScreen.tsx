@@ -51,7 +51,7 @@ function ChooseBenefScreen() {
     const { photoUrl } = React.useContext(ApiContext);
 
     const getPhotoUrl = (name: string) => {
-        return photoUrl + '/' + name;
+        return photoUrl + name;
     };
 
 

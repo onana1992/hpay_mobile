@@ -47,7 +47,7 @@ function ProfilBenefScreen({ navigation }: { navigation: any }) {
     ];
 
     const getPhotoUrl = (name: string) => {
-        return photoUrl + '/' + name;
+        return photoUrl +  name;
     };
 
 
@@ -132,7 +132,6 @@ function ProfilBenefScreen({ navigation }: { navigation: any }) {
                         <Text style={{ color: Colors.text, textAlign: 'center', paddingTop: 10, fontSize: 26, fontWeight: 'bold' }}> {client.prenoms}{' '}{client.nom} </Text>
                         <Text style={{ color: Colors.text, paddingTop: 0, marginTop: 3, fontSize: 16 }}> {client.telephone} </Text>
                     </View>
-
 
 
                     <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginTop: 20 }}>

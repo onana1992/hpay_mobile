@@ -160,19 +160,16 @@ function TransfertBetweenAccount({ navigation }: { navigation: any }) {
 
         setBenefAccounts(filterAccounts);
         getRate(account?.compte.devise, filterAccounts[0]?.compte.devise);
-        getCADRate(benefAccount?.compte.devise);
+        getCADRate(account?.compte.devise);
         setBenefAccount(filterAccounts[0]);
     };
 
 
 
     const getRate = async (currencyFrom: string, currencyTo: string) => {
-
         currencyRateRequest(currencyFrom, currencyTo).then((response: any) => {
-
             //console.log("le taux applicable", response.data);
             setRate(response.data);
-
         }).catch((error: any) => {
 
         });
@@ -180,10 +177,11 @@ function TransfertBetweenAccount({ navigation }: { navigation: any }) {
 
 
 
-    const getCADRate = async (currencyTo: string) => {
+    const getCADRate = async (currencyFrom: string) => {
 
-        currencyRateRequest(currencyTo, 'CAD').then((response: any) => {
+        currencyRateRequest(currencyFrom, 'CAD').then((response: any) => {
 
+            //alert(response.data.realRate);
             //console.log("le taux applicable", response.data.realRate);
             setCADRate(response.data.realRate);
 
@@ -192,7 +190,6 @@ function TransfertBetweenAccount({ navigation }: { navigation: any }) {
 
         });
     };
-
 
 
     const send = () => {
@@ -273,7 +270,7 @@ function TransfertBetweenAccount({ navigation }: { navigation: any }) {
     React.useEffect(() => {
 
         getRate(account?.compte.devise, benefAccount?.compte.devise);
-        getCADRate(benefAccount?.compte.devise);
+        getCADRate(account?.compte.devise);
 
     }, [benefAccount]);
 

@@ -387,7 +387,9 @@
     "payatthemerchant": "Paiement chez marchand",
     "Dailytransferlimitreached": "Limite quotidienne de transferts atteinte.",
     "limithasbeenreached": "La limite du montant transférable quotidien a été atteinte.",
-    "amountexceedsauthorizedlimit": "Le montant saisi dépasse la limite autorisée."
+    "amountexceedsauthorizedlimit": "Le montant saisi dépasse la limite autorisée.",
+    "cashin": "Dépot",
+    "cashout": "Retrait"
   },
 
   "sponsorTab": {
@@ -423,15 +425,26 @@
     "service": "Service",
     "selecttheservice": "Selectionez le service",
     "beneficiary": "Bénéficiaire (numéro de téléphone/identifiant de compte)",
-    "accountandamount": "Compte et montant",
+    "accountandamount": "Compte et total à payer",
     "fixed": "fixe",
     "incorrectNumber": "Numéro incorrect",
     "purchasesummary": "Récapitulatif de l'achat",
-    "amount": "Montnant",
+    "amount": "Montant",
     "confirm": "confirmez",
     "beneficiary2": "Bénéficiaire \n(Tel/Id du compte)",
-    "submit": "Soumettre"
+    "submit": "Soumettre",
+    "totaltopay": "Total à payer"
 
+  },
+
+  "history": {
+    "internaltransfer": "Transfert interne",
+    "hpaystorepurchases": "Achat Hpay Store",
+    "cashin": "Dépôt",
+    "cashout": "Retrait",
+    "loadinginprogress": "Chargement en cours ...",
+    "notransactionscompleted": "Aucune transaction effectué",
+    "seemore": "Voir plus"
   },
 
 

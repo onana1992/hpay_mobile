@@ -177,7 +177,7 @@ function ChangePasswordScreen({ navigation }: { navigation: any }) {
                         </View>
                     </View>
 
-                        
+
 
                     <View style={{ marginTop: 20, flex: 1, flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center' }}>
                         <Button

@@ -48,7 +48,6 @@ function SignInScreen({ navigation }: {navigation:any}){
     
 
 
-
     const onLoginPressed = () => {
 
         const telError = telValidator1(telephone.value)
@@ -140,6 +139,7 @@ function SignInScreen({ navigation }: {navigation:any}){
 
  
     }
+
 
 
     // effacement du token

@@ -34,7 +34,9 @@ export default function HistoryItem({user, clientFrom, clientTo, compteFrom, com
     const { photoUrl, setPhotoUrl } = React.useContext(ApiContext);
 
     const getInitials = (phrase: string) => {
+
         const words = phrase.split(' '); // Divise la phrase en mots
+
         if (words.length < 2) {
             // Si la phrase a moins de 2 mots, retourner les initiales du premier mot
             return words[0][0].toUpperCase();
@@ -45,29 +47,8 @@ export default function HistoryItem({user, clientFrom, clientTo, compteFrom, com
     };
 
     const getPhotoUrl = (name: string) => {
-        return photoUrl + '/' + name;
+        return photoUrl + name;
     };
-
-    /*const currencyIcon = (dev:string) => {
-
-        if (dev === 'CAD') {
-            return require('../assets/cad.png');
-        }
-
-        else if (dev === 'USD') {
-            return require('../assets/us.png');
-        }
-
-        else if (dev === 'EUR') {
-            return require('../assets/ue.png');
-        }
-
-        else if (dev === 'GBP') {
-            return require('../assets/gb.png');
-        }
-
-    };*/
-
 
 
     if (clientTo.id !== clientFrom.id && clientFrom.id === user.client.id) {
@@ -228,8 +209,9 @@ export default function HistoryItem({user, clientFrom, clientTo, compteFrom, com
 
                 <View style={{ flex: 3, alignItems: 'flex-end' }}>
                     <Text style={{ lineHeight: 20, fontSize: 14, color: 'green' }} >+ {(Number(montantTo)).toFixed(2)}  {compteTo.devise }</Text>
-                    <Text style={{ lineHeight: 20, fontSize: 14, color: 'red' }} >- {(Number(montantFrom)).toFixed(2)}  {compteTo.devise}</Text>
+                    <Text style={{ lineHeight: 20, fontSize: 14, color: 'red' }} >- {(Number(montantFrom)).toFixed(2)}  {compteFrom.devise}</Text>
                 </View>
+
             </View>
         );
     }
